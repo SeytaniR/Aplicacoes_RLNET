@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 02 - Segurança Operacional (NR10 e NR35) | RL NET</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; }
+        .safety-gradient { background: linear-gradient(135deg, #003366 0%, #004080 100%); }
+        .hazard-stripe {
+            background: repeating-linear-gradient(
+                45deg,
+                #FBBF24,
+                #FBBF24 10px,
+                #000 10px,
+                #000 20px
+            );
+            height: 8px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="md:pl-64 flex flex-col min-h-screen transition-all duration-300">
+        <div id="app-layout" class="flex flex-col min-h-screen">
+            
+            <main class="flex-1 p-4 md:p-8">
+                <!-- Card Principal -->
+                <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+                    
+                    <div class="p-6 md:p-10">
+                        <!-- Cabeçalho do Módulo -->
+                        <div class="flex flex-col md:flex-row items-center gap-6 mb-10 border-b pb-8">
+                            <div class="w-20 h-20 rounded-full bg-orange-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg shrink-0 border-4 border-white ring-2 ring-orange-200">
+                                02
+                            </div>
+                            <div class="text-center md:text-left">
+                                <h1 class="text-3xl md:text-4xl font-black text-[#003366] mb-2 uppercase">Segurança Operacional</h1>
+                                <p class="text-gray-600 text-lg font-medium"><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm font-bold mr-2">NR10</span> <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-sm font-bold">NR35</span> Aplicado a Telecomunicações e Fibra Óptica</p>
+                            </div>
+                        </div>
+
+                        <!-- 1. Introdução -->
+                        <section class="mb-12">
+                            <div class="bg-blue-50 border-l-8 border-[#003366] p-6 rounded-r-lg shadow-sm">
+                                <h2 class="text-xl font-bold text-[#003366] mb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-shield-halved"></i> 1. Introdução à Segurança no Trabalho
+                                </h2>
+                                <p class="text-gray-700 leading-relaxed mb-4">
+                                    A segurança operacional é um pilar <strong>obrigatório</strong>. Técnicos em campo estão expostos a riscos elétricos, quedas, intempéries e acidentes viários. Este módulo não é apenas burocracia: é sobre voltar para casa todos os dias.
+                                </p>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                                    <div class="bg-white p-3 rounded text-center shadow-sm border"><i class="fa-solid fa-graduation-cap text-blue-500 mb-1"></i><br><span class="text-sm font-bold">Capacitar</span></div>
+                                    <div class="bg-white p-3 rounded text-center shadow-sm border"><i class="fa-solid fa-list-check text-blue-500 mb-1"></i><br><span class="text-sm font-bold">Padronizar</span></div>
+                                    <div class="bg-white p-3 rounded text-center shadow-sm border"><i class="fa-solid fa-users text-blue-500 mb-1"></i><br><span class="text-sm font-bold">Prevenir</span></div>
+                                    <div class="bg-white p-3 rounded text-center shadow-sm border"><i class="fa-solid fa-heart-pulse text-red-500 mb-1"></i><br><span class="text-sm font-bold">Proteger</span></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 2. Princípios Fundamentais (Hierarquia) -->
+                        <section class="mb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 border-b pb-2">2. Hierarquia de Controle de Riscos</h2>
+                            <div class="space-y-2 max-w-3xl mx-auto">
+                                <div class="bg-green-600 text-white p-4 rounded-t-lg text-center font-bold relative shadow-md w-full">
+                                    1. Eliminação / Substituição <span class="absolute right-4 text-xs font-normal opacity-75">Mais Eficaz</span>
+                                </div>
+                                <div class="bg-green-500 text-white p-4 text-center font-bold relative shadow-md w-[95%] mx-auto">
+                                    2. Controle de Engenharia (Barreiras/Bloqueios)
+                                </div>
+                                <div class="bg-yellow-500 text-white p-4 text-center font-bold relative shadow-md w-[90%] mx-auto">
+                                    3. Medidas Administrativas (Treinamentos/POPs)
+                                </div>
+                                <div class="bg-orange-500 text-white p-4 rounded-b-lg text-center font-bold relative shadow-md w-[85%] mx-auto">
+                                    4. EPI (Proteção Individual) <span class="absolute right-4 text-xs font-normal opacity-75">Menos Eficaz</span>
+                                </div>
+                            </div>
+                            <p class="text-center text-sm text-gray-500 mt-2">Tecnologia e processos reduzem o risco; o EPI é a última barreira.</p>
+                        </section>
+
+                        <!-- 3. NR-10 - Eletricidade -->
+                        <section class="mb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-yellow-400 text-black font-black px-3 py-1 rounded text-lg">NR-10</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Segurança em Instalações e Eletricidade</h2>
+                            </div>
+
+                            <!-- Treinamentos -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                <div class="border-2 border-yellow-400 bg-yellow-50 p-5 rounded-lg">
+                                    <h3 class="font-bold text-lg mb-2"><i class="fa-solid fa-book-open mr-2"></i> NR10 Básico (40h)</h3>
+                                    <p class="text-sm">Obrigatório para quem trabalha próximo à rede, em postes ou com equipamentos energizados.</p>
+                                </div>
+                                <div class="border-2 border-orange-400 bg-orange-50 p-5 rounded-lg">
+                                    <h3 class="font-bold text-lg mb-2"><i class="fa-solid fa-bolt mr-2"></i> NR10 SEP (40h)</h3>
+                                    <p class="text-sm">Complementar. Exigido para trabalhos em alta tensão ou sistema elétrico de potência.</p>
+                                </div>
+                            </div>
+
+                            <!-- Riscos -->
+                            <h3 class="text-lg font-bold text-gray-700 mb-4">Riscos Comuns em Provedores:</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                                <div class="bg-red-50 p-4 rounded border border-red-100 flex flex-col items-center text-center">
+                                    <i class="fa-solid fa-bolt text-red-500 text-2xl mb-2"></i>
+                                    <span class="font-bold text-sm">Choque Elétrico</span>
+                                    <span class="text-xs text-gray-500">Direto ou Indireto</span>
+                                </div>
+                                <div class="bg-red-50 p-4 rounded border border-red-100 flex flex-col items-center text-center">
+                                    <i class="fa-solid fa-fire text-orange-500 text-2xl mb-2"></i>
+                                    <span class="font-bold text-sm">Arco Elétrico</span>
+                                    <span class="text-xs text-gray-500">Queimadura sem contato</span>
+                                </div>
+                                <div class="bg-red-50 p-4 rounded border border-red-100 flex flex-col items-center text-center">
+                                    <i class="fa-solid fa-magnet text-blue-500 text-2xl mb-2"></i>
+                                    <span class="font-bold text-sm">Indução</span>
+                                    <span class="text-xs text-gray-500">Cabos metálicos</span>
+                                </div>
+                                <div class="bg-red-50 p-4 rounded border border-red-100 flex flex-col items-center text-center">
+                                    <i class="fa-solid fa-plug-circle-xmark text-gray-600 text-2xl mb-2"></i>
+                                    <span class="font-bold text-sm">Aterramento Ruim</span>
+                                    <span class="text-xs text-gray-500">No cliente</span>
+                                </div>
+                            </div>
+
+                            <!-- Lista de Procedimentos -->
+                            <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                                <h3 class="font-bold text-[#003366] mb-4">Procedimentos Obrigatórios e Boas Práticas</h3>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start gap-3">
+                                        <div class="bg-[#003366] text-white w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-sm mt-1">A</div>
+                                        <div><strong>Análise de Risco (AR):</strong> Antes de começar, avalie distâncias, clima e circuitos ativos.</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <div class="bg-[#003366] text-white w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-sm mt-1">B</div>
+                                        <div><strong>Zona de Proximidade:</strong> Técnicos de fibra não tocam na rede elétrica. Mantenha distância segura da concessionária.</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <div class="bg-[#003366] text-white w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-sm mt-1">C</div>
+                                        <div><strong>Proibido:</strong> Nunca apoiar escada na rede elétrica ou trabalhar com drop enrolado no pescoço.</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <div class="bg-red-600 text-white w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-sm mt-1"><i class="fa-solid fa-exclamation"></i></div>
+                                        <div class="text-red-700 font-bold">Pare tudo se: Sentir cheiro de queimado, ver centelha ou aquecimento anormal.</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+
+                        <!-- 4. NR-35 - Altura -->
+                        <section class="mb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-orange-500 text-white font-black px-3 py-1 rounded text-lg">NR-35</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Trabalho em Altura (> 2 metros)</h2>
+                            </div>
+
+                            <p class="mb-6 text-gray-600 italic border-l-4 border-orange-500 pl-4">
+                                "Qualquer atividade acima de 2 metros do nível inferior com risco de queda exige NR35."
+                            </p>
+
+                            <!-- Passo a Passo NR35 -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                                <div class="p-4 border rounded hover:shadow-md transition">
+                                    <div class="text-orange-600 font-bold text-xl mb-2">01. Planejamento</div>
+                                    <p class="text-sm">Verificar clima (chuva/vento), estrutura do poste e equipe de apoio.</p>
+                                </div>
+                                <div class="p-4 border rounded hover:shadow-md transition">
+                                    <div class="text-orange-600 font-bold text-xl mb-2">02. Análise de Risco</div>
+                                    <p class="text-sm">Estado do poste/muro, proximidade elétrica e risco de queda de objetos.</p>
+                                </div>
+                                <div class="p-4 border rounded hover:shadow-md transition">
+                                    <div class="text-orange-600 font-bold text-xl mb-2">03. Ancoragem</div>
+                                    <p class="text-sm">Uso de cinto paraquedista e ponto de ancoragem certificado (mín. 15 kN).</p>
+                                </div>
+                                <div class="p-4 border rounded hover:shadow-md transition">
+                                    <div class="text-orange-600 font-bold text-xl mb-2">04. Execução</div>
+                                    <p class="text-sm">3 pontos de contato na escada. Escada inclinada a 75º e amarrada.</p>
+                                </div>
+                                <div class="p-4 border rounded hover:shadow-md transition">
+                                    <div class="text-orange-600 font-bold text-xl mb-2">05. Ferramentas</div>
+                                    <p class="text-sm">Nunca subir com mãos ocupadas. Use bolsas porta-ferramentas.</p>
+                                </div>
+                                <div class="p-4 border rounded hover:shadow-md transition">
+                                    <div class="text-orange-600 font-bold text-xl mb-2">06. Jamais Sozinho</div>
+                                    <p class="text-sm">O trabalho em altura exige monitoramento constante.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 5. Tabela de Integração -->
+                        <section class="mb-12">
+                            <h2 class="text-xl font-bold text-[#003366] mb-4">Integração: Quando NR10 e NR35 se encontram</h2>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse rounded-lg overflow-hidden shadow-sm text-sm md:text-base">
+                                    <thead class="bg-[#003366] text-white">
+                                        <tr>
+                                            <th class="p-3">Situação</th>
+                                            <th class="p-3 bg-yellow-600">Ação NR10 (Elétrica)</th>
+                                            <th class="p-3 bg-orange-600">Ação NR35 (Altura)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="p-3 font-bold">Subir em poste</td>
+                                            <td class="p-3">Distância de segurança, escada isolada</td>
+                                            <td class="p-3">Escada amarrada, cinto e talabarte</td>
+                                        </tr>
+                                        <tr class="bg-gray-50">
+                                            <td class="p-3 font-bold">Instalação em telhado</td>
+                                            <td class="p-3">Avaliar padrão elétrico do cliente</td>
+                                            <td class="p-3">Linha de vida e movimentação segura</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 font-bold">Troca de cabos fachada</td>
+                                            <td class="p-3">Bloqueio energizado se necessário</td>
+                                            <td class="p-3">Talabarte e prevenção de queda</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+
+                        <!-- 7. Equipamentos e EPIs -->
+                        <section class="mb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6">Equipamentos Obrigatórios (Checklist Visual)</h2>
+                            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 text-center">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-3xl text-yellow-600 mb-2"><i class="fa-solid fa-helmet-safety"></i></div>
+                                    <span class="text-xs font-bold">Capacete c/ Jugular</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-3xl text-gray-700 mb-2"><i class="fa-solid fa-glasses"></i></div>
+                                    <span class="text-xs font-bold">Óculos Proteção</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-3xl text-orange-600 mb-2"><i class="fa-solid fa-user-shield"></i></div>
+                                    <span class="text-xs font-bold">Cinto Paraquedista</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-3xl text-orange-600 mb-2"><i class="fa-solid fa-link"></i></div>
+                                    <span class="text-xs font-bold">Talabarte Duplo</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-3xl text-black mb-2"><i class="fa-solid fa-shoe-prints"></i></div>
+                                    <span class="text-xs font-bold">Botina Isolada</span>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-3xl text-blue-600 mb-2"><i class="fa-solid fa-vest"></i></div>
+                                    <span class="text-xs font-bold">Uniforme/Colete</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 8. Checklists Rápidos -->
+                        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                            <div class="bg-white border rounded-lg p-5 shadow-sm">
+                                <h3 class="font-bold text-yellow-600 mb-3 border-b pb-2">⚡ Checklist Diário NR10</h3>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-center gap-2"><input type="checkbox" class="w-4 h-4 text-blue-600 rounded"> Usei escada isolante (fibra)</li>
+                                    <li class="flex items-center gap-2"><input type="checkbox" class="w-4 h-4 text-blue-600 rounded"> Avaliei risco de indução</li>
+                                    <li class="flex items-center gap-2"><input type="checkbox" class="w-4 h-4 text-blue-600 rounded"> Identifiquei contatos indevidos</li>
+                                    <li class="flex items-center gap-2"><input type="checkbox" class="w-4 h-4 text-blue-600 rounded"> Distância segura da rede mantida</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white border rounded-lg p-5 shadow-sm">
+                                <h3 class="font-bold text-orange-600 mb-3 border-b pb-2">🏗️ Checklist Diário NR35</h3>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-center gap-2"><input type="checkbox" class="w-4 h-4 text-blue-600 rounded"> Cinto e talabarte conectados</li>
+                                    <li class="flex items-center gap-2"><input type="checkbox" class="w-4 h-4 text-blue-600 rounded"> Escada amarrada e estável</li>
+                                    <li class="flex items-center gap-2"><input type="checkbox" class="w-4 h-4 text-blue-600 rounded"> Área sinalizada (cones)</li>
+                                    <li class="flex items-center gap-2"><input type="checkbox" class="w-4 h-4 text-blue-600 rounded"> Condições climáticas seguras</li>
+                                </ul>
+                            </div>
+                        </section>
+
+                        <!-- 9. Erros Críticos (Danger Zone) -->
+                        <section class="mb-12 bg-red-50 border border-red-200 rounded-xl p-6">
+                            <h2 class="text-xl font-bold text-red-800 mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-circle-xmark"></i> ERROS CRÍTICOS (Tolerância Zero)
+                            </h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+                                <div class="flex items-center gap-2 text-red-700 font-medium"><i class="fa-solid fa-xmark"></i> Subir em poste sem ancoragem</div>
+                                <div class="flex items-center gap-2 text-red-700 font-medium"><i class="fa-solid fa-xmark"></i> Usar escada metálica perto da rede</div>
+                                <!-- Removido: Trabalhar em altura sozinho -->
+                                <div class="flex items-center gap-2 text-red-700 font-medium"><i class="fa-solid fa-xmark"></i> Ignorar chuva, ventos fortes ou raios</div>
+                                <div class="flex items-center gap-2 text-red-700 font-medium"><i class="fa-solid fa-xmark"></i> Mexer em padrão elétrico do cliente</div>
+                                <div class="flex items-center gap-2 text-red-700 font-medium"><i class="fa-solid fa-xmark"></i> Instalar em tomadas queimadas</div>
+                            </div>
+                        </section>
+
+                        <!-- 10. Casos Reais -->
+                        <section class="mb-12">
+                            <h2 class="text-xl font-bold text-gray-700 mb-4">Aprendendo com Casos Reais</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="bg-gray-800 text-gray-200 p-5 rounded-lg text-sm">
+                                    <h4 class="font-bold text-red-400 mb-2">Caso 01: Choque na Escada</h4>
+                                    <p class="mb-2 opacity-80">Técnico usou escada metálica que tocou em cabo rompido.</p>
+                                    <p class="text-green-400 font-bold"><i class="fa-solid fa-check"></i> Lição: Use apenas escadas de fibra (PRFV).</p>
+                                </div>
+                                <div class="bg-gray-800 text-gray-200 p-5 rounded-lg text-sm">
+                                    <h4 class="font-bold text-red-400 mb-2">Caso 02: Queda de Telhado</h4>
+                                    <p class="mb-2 opacity-80">Telhado molhado e falta de ancoragem resultou em queda.</p>
+                                    <p class="text-green-400 font-bold"><i class="fa-solid fa-check"></i> Lição: Use linha de vida móvel.</p>
+                                </div>
+                                <div class="bg-gray-800 text-gray-200 p-5 rounded-lg text-sm">
+                                    <h4 class="font-bold text-red-400 mb-2">Caso 03: Curto na ONU</h4>
+                                    <p class="mb-2 opacity-80">Cliente forçou uso de adaptadores ruins, queimando o equipamento.</p>
+                                    <p class="text-green-400 font-bold"><i class="fa-solid fa-check"></i> Lição: Recuse instalações fora do padrão.</p>
+                                </div>
+                            </div>
+                        </section>
+                      <section class="mb-12">
+    <div class="flex items-center gap-3 mb-6">
+        <h2 class="text-2xl font-bold text-[#003366]">Segurança Veicular e Direção Defensiva</h2>
+    </div>
+
+    <p class="text-gray-700 mb-6 border-l-4 border-gray-400 pl-4">
+        O veículo da frota é uma ferramenta de trabalho tão importante quanto seu clivador. A segurança começa no trajeto.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        
+        <div class="bg-white border-t-4 border-blue-600 rounded-lg shadow-sm p-6">
+            <h3 class="text-lg font-bold text-[#003366] mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-clipboard-check text-blue-600"></i> Checklist de Saída (Viatura)
+            </h3>
+            <ul class="space-y-3 text-sm text-gray-700">
+                <li class="flex items-start gap-3">
+                    <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                    <span><strong>Escadas no Teto:</strong> Verifique se as escadas estão travadas e amarradas. Uma escada solta é um projétil fatal.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                    <span><strong>Pneus e Estepe:</strong> Calibragem e estado de conservação (TWI).</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                    <span><strong>Sinalização:</strong> Setas, faróis, luz de freio e giroflex (se houver).</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                    <span><strong>Documentação:</strong> CNH válida e documento do veículo.</span>
+                </li>
+              <li class="flex items-start gap-3">
+                    <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                    <span><strong>Manutenção:</strong> Óleo e água em níveis ideais.</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="bg-white border-t-4 border-red-500 rounded-lg shadow-sm p-6">
+            <h3 class="text-lg font-bold text-[#003366] mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-shield-heart text-red-500"></i> Regras de Ouro na Direção
+            </h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="text-center p-2 bg-gray-50 rounded">
+                    <i class="fa-solid fa-mobile-screen-button text-red-500 text-xl mb-1"></i>
+                    <p class="text-xs font-bold">ZERO Celular</p>
+                    <p class="text-[10px] text-gray-500">Nem no suporte. Pare para atender.</p>
+                </div>
+                <div class="text-center p-2 bg-gray-50 rounded">
+                    <i class="fa-solid fa-gauge-high text-red-500 text-xl mb-1"></i>
+                    <p class="text-xs font-bold">Respeite o Limite</p>
+                    <p class="text-[10px] text-gray-500">A pressa gera acidentes.</p>
+                </div>
+                <div class="text-center p-2 bg-gray-50 rounded">
+                    <i class="fa-solid fa-user-slash text-red-500 text-xl mb-1"></i>
+                    <p class="text-xs font-bold">Sem Caronas</p>
+                    <p class="text-[10px] text-gray-500">Proibido transportar estranhos.</p>
+                </div>
+                <div class="text-center p-2 bg-gray-50 rounded">
+                    <i class="fa-solid fa-triangle-exclamation text-orange-500 text-xl mb-1"></i>
+                    <p class="text-xs font-bold">Distância</p>
+                    <p class="text-[10px] text-gray-500">Mantenha 3s do veículo da frente.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-gray-800 text-white rounded-xl p-6 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-500 opacity-10 rounded-full translate-x-10 -translate-y-10"></div>
+        
+        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-cone text-orange-500"></i> Estacionamento Operacional (Sinalização)
+        </h3>
+        
+        <div class="flex flex-col md:flex-row gap-6 items-center">
+            <div class="flex-1">
+                <p class="mb-4 text-gray-300 text-sm">
+                    Ao estacionar para realizar um atendimento, o técnico se torna um obstáculo na via. Sinalize corretamente para evitar colisão traseira.
+                </p>
+                <ul class="space-y-2 text-sm font-medium">
+                    <li class="flex items-center gap-2"><span class="text-orange-500">1.</span> Ligue o pisca-alerta imediatamente.</li>
+                    <li class="flex items-center gap-2"><span class="text-orange-500">2.</span> Coloque o 1º cone próximo à traseira do carro.</li>
+                    <li class="flex items-center gap-2"><span class="text-orange-500">3.</span> Coloque os demais cones formando uma diagonal sentido fluxo.</li>
+                    <li class="flex items-center gap-2"><span class="text-orange-500">4.</span> Nunca estacione em esquinas ou saídas de garagem.</li>
+                </ul>
+            </div>
+            
+            <div class="bg-gray-700 p-4 rounded-lg w-full md:w-1/3 flex flex-col items-center justify-center border border-gray-600 border-dashed">
+                <div class="text-xs text-gray-400 mb-2 uppercase tracking-widest">Fluxo da Via &darr;</div>
+                <div class="flex flex-col gap-2 items-center">
+                    <i class="fa-solid fa-cone text-orange-500 text-xs translate-x-8"></i>
+                    <i class="fa-solid fa-cone text-orange-500 text-sm translate-x-4"></i>
+                    <i class="fa-solid fa-cone text-orange-500 text-base"></i>
+                    <div class="bg-white text-gray-900 px-3 py-2 rounded font-bold text-xs flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-car-side"></i> Viatura RL NET
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+                        <!-- Conclusão -->
+                        <div class="bg-blue-600 text-white p-8 rounded-xl text-center shadow-lg">
+                          <div class="inline-block bg-amber-500 p-4 rounded-full mb-6 shadow-lg animate-bounce">
+            <i class="fa-solid fa-trophy text-3xl text-white"></i>
+        </div>
+                            <h3 class="text-2xl font-bold mb-2">Segurança em Primeiro Lugar</h3>
+                            <p class="opacity-90 max-w-2xl mx-auto">
+                                "NR10 e NR35 não são apenas normas; são o principal instrumento de proteção da sua vida. Cumpra os procedimentos para garantir que o seu retorno para casa seja tão certo quanto a sua saída."
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="layout.js"></script>
+
+</body>
+</html>

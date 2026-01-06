@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RL NET - Mentoria de Campo</title>
+    
+    <!-- Bibliotecas Externas -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .insignia-card { transition: transform 0.2s; }
+        .insignia-card:hover { transform: scale(1.05); }
+        
+        /* Links Interativos */
+        .app-link { color: #2563eb; cursor: pointer; font-weight: 600; text-decoration: none; }
+        .app-link:hover { text-decoration: underline; color: #1d4ed8; }
+
+        /* Estrelas Interativas */
+        .star-rating i { cursor: pointer; transition: color 0.2s; }
+        .star-rating i.active { color: #fbbf24; }
+        .star-rating i.inactive { color: #d1d5db; }
+        
+        /* Loading Overlay */
+        #loadingOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.9); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column;
+        }
+        .loader {
+            border: 5px solid #f3f3f3; border-top: 5px solid #2563eb;
+            border-radius: 50%; width: 50px; height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .no-print-pdf { display: block; }
+        
+        /* Scrollbar personalizada para modais */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- OVERLAY DE CARREGAMENTO -->
+    <div id="loadingOverlay">
+        <div class="loader mb-4"></div>
+        <p class="text-blue-600 font-bold animate-pulse">Sincronizando com RL NET...</p>
+    </div>
+
+    <!-- TELA DE LOGIN -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border-t-4 border-blue-600">
+            <div class="text-center mb-8">
+                <img src="https://i.imgur.com/qndtfM0.png" alt="RL NET Logo" class="h-16 mx-auto mb-4">
+                <h1 class="text-2xl font-bold text-gray-800">Portal de Mentoria</h1>
+                <p class="text-gray-500 text-sm">Acesse sua conta para continuar</p>
+            </div>
+            
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Usuário</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fas fa-user"></i></span>
+                        <input type="text" id="loginUser" class="w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Seu login" required>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Senha</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fas fa-lock"></i></span>
+                        <input type="password" id="loginPass" class="w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Sua senha" required>
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition transform hover:scale-[1.02]">ENTRAR</button>
+            </form>
+            <div class="mt-6 text-center">
+                 <a href="index.html" class="no-print inline-flex items-center gap-1 bg-blue-100 text-blue-600 border border-blue-200 text-xs font-bold px-3 py-1 rounded hover:bg-blue-200 transition-colors no-underline">
+                    <i class="fas fa-home"></i> LAUNCHER
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- APLICAÇÃO PRINCIPAL -->
+    <div id="appContainer" class="hidden min-h-screen pb-20">
+        <!-- NAVBAR -->
+        <nav class="bg-white shadow-md sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <img src="https://i.imgur.com/qndtfM0.png" alt="RL NET" class="h-8 mr-3">
+                        <span class="font-bold text-gray-800 hidden sm:block">Mentoria de Campo</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right hidden sm:block">
+                            <p id="navUserName" class="text-sm font-bold text-gray-900">Usuário</p>
+                            <p id="navUserRole" class="text-xs text-blue-600">Cargo</p>
+                        </div>
+                        <img id="navUserPhoto" src="" class="h-10 w-10 rounded-full object-cover border-2 border-blue-100 bg-gray-200">
+                        <button onclick="logout()" class="text-gray-400 hover:text-red-500 ml-2"><i class="fas fa-sign-out-alt fa-lg"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- DASHBOARD GESTOR -->
+        <div id="viewGestor" class="view-section hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <!-- Cards de Saúde (Clicáveis) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div onclick="openRatingsReport()" class="cursor-pointer transform hover:scale-[1.02] transition bg-white p-6 rounded-xl shadow-sm border-l-4 border-yellow-400 relative overflow-hidden group">
+                    <div class="relative z-10">
+                        <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider group-hover:text-yellow-600">Média Geral de Avaliação <i class="fas fa-external-link-alt ml-1"></i></h3>
+                        <div class="flex items-end gap-2 mt-2">
+                            <span class="text-4xl font-bold text-gray-800" id="statsAvgRating">0.0</span>
+                            <div class="mb-2 text-yellow-400 text-sm" id="statsStarsDisplay"></div>
+                        </div>
+                    </div>
+                    <i class="fas fa-star absolute -bottom-4 -right-4 text-9xl text-yellow-100 opacity-50"></i>
+                </div>
+                
+                <div onclick="openProceduresReport()" class="cursor-pointer transform hover:scale-[1.02] transition bg-white p-6 rounded-xl shadow-sm border-l-4 border-blue-500 relative overflow-hidden group">
+                    <div class="relative z-10">
+                        <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider group-hover:text-blue-600">Procedimento Mais Ensinado <i class="fas fa-external-link-alt ml-1"></i></h3>
+                        <p class="text-2xl font-bold text-gray-800 mt-2 truncate" id="statsTopProc">--</p>
+                        <p class="text-xs text-blue-600 mt-1 font-semibold" id="statsTopProcCount">0 registros</p>
+                    </div>
+                    <i class="fas fa-chart-pie absolute -bottom-4 -right-4 text-9xl text-blue-50 opacity-50"></i>
+                </div>
+                
+                <div onclick="openPendencyReport()" class="cursor-pointer transform hover:scale-[1.02] transition bg-white p-6 rounded-xl shadow-sm border-l-4 border-red-500 relative overflow-hidden group">
+                    <div class="relative z-10">
+                        <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider group-hover:text-red-600">Pendências de Relatório <i class="fas fa-external-link-alt ml-1"></i></h3>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-4xl font-bold text-red-600" id="statsPendencyCount">0</span>
+                            <span class="text-sm text-gray-500 font-medium">dias</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-exclamation-circle absolute -bottom-4 -right-4 text-9xl text-red-50 opacity-50"></i>
+                </div>
+            </div>
+
+            <!-- Ações Rápidas -->
+            <div class="flex flex-wrap gap-4 mb-8">
+                <button onclick="openModal('modalNewUser')" class="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 flex items-center gap-2 shadow-lg transition transform hover:scale-105">
+                    <i class="fas fa-user-plus"></i> Novo Usuário
+                </button>
+                <button onclick="openModal('modalNewSeason')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2 shadow-lg transition transform hover:scale-105">
+                    <i class="fas fa-calendar-plus"></i> Nova Temporada
+                </button>
+                <button onclick="openModal('modalConfigProcedures')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 flex items-center gap-2 shadow-lg transition transform hover:scale-105">
+                    <i class="fas fa-list"></i> Procedimentos
+                </button>
+                 <button onclick="openAdvancedReportModal()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex items-center gap-2 shadow-lg transition transform hover:scale-105">
+                    <i class="fas fa-file-pdf"></i> Relatórios Avançados
+                </button>
+            </div>
+
+            <!-- Lista de Temporadas -->
+            <div class="mb-8">
+                <div class="mb-4 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <h3 class="font-bold text-xl text-gray-800 border-l-4 border-gray-800 pl-3">Temporadas</h3>
+                        <select id="seasonFilter" onchange="setupGestorView()" class="text-xs border border-gray-300 rounded p-1 bg-white">
+                            <option value="Em Andamento" selected>Em Andamento (Atuais)</option>
+                            <option value="Encerrada">Encerradas (Histórico)</option>
+                        </select>
+                    </div>
+                    <span class="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full" id="activeSeasonsBadge">0 encontradas</span>
+                </div>
+                <div id="gestorSeasonsList" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+            </div>
+
+            <!-- Lista de Colaboradores (Cards) -->
+            <div class="mb-8">
+                <div class="mb-4 flex items-center justify-between">
+                    <h3 class="font-bold text-xl text-gray-800 border-l-4 border-blue-600 pl-3">Colaboradores</h3>
+                </div>
+                <div id="usersCardList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- Cards de Usuários JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- DASHBOARD OPERACIONAL -->
+        <div id="viewOperacional" class="view-section hidden max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <!-- Aviso de Sem Temporada -->
+            <div id="operacionalEmpty" class="hidden text-center p-10 bg-white rounded-xl shadow-sm">
+                <i class="fas fa-calendar-times text-6xl text-gray-300 mb-4"></i>
+                <h1 class="text-xl font-bold text-gray-700">Nenhuma temporada ativa encontrada</h1>
+                <p class="text-gray-500 mt-2">Aguarde seu gestor iniciar uma nova temporada de treinamento para você.</p>
+            </div>
+
+            <!-- Conteúdo Operacional -->
+            <div id="operacionalContent">
+                <!-- Status Bar -->
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6 border-l-4 border-blue-600">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800 mb-1">Status da Temporada <span id="seasonTypeBadge" class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full ml-2 hidden">SOLO</span></h2>
+                            <p class="text-sm text-gray-500 mb-2">Treinamento: <span id="opPartnerName" class="font-semibold text-gray-800">--</span></p>
+                            <div class="flex items-center gap-2 text-xs font-bold bg-blue-50 text-blue-700 px-3 py-1 rounded-full w-fit">
+                                <i class="fas fa-calendar-day"></i>
+                                <span id="opDayCounter">Dia 0 de 0</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-3xl font-bold text-blue-600" id="opProgressPercent">0%</div>
+                            <span class="text-xs text-gray-400 block">da Meta</span>
+                            <!-- Botão Encerrar (Visível para todos na operacional) -->
+                            <button id="btnEndSeasonOperacional" onclick="changeSeasonStatus(currentSeason.ID_Temporada, 'Encerrada')" class="mt-2 text-[10px] bg-red-100 text-red-600 font-bold px-2 py-1 rounded border border-red-200 hover:bg-red-200 transition"><i class="fas fa-flag-checkered mr-1"></i> Encerrar Temporada</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pendências -->
+                <div id="pendenciesContainer" class="hidden bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0"><i class="fas fa-exclamation-triangle text-yellow-400"></i></div>
+                        <div class="ml-3">
+                            <p class="text-sm text-yellow-700 font-bold">Pendências Encontradas</p>
+                            <div id="pendenciesList" class="mt-2 flex flex-wrap gap-2"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insígnias -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-gray-700 mb-3 flex items-center gap-2"><i class="fas fa-medal text-yellow-500"></i> Suas Insígnias</h3>
+                    <div id="insigniasContainer" class="flex gap-4 overflow-x-auto pb-2"></div>
+                </div>
+
+                <!-- Formulário Diário -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="bg-gray-800 text-white px-6 py-4 flex justify-between items-center">
+                        <h3 class="font-bold text-lg"><i class="fas fa-edit mr-2"></i> Registro Diário</h3>
+                        <div class="flex items-center gap-2">
+                             <span id="draftStatus" class="text-xs text-yellow-400 hidden"><i class="fas fa-save"></i> Rascunho salvo</span>
+                             <span id="currentDateDisplay" class="text-sm opacity-75"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 space-y-6" id="dailyFormContainer">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Data do Registro</label>
+                            <input type="date" id="recordDate" class="w-full border rounded-lg p-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 save-draft">
+                        </div>
+
+                        <!-- Checklist -->
+                        <div id="checklistContainer">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <span id="labelProcedures">Procedimentos Realizados</span>
+                            </label>
+                            <div id="proceduresList" class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-gray-50 p-4 rounded-lg border border-gray-200"></div>
+                        </div>
+
+                        <!-- Campos Mentor (Avalia Novato) -->
+                        <div id="mentorFields" class="hidden space-y-4 border-t pt-4">
+                            <h4 class="font-bold text-blue-800 text-sm bg-blue-50 p-2 rounded">Avaliação do Novato</h4>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Nota de Desempenho (Técnica)</label>
+                                <div class="flex items-center gap-1 star-rating text-2xl" id="starRatingInput">
+                                    <i class="fas fa-star inactive" data-value="1"></i><i class="fas fa-star inactive" data-value="2"></i>
+                                    <i class="fas fa-star inactive" data-value="3"></i><i class="fas fa-star inactive" data-value="4"></i>
+                                    <i class="fas fa-star inactive" data-value="5"></i><i class="fas fa-star inactive" data-value="6"></i>
+                                    <i class="fas fa-star inactive" data-value="7"></i><i class="fas fa-star inactive" data-value="8"></i>
+                                    <i class="fas fa-star inactive" data-value="9"></i><i class="fas fa-star inactive" data-value="10"></i>
+                                </div>
+                                <input type="hidden" id="mentorRatingValue" class="save-draft">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-green-700">Elogios</label>
+                                    <textarea id="mentorPraise" rows="2" class="w-full border border-green-200 rounded p-2 mt-1 bg-green-50 save-draft"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-red-700">Advertências</label>
+                                    <textarea id="mentorWarning" rows="2" class="w-full border border-red-200 rounded p-2 mt-1 bg-red-50 save-draft"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Campos Novato (Avalia Mentor ou Auto) -->
+                        <div id="novatoFields" class="hidden space-y-4 border-t pt-4">
+                            <h4 class="font-bold text-green-800 text-sm bg-green-50 p-2 rounded" id="novatoEvalTitle">Avaliação do Mentor (Didática)</h4>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Nota (1-10)</label>
+                                <div class="flex items-center gap-1 star-rating text-2xl" id="novatoRatingInput">
+                                    <i class="fas fa-star inactive" data-value="1"></i><i class="fas fa-star inactive" data-value="2"></i>
+                                    <i class="fas fa-star inactive" data-value="3"></i><i class="fas fa-star inactive" data-value="4"></i>
+                                    <i class="fas fa-star inactive" data-value="5"></i><i class="fas fa-star inactive" data-value="6"></i>
+                                    <i class="fas fa-star inactive" data-value="7"></i><i class="fas fa-star inactive" data-value="8"></i>
+                                    <i class="fas fa-star inactive" data-value="9"></i><i class="fas fa-star inactive" data-value="10"></i>
+                                </div>
+                                <input type="hidden" id="novatoRatingValue" class="save-draft">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700">Nível de Confiança / Humor</label>
+                                <select id="novatoConfidence" class="w-full border rounded p-2 mt-1 bg-white save-draft">
+                                    <option value="">Selecione...</option>
+                                    <option value="1">Estou inapto (Preciso rever tudo)</option>
+                                    <option value="2">Ainda há muito a aprender</option>
+                                    <option value="3">Há coisas que faço solo</option>
+                                    <option value="4">Estou confiante para algumas atividades</option>
+                                    <option value="5">Estou pronto para atuar solo</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700">Observações Gerais</label>
+                            <textarea id="generalObs" rows="3" class="w-full border rounded-lg p-2 mt-1 focus:ring-2 focus:ring-blue-500 save-draft"></textarea>
+                        </div>
+
+                        <div class="flex gap-4 pt-4">
+                            <button onclick="submitDailyReport(false)" class="flex-1 bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 shadow-lg active:scale-95">FINALIZAR DIA</button>
+                            <button onclick="submitDailyReport(true)" class="flex-none bg-gray-200 text-gray-600 font-bold px-4 rounded-lg hover:bg-gray-300">Lançar Vazio</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 bg-white p-4 rounded-xl shadow-sm">
+                    <h4 class="font-bold text-gray-700 mb-2">Meta vs Realizado</h4>
+                    <div id="goalsSummary" class="text-sm space-y-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAIS E RESTANTE DO HTML ... -->
+    
+    <!-- Detalhes do Usuário -->
+    <div id="modalUserDetails" class="hidden fixed inset-0 bg-black bg-opacity-60 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('modalUserDetails')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
+            <div id="userDetailsContent" class="mt-2"></div>
+        </div>
+    </div>
+
+    <!-- Raio-X Detalhado (Temporada) -->
+    <div id="modalSeasonDetails" class="hidden fixed inset-0 bg-black bg-opacity-60 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl p-0 overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="bg-gray-900 text-white p-4 flex justify-between items-center">
+                <div>
+                    <h3 class="font-bold text-lg"><i class="fas fa-microscope mr-2 text-blue-400"></i> Raio-X Detalhado</h3>
+                    <p class="text-xs text-gray-400">Análise profunda de dados da temporada</p>
+                </div>
+                <button onclick="closeModal('modalSeasonDetails')" class="text-gray-400 hover:text-white"><i class="fas fa-times fa-lg"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1 bg-gray-50" id="seasonDetailsContent">
+                <!-- Conteúdo Injetado via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Genérico para Relatórios (Tabela) -->
+    <div id="modalGenericReport" class="hidden fixed inset-0 bg-black bg-opacity-60 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl p-6 relative max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800" id="genericReportTitle">Relatório</h3>
+                <button onclick="closeModal('modalGenericReport')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="flex-1 overflow-y-auto" id="genericReportContent"></div>
+        </div>
+    </div>
+
+    <!-- Relatório Avançado (Filtros PDF) -->
+    <div id="modalAdvancedReport" class="hidden fixed inset-0 bg-black bg-opacity-60 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 relative">
+            <h3 class="text-xl font-bold mb-4">Relatórios Avançados (PDF)</h3>
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500">De</label>
+                        <input type="date" id="reportStartDate" class="w-full border p-2 rounded">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500">Até</label>
+                        <input type="date" id="reportEndDate" class="w-full border p-2 rounded">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500">Usuário Específico (Opcional)</label>
+                    <select id="reportUserFilter" class="w-full border p-2 rounded">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="border-t pt-4 flex justify-end gap-2">
+                    <button onclick="closeModal('modalAdvancedReport')" class="px-4 py-2 text-gray-600">Cancelar</button>
+                    <button onclick="generateAdvancedReport()" class="px-4 py-2 bg-red-600 text-white rounded font-bold hover:bg-red-700"><i class="fas fa-file-pdf"></i> Gerar PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Novo Usuário -->
+    <div id="modalNewUser" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
+            <h3 class="text-xl font-bold mb-4" id="titleModalUser">Adicionar Usuário</h3>
+            <form id="formNewUser" onsubmit="saveUser(event)" class="space-y-3">
+                <input type="hidden" name="id" id="editUserId">
+                <input type="text" name="nome" id="editUserNome" placeholder="Nome Completo" class="w-full border p-2 rounded" required>
+                <input type="text" name="login" id="editUserLogin" placeholder="Login de Acesso" class="w-full border p-2 rounded" required>
+                <input type="text" name="senha" id="editUserSenha" placeholder="Senha Simples" class="w-full border p-2 rounded" required>
+                <select name="tipo" id="editUserTipo" class="w-full border p-2 rounded" required>
+                    <option value="Mentor">Mentor</option>
+                    <option value="Novato">Novato</option>
+                    <option value="Gestor">Gestor</option>
+                </select>
+                <input type="url" name="foto" id="editUserFoto" placeholder="URL da Foto (Imgur) - Opcional" class="w-full border p-2 rounded">
+                <div class="flex justify-end gap-2 mt-4">
+                    <button type="button" onclick="closeModal('modalNewUser')" class="px-4 py-2 text-gray-600">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Nova Temporada -->
+    <div id="modalNewSeason" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+            <h3 class="text-xl font-bold mb-4" id="titleModalSeason">Iniciar Temporada de Treino</h3>
+            <form id="formNewSeason" onsubmit="saveSeason(event)" class="space-y-3">
+                <input type="hidden" id="editSeasonId">
+                <div class="mb-2 bg-purple-50 p-2 rounded border border-purple-200">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="checkSoloSeason" class="w-4 h-4 text-purple-600 rounded" onchange="toggleSoloSeason()">
+                        <span class="text-sm font-bold text-purple-700">Temporada Solo (Sem Mentor)</span>
+                    </label>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div id="divSelMentor">
+                        <label class="text-xs font-bold">Mentor</label>
+                        <select id="selMentor" class="w-full border p-2 rounded" required></select>
+                    </div>
+                    <div id="divSelNovato">
+                        <label class="text-xs font-bold">Novato</label>
+                        <select id="selNovato" class="w-full border p-2 rounded" required></select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs font-bold">Início</label>
+                        <input type="date" id="dateStart" class="w-full border p-2 rounded" required>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold">Fim Previsto</label>
+                        <input type="date" id="dateEnd" class="w-full border p-2 rounded" required>
+                    </div>
+                </div>
+                <div class="border-t pt-2 mt-2">
+                    <label class="text-sm font-bold block mb-2">Definir Metas (Qtd por Procedimento)</label>
+                    <div id="goalsInputs" class="grid grid-cols-2 gap-2 text-sm"></div>
+                </div>
+                <div class="flex justify-end gap-2 mt-4">
+                    <button type="button" onclick="closeModal('modalNewSeason')" class="px-4 py-2 text-gray-600">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Config Procedimentos -->
+    <div id="modalConfigProcedures" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
+            <h3 class="text-xl font-bold mb-2">Lista de Procedimentos</h3>
+            <textarea id="txtProcedures" rows="6" class="w-full border p-2 rounded font-mono text-sm"></textarea>
+            <div class="flex justify-end gap-2 mt-4">
+                <button type="button" onclick="closeModal('modalConfigProcedures')" class="px-4 py-2 text-gray-600">Cancelar</button>
+                <button type="button" onclick="saveConfigProcedures()" class="px-4 py-2 bg-purple-600 text-white rounded">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Area Oculta Relatório PDF (Renderização) -->
+    <div id="pdfReportContainer" class="hidden bg-white p-8 max-w-[800px] text-gray-800"></div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbyz9Dpw6pLZ_Vhi5wXwW9Gz9A7-C_kXo6oVn122jQSw8pJ4zTh1WEYZcagmyrBirvn1/exec"; 
+        
+        let appData = { config: [], users: [], seasons: [], records: [] };
+        let currentUser = null;
+        let currentSeason = null;
+        let proceduresList = [];
+
+        // --- HELPER FUNCTIONS FOR LINKS ---
+        function renderUserLink(id, name) {
+            return `<span onclick="closeModal('modalGenericReport'); openUserDetails('${id}')" class="app-link" title="Ver Perfil">${name}</span>`;
+        }
+        function renderSeasonLink(id, text) {
+            return `<span onclick="closeModal('modalGenericReport'); closeModal('modalUserDetails'); openSeasonDetails('${id}')" class="app-link" title="Ver Raio-X">${text || 'Temporada ' + id}</span>`;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('currentDateDisplay').innerText = new Date().toLocaleDateString('pt-BR');
+            document.getElementById('recordDate').valueAsDate = new Date();
+            
+            setupStarRatingInput('starRatingInput', 'mentorRatingValue');
+            setupStarRatingInput('novatoRatingInput', 'novatoRatingValue');
+
+            const savedUser = localStorage.getItem('rlnet_user');
+            if(savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    toggleLoading(true);
+                    fetchAllData().then(success => {
+                        toggleLoading(false);
+                        if(success) initApp();
+                        else {
+                            Swal.fire('Aviso', 'Offline ou erro de conexão.', 'warning');
+                            document.getElementById('loadingOverlay').style.display = 'none';
+                        }
+                    });
+                } catch(e) {
+                    localStorage.removeItem('rlnet_user');
+                    setTimeout(() => toggleLoading(false), 500);
+                }
+            } else {
+                setTimeout(() => toggleLoading(false), 500);
+            }
+        });
+
+        // ... [Funções de Star Rating e Login mantidas iguais] ...
+        function setupStarRatingInput(containerId, inputId) {
+            const container = document.getElementById(containerId);
+            const hiddenInput = document.getElementById(inputId);
+            if(!container) return;
+            const stars = container.querySelectorAll('i');
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const val = star.getAttribute('data-value');
+                    hiddenInput.value = val;
+                    const event = new Event('change');
+                    hiddenInput.dispatchEvent(event);
+                    updateStarVisuals(container, val);
+                });
+                star.addEventListener('mouseenter', () => updateStarVisuals(container, star.getAttribute('data-value')));
+            });
+            container.addEventListener('mouseleave', () => updateStarVisuals(container, hiddenInput.value || 0));
+        }
+
+        function updateStarVisuals(container, value) {
+            const stars = container.querySelectorAll('i');
+            stars.forEach(s => {
+                if (parseInt(s.getAttribute('data-value')) <= value) {
+                    s.classList.remove('inactive'); s.classList.add('active');
+                } else {
+                    s.classList.remove('active'); s.classList.add('inactive');
+                }
+            });
+        }
+
+        function generateStarsHTML(value) {
+            let html = '';
+            for(let i=1; i<=10; i++) {
+                html += i <= value ? '<i class="fas fa-star text-yellow-400 text-xs"></i>' : '<i class="fas fa-star text-gray-200 text-xs"></i>';
+            }
+            return html;
+        }
+
+        async function fetchAllData() {
+            try {
+                const response = await fetch(`${API_URL}?action=readAll`);
+                const data = await response.json();
+                appData = {
+                    config: data.config || [],
+                    users: data.users || [],
+                    seasons: data.seasons || [],
+                    records: data.records || []
+                };
+                const procConfig = appData.config.find(c => (c.Chave === 'Procedimentos' || c.key === 'Procedimentos'));
+                if (procConfig) {
+                    const val = procConfig.Valor || procConfig.value;
+                    proceduresList = val.split(',').map(s => s.trim());
+                } else {
+                    proceduresList = ["Instalação", "Reparo", "Configuração ONU", "Fusão", "Troca de Senha"];
+                }
+                return true;
+            } catch (error) { console.error("Erro fetch", error); return false; }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+            toggleLoading(true);
+            const success = await fetchAllData();
+            toggleLoading(false);
+            if (!success) return Swal.fire('Erro', 'Falha na conexão.', 'error');
+
+            const foundUser = appData.users.find(u => u.Login.toLowerCase() === user.toLowerCase() && String(u.Senha) === pass);
+            if (foundUser) {
+                if(foundUser.Status !== 'Ativo') return Swal.fire('Acesso Negado', 'Usuário inativo.', 'warning');
+                currentUser = foundUser;
+                localStorage.setItem('rlnet_user', JSON.stringify(currentUser));
+                initApp();
+            } else {
+                Swal.fire('Erro', 'Dados incorretos.', 'error');
+            }
+        }
+
+        function initApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('appContainer').classList.remove('hidden');
+            document.getElementById('navUserName').innerText = currentUser.Nome;
+            document.getElementById('navUserRole').innerText = currentUser.Tipo;
+            document.getElementById('navUserPhoto').src = currentUser.Foto_URL || 'https://i.imgur.com/Knw2a6b.png'; 
+            refreshCurrentView();
+        }
+
+        function logout() {
+            localStorage.removeItem('rlnet_user');
+            localStorage.removeItem('rlnet_draft_' + currentUser.ID);
+            location.reload();
+        }
+
+        function refreshCurrentView() {
+            if (currentUser.Tipo === 'Gestor') setupGestorView();
+            else setupOperacionalView();
+        }
+
+        // --- DASHBOARDS ---
+
+        function setupGestorView() {
+            document.getElementById('viewGestor').classList.remove('hidden');
+            document.getElementById('viewOperacional').classList.add('hidden');
+            
+            // Cálculos Stats
+            let totalStars = 0, countStars = 0, procCounts = {}, totalPendencies = 0;
+            let today = new Date(); today.setHours(0,0,0,0);
+            const activeSeasons = appData.seasons.filter(s => s.Status === 'Em Andamento');
+            
+            // Stats baseados apenas em ativas para dar visão do "agora"
+            activeSeasons.forEach(s => {
+                const sRecords = appData.records.filter(r => r.ID_Temporada == s.ID_Temporada);
+                sRecords.forEach(r => {
+                    if(r.Avaliacao_Nota) {
+                        totalStars += parseFloat(r.Avaliacao_Nota); countStars++;
+                    }
+                    if(r.Procedimentos_Feitos) {
+                        try {
+                            const procs = JSON.parse(r.Procedimentos_Feitos);
+                            for(let k in procs) procCounts[k] = (procCounts[k] || 0) + 1;
+                        } catch(e){}
+                    }
+                });
+                const start = new Date(s.Data_Inicio);
+                const uniqueDays = countUniqueDays(sRecords);
+                const businessDays = getBusinessDatesCount(start, today) - 1;
+                if(businessDays > uniqueDays) totalPendencies += (businessDays - uniqueDays);
+            });
+
+            const avg = countStars > 0 ? (totalStars / countStars).toFixed(1) : "0.0";
+            document.getElementById('statsAvgRating').innerText = avg;
+            document.getElementById('statsStarsDisplay').innerHTML = generateStarsHTML(Math.round(avg));
+            document.getElementById('statsPendencyCount').innerText = totalPendencies;
+
+            let topProc = "--", topCount = 0;
+            for(let [k,v] of Object.entries(procCounts)) { if(v > topCount) { topCount = v; topProc = k; } }
+            document.getElementById('statsTopProc').innerText = topProc;
+            document.getElementById('statsTopProcCount').innerText = `${topCount} registros`;
+
+            // Render Cards Temporada
+            const listDiv = document.getElementById('gestorSeasonsList');
+            listDiv.innerHTML = '';
+            
+            // Filtro de Status
+            const statusFilter = document.getElementById('seasonFilter').value; // "Em Andamento" ou "Encerrada"
+            const filteredSeasons = appData.seasons.filter(s => s.Status === statusFilter);
+            document.getElementById('activeSeasonsBadge').innerText = `${filteredSeasons.length} encontradas`;
+
+            filteredSeasons.forEach(s => {
+                const mentorUser = appData.users.find(u => u.ID == s.ID_Mentor);
+                const novatoUser = appData.users.find(u => u.ID == s.ID_Novato);
+                
+                const mentorName = s.ID_Mentor === 'SOLO' ? 'Autogestão' : (mentorUser ? mentorUser.Nome : 'N/A');
+                const novatoName = novatoUser ? novatoUser.Nome : 'N/A';
+                
+                const mentorLink = s.ID_Mentor === 'SOLO' ? 'Autogestão' : renderUserLink(s.ID_Mentor, mentorName);
+                const novatoLink = renderUserLink(s.ID_Novato, novatoName);
+
+                const sRecords = appData.records.filter(r => r.ID_Temporada == s.ID_Temporada);
+                const start = new Date(s.Data_Inicio);
+                const end = new Date(s.Data_Fim);
+                const totalDays = getBusinessDatesCount(start, end);
+                const daysDone = countUniqueDays(sRecords);
+                const timePercent = Math.min(100, Math.round((daysDone/totalDays)*100));
+
+                let metas = {}; try { metas = JSON.parse(s.Meta_Procedimentos); } catch(e){}
+                let doneProcs = {};
+                sRecords.forEach(r => { try { let p=JSON.parse(r.Procedimentos_Feitos); for(let k in p) doneProcs[k]=(doneProcs[k]||0)+parseInt(p[k]); } catch(e){} });
+                let metaTotal = 0, metaDone = 0;
+                let metaSummary = [];
+                for(let k in metas) { 
+                    metaTotal += parseInt(metas[k]); 
+                    let d = doneProcs[k] || 0;
+                    metaDone += Math.min(d, parseInt(metas[k])); 
+                    if(parseInt(metas[k]) > 0) metaSummary.push(`${k.substring(0,4)}: ${d}/${metas[k]}`);
+                }
+                const techPercent = metaTotal > 0 ? Math.min(100, Math.round((metaDone/metaTotal)*100)) : 0;
+                
+                let lastActivity = "Sem registros";
+                let lastNote = 0;
+                let novatoMood = "N/A";
+                
+                if(sRecords.length > 0) {
+                    sRecords.sort((a,b) => new Date(b.Data_Referencia) - new Date(a.Data_Referencia));
+                    lastActivity = formatDate(sRecords[0].Data_Referencia);
+                    lastNote = sRecords[0].Avaliacao_Nota || 0;
+                    const lastNovatoRec = sRecords.find(r => r.Autor_Tipo === 'Novato');
+                    if(lastNovatoRec) {
+                        const moods = {1:'Inapto', 2:'Aprendendo', 3:'Mediano', 4:'Confiante', 5:'Pronto'};
+                        novatoMood = moods[lastNovatoRec.Nivel_Confianca] || "N/A";
+                    }
+                }
+
+                // Botão de Ação Dinâmico (Encerrar vs Reabrir)
+                let actionBtn = '';
+                if (s.Status === 'Em Andamento') {
+                    actionBtn = `<button onclick="changeSeasonStatus('${s.ID_Temporada}', 'Encerrada')" class="text-gray-400 hover:text-green-600 p-1" title="Encerrar (Arquivar)"><i class="fas fa-flag-checkered"></i></button>`;
+                } else {
+                    actionBtn = `<button onclick="changeSeasonStatus('${s.ID_Temporada}', 'Em Andamento')" class="text-gray-400 hover:text-blue-600 p-1" title="Tornar Atual (Reativar)"><i class="fas fa-redo"></i></button>`;
+                }
+
+                listDiv.innerHTML += `
+                    <div class="bg-white rounded-xl shadow-md p-5 border border-gray-100 hover:shadow-lg transition relative">
+                        <div class="absolute top-2 right-2 flex gap-1">
+                            <button onclick="editSeason('${s.ID_Temporada}')" class="text-gray-400 hover:text-blue-500 p-1" title="Editar"><i class="fas fa-edit"></i></button>
+                            ${actionBtn}
+                            <button onclick="deleteSeason('${s.ID_Temporada}')" class="text-gray-400 hover:text-red-500 p-1" title="Excluir"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <div class="flex justify-between items-start mb-4 pr-12">
+                            <div><p class="text-xs text-gray-500 uppercase font-bold">Mentor</p><div class="font-bold text-gray-800 text-sm">${mentorLink}</div></div>
+                            <div class="text-right"><p class="text-xs text-gray-500 uppercase font-bold">Novato</p><div class="font-bold text-gray-800 text-sm">${novatoLink}</div></div>
+                        </div>
+                        <div class="cursor-pointer" onclick="openSeasonDetails('${s.ID_Temporada}')">
+                            <div class="space-y-3 mb-4">
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1"><span class="text-blue-600 font-bold">Tempo</span><span>${daysDone}/${totalDays} d</span></div>
+                                    <div class="w-full bg-gray-100 rounded-full h-2"><div class="bg-blue-500 h-2 rounded-full" style="width: ${timePercent}%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1"><span class="text-green-600 font-bold">Técnica</span><span>${techPercent}% meta</span></div>
+                                    <div class="w-full bg-gray-100 rounded-full h-2"><div class="bg-green-500 h-2 rounded-full" style="width: ${techPercent}%"></div></div>
+                                    <p class="text-[10px] text-gray-500 mt-1 truncate">${metaSummary.slice(0,3).join(', ')}${metaSummary.length>3?'...':''}</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center text-xs text-gray-500 border-t pt-3">
+                                <div><i class="fas fa-history mr-1"></i> ${lastActivity}</div>
+                                <div class="flex text-yellow-400" title="Última Avaliação">${generateStarsHTML(lastNote)}</div>
+                            </div>
+                            <div class="mt-2 text-xs text-center font-bold text-indigo-600 bg-indigo-50 py-1 rounded">Humor Novato: ${novatoMood}</div>
+                        </div>
+                        <div class="flex gap-2 mt-4">
+                            <button onclick="openSeasonDetails('${s.ID_Temporada}')" class="flex-1 bg-gray-50 text-gray-600 text-xs font-bold py-2 rounded border border-gray-200 hover:bg-gray-100">RAIO-X COMPLETO</button>
+                            <button onclick="generateAdvancedReport('${s.ID_Temporada}')" class="bg-red-50 text-red-600 text-xs font-bold px-3 py-2 rounded border border-red-200 hover:bg-red-100" title="PDF da Temporada"><i class="fas fa-file-pdf"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            renderUserCards();
+        }
+
+        // --- MANIPULAÇÃO DE STATUS DE TEMPORADA ---
+        async function changeSeasonStatus(id, newStatus) {
+            const actionText = newStatus === 'Encerrada' ? 'Encerrar e Arquivar' : 'Reativar e Tornar Atual';
+            const result = await Swal.fire({ 
+                title: `${actionText} Temporada?`, 
+                text: newStatus === 'Encerrada' 
+                    ? "A temporada sairá do painel diário, mas os dados serão preservados." 
+                    : "A temporada voltará a aparecer para preenchimento diário.",
+                icon: 'question', 
+                showCancelButton: true, 
+                confirmButtonText: 'Sim, confirmar' 
+            });
+            
+            if(result.isConfirmed) {
+                sendPost('updateSeasonStatus', { ID_Temporada: id, Status: newStatus });
+            }
+        }
+
+        // --- CALCULO BILATERAL DE ESTRELAS ---
+        function getUserStats(user) {
+            let total = 0;
+            let count = 0;
+            let label = "";
+
+            if (user.Tipo === 'Novato') {
+                // Novato: Média das notas que ele RECEBEU dos Mentores
+                label = "Desempenho (Aval. Mentor)";
+                const mySeasons = appData.seasons.filter(s => s.ID_Novato == user.ID).map(s => s.ID_Temporada);
+                appData.records.forEach(r => {
+                    // Nota dada por Mentor EM uma temporada do novato
+                    if (mySeasons.includes(r.ID_Temporada) && r.Autor_Tipo === 'Mentor' && r.Avaliacao_Nota) {
+                        total += parseFloat(r.Avaliacao_Nota);
+                        count++;
+                    }
+                });
+            } else if (user.Tipo === 'Mentor') {
+                // Mentor: Média das notas que ele RECEBEU dos Novatos (Didática)
+                label = "Didática (Aval. Novato)";
+                const mySeasons = appData.seasons.filter(s => s.ID_Mentor == user.ID).map(s => s.ID_Temporada);
+                appData.records.forEach(r => {
+                    // Nota dada por Novato EM uma temporada desse mentor
+                    if (mySeasons.includes(r.ID_Temporada) && r.Autor_Tipo === 'Novato' && r.Avaliacao_Nota) {
+                        total += parseFloat(r.Avaliacao_Nota);
+                        count++;
+                    }
+                });
+            }
+            
+            return { avg: count > 0 ? (total / count).toFixed(1) : "-", count, label };
+        }
+
+        function renderUserCards() {
+            const listDiv = document.getElementById('usersCardList');
+            listDiv.innerHTML = '';
+            appData.users.forEach(u => {
+                const stats = getUserStats(u);
+                listDiv.innerHTML += `
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition relative group">
+                        <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition z-10">
+                            <button onclick="editUser('${u.ID}')" class="text-blue-400 hover:text-blue-600"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteUser('${u.ID}')" class="text-red-400 hover:text-red-600"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <div onclick="openUserDetails('${u.ID}')" class="cursor-pointer flex items-center gap-3">
+                            <img src="${u.Foto_URL || 'https://i.imgur.com/Knw2a6b.png'}" class="w-12 h-12 rounded-full object-cover bg-gray-200">
+                            <div>
+                                <p class="font-bold text-sm text-gray-800">${u.Nome}</p>
+                                <span class="text-xs px-2 py-0.5 rounded-full ${u.Tipo==='Mentor'?'bg-blue-100 text-blue-700':(u.Tipo==='Novato'?'bg-green-100 text-green-700':'bg-gray-100')}">${u.Tipo}</span>
+                                <div class="flex flex-col mt-1" title="${stats.label}">
+                                    <div class="flex items-center text-xs text-yellow-500">
+                                        <i class="fas fa-star mr-1"></i> ${stats.avg} <span class="text-gray-400 ml-1">(${stats.count})</span>
+                                    </div>
+                                    <span class="text-[9px] text-gray-400">${stats.label}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- RELATÓRIOS DETALHADOS (DRILL-DOWN) ---
+
+        // 1. Relatório de Pendências
+        function openPendencyReport() {
+            const title = document.getElementById('genericReportTitle');
+            const content = document.getElementById('genericReportContent');
+            title.innerText = "Detalhamento de Pendências";
+            
+            let html = `<table class="w-full text-sm text-left"><thead class="bg-gray-100 text-gray-600"><tr><th class="p-2">Data Pendente</th><th class="p-2">Temporada</th><th class="p-2">Mentor</th><th class="p-2">Novato</th></tr></thead><tbody>`;
+            
+            let hasData = false;
+            const today = new Date(); today.setHours(0,0,0,0);
+            
+            appData.seasons.filter(s => s.Status === 'Em Andamento').forEach(s => {
+                const records = appData.records.filter(r => r.ID_Temporada == s.ID_Temporada);
+                const start = new Date(s.Data_Inicio);
+                let curr = new Date(start);
+                
+                const mentor = appData.users.find(u => u.ID == s.ID_Mentor);
+                const novato = appData.users.find(u => u.ID == s.ID_Novato);
+                const mentorName = mentor ? mentor.Nome : (s.ID_Mentor === 'SOLO' ? 'Solo' : 'N/A');
+                const novatoName = novato ? novato.Nome : 'N/A';
+
+                while(curr < today) {
+                    const dow = curr.getDay();
+                    if(dow >= 1 && dow <= 5) {
+                        const dStr = curr.toISOString().split('T')[0];
+                        if(!records.some(r => r.Data_Referencia.startsWith(dStr))) {
+                            hasData = true;
+                            html += `<tr class="border-b hover:bg-gray-50">
+                                <td class="p-2 text-red-600 font-bold">${formatDate(dStr)}</td>
+                                <td class="p-2">${renderSeasonLink(s.ID_Temporada)}</td>
+                                <td class="p-2">${s.ID_Mentor==='SOLO' ? 'SOLO' : renderUserLink(s.ID_Mentor, mentorName)}</td>
+                                <td class="p-2">${renderUserLink(s.ID_Novato, novatoName)}</td>
+                            </tr>`;
+                        }
+                    }
+                    curr.setDate(curr.getDate()+1);
+                }
+            });
+            html += `</tbody></table>`;
+            if(!hasData) html = `<div class="text-center p-8 text-green-500 font-bold"><i class="fas fa-check-circle text-4xl mb-2"></i><br>Nenhuma pendência encontrada!</div>`;
+            
+            content.innerHTML = html;
+            document.getElementById('modalGenericReport').classList.remove('hidden');
+        }
+
+        // 2. Relatório de Procedimentos
+        function openProceduresReport() {
+            const title = document.getElementById('genericReportTitle');
+            const content = document.getElementById('genericReportContent');
+            title.innerText = "Ranking de Procedimentos Ensinados";
+            
+            let counts = {};
+            appData.records.forEach(r => {
+                if(r.Procedimentos_Feitos) {
+                    try {
+                        const p = JSON.parse(r.Procedimentos_Feitos);
+                        for(let k in p) counts[k] = (counts[k] || 0) + parseInt(p[k]);
+                    } catch(e){}
+                }
+            });
+            
+            // Converter para array e ordenar
+            let sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+            
+            let html = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
+            sorted.forEach(([proc, qtd], index) => {
+                const percent = sorted[0][1] > 0 ? (qtd / sorted[0][1]) * 100 : 0;
+                html += `
+                    <div class="bg-gray-50 p-3 rounded border flex items-center justify-between">
+                        <div class="flex-1">
+                            <div class="flex justify-between mb-1">
+                                <span class="font-bold text-gray-700">#${index+1} ${proc}</span>
+                                <span class="font-bold text-blue-600">${qtd}</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-blue-500 h-2 rounded-full" style="width: ${percent}%"></div></div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            
+            content.innerHTML = html;
+            document.getElementById('modalGenericReport').classList.remove('hidden');
+        }
+
+        // 3. Relatório de Avaliações
+        function openRatingsReport() {
+            const title = document.getElementById('genericReportTitle');
+            const content = document.getElementById('genericReportContent');
+            title.innerText = "Histórico de Avaliações (Bilateral)";
+            
+            let html = `<table class="w-full text-xs md:text-sm text-left"><thead class="bg-gray-100 text-gray-600"><tr>
+                <th class="p-2">Data</th>
+                <th class="p-2">Quem Avaliou (Autor)</th>
+                <th class="p-2">Quem Recebeu</th>
+                <th class="p-2">Nota</th>
+                <th class="p-2">Contexto</th>
+            </tr></thead><tbody>`;
+            
+            // Ordenar registros por data (mais recente)
+            const sortedRecords = [...appData.records].sort((a,b) => new Date(b.Data_Referencia) - new Date(a.Data_Referencia));
+            
+            sortedRecords.forEach(r => {
+                if(!r.Avaliacao_Nota) return;
+                
+                // Descobrir nomes e papéis
+                const season = appData.seasons.find(s => s.ID_Temporada == r.ID_Temporada);
+                if(!season) return;
+
+                let autorName = "Desconhecido";
+                let receiverName = "N/A";
+                let autorId = null;
+                let receiverId = null;
+
+                if (r.Autor_Tipo === 'Mentor') {
+                    // Mentor avaliou Novato
+                    const u = appData.users.find(x => x.ID == season.ID_Mentor);
+                    autorName = u ? u.Nome : 'Mentor (Removido)';
+                    autorId = season.ID_Mentor;
+                    const n = appData.users.find(x => x.ID == season.ID_Novato);
+                    receiverName = n ? n.Nome : 'Novato';
+                    receiverId = season.ID_Novato;
+                } else {
+                    // Novato avaliou Mentor (ou Autoavaliação se Solo)
+                    const n = appData.users.find(x => x.ID == season.ID_Novato);
+                    autorName = n ? n.Nome : 'Novato';
+                    autorId = season.ID_Novato;
+                    
+                    if(season.ID_Mentor === 'SOLO') {
+                        receiverName = "Autoavaliação (Solo)";
+                    } else {
+                        const m = appData.users.find(x => x.ID == season.ID_Mentor);
+                        receiverName = m ? m.Nome : 'Mentor';
+                        receiverId = season.ID_Mentor;
+                    }
+                }
+
+                html += `<tr class="border-b hover:bg-gray-50">
+                    <td class="p-2">${formatDate(r.Data_Referencia)}</td>
+                    <td class="p-2 font-bold ${r.Autor_Tipo==='Mentor'?'text-blue-600':'text-green-600'}">${renderUserLink(autorId, autorName)} <span class="text-[10px] text-gray-400">(${r.Autor_Tipo})</span></td>
+                    <td class="p-2">${receiverId ? renderUserLink(receiverId, receiverName) : receiverName}</td>
+                    <td class="p-2 text-yellow-500 font-bold">${r.Avaliacao_Nota} <i class="fas fa-star text-[10px]"></i></td>
+                    <td class="p-2 text-gray-500">${renderSeasonLink(season.ID_Temporada)}</td>
+                </tr>`;
+            });
+            html += `</tbody></table>`;
+            content.innerHTML = html;
+            document.getElementById('modalGenericReport').classList.remove('hidden');
+        }
+
+
+        // --- RAIO-X COMPLETO (Modal Season Details) ---
+        function openSeasonDetails(id) {
+            const season = appData.seasons.find(s => s.ID_Temporada == id);
+            if(!season) return;
+
+            const records = appData.records.filter(r => r.ID_Temporada == id).sort((a,b) => new Date(b.Data_Referencia) - new Date(a.Data_Referencia));
+            const mentorUser = appData.users.find(u => u.ID == season.ID_Mentor);
+            const novatoUser = appData.users.find(u => u.ID == season.ID_Novato);
+            const mentorName = season.ID_Mentor === 'SOLO' ? 'Autogestão (Solo)' : (mentorUser ? mentorUser.Nome : 'Desconhecido');
+            const novatoName = novatoUser ? novatoUser.Nome : 'Desconhecido';
+
+            // Cálculos Detalhados
+            let metas = {}; try { metas = JSON.parse(season.Meta_Procedimentos); } catch(e){}
+            let realizados = {};
+            let moodHistory = [];
+            
+            records.forEach(r => {
+                // Procedimentos
+                try {
+                    let p = JSON.parse(r.Procedimentos_Feitos);
+                    for(let k in p) realizados[k] = (realizados[k]||0) + parseInt(p[k]);
+                } catch(e){}
+                // Humor
+                if(r.Autor_Tipo === 'Novato' && r.Nivel_Confianca) {
+                     moodHistory.push({date: r.Data_Referencia, val: parseInt(r.Nivel_Confianca)});
+                }
+            });
+
+            // HTML Construction
+            let html = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-4 rounded shadow-sm border">
+                        <h4 class="font-bold text-gray-700 border-b pb-2 mb-2">Informações Gerais</h4>
+                        <div class="text-sm space-y-1">
+                            <p><span class="text-gray-500">Temporada ID:</span> ${season.ID_Temporada}</p>
+                            <p><span class="text-gray-500">Mentor:</span> ${renderUserLink(season.ID_Mentor, mentorName)}</p>
+                            <p><span class="text-gray-500">Novato:</span> ${renderUserLink(season.ID_Novato, novatoName)}</p>
+                            <p><span class="text-gray-500">Período:</span> ${formatDate(season.Data_Inicio)} até ${formatDate(season.Data_Fim)}</p>
+                            <p><span class="text-gray-500">Status:</span> <span class="px-2 py-0.5 rounded text-xs font-bold ${season.Status==='Em Andamento'?'bg-blue-100 text-blue-700':'bg-gray-100'}">${season.Status}</span></p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded shadow-sm border">
+                        <h4 class="font-bold text-gray-700 border-b pb-2 mb-2">Progresso das Metas</h4>
+                        <div class="space-y-3 max-h-40 overflow-y-auto pr-2">`;
+            
+            // Barras de Progresso Detalhadas
+            for(let proc in metas) {
+                const meta = parseInt(metas[proc]);
+                const feito = realizados[proc] || 0;
+                const pct = Math.min(100, Math.round((feito/meta)*100));
+                html += `
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>${proc}</span>
+                            <span class="${feito>=meta?'text-green-600 font-bold':''}">${feito} / ${meta}</span>
+                        </div>
+                        <div class="w-full bg-gray-100 rounded-full h-2">
+                            <div class="${feito>=meta?'bg-green-500':'bg-blue-500'} h-2 rounded-full" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            html += `   </div>
+                    </div>
+                </div>`;
+
+            // Histórico de Humor (Visualização Simples)
+            if(moodHistory.length > 0) {
+                html += `<div class="mb-6 bg-white p-4 rounded shadow-sm border">
+                    <h4 class="font-bold text-gray-700 border-b pb-2 mb-2">Evolução da Confiança (Novato)</h4>
+                    <div class="flex items-end space-x-2 h-20 pt-4">`;
+                moodHistory.reverse(); // Cronológico
+                moodHistory.forEach(m => {
+                    const h = m.val * 20; // 1-5 scale to height
+                    const color = m.val >= 4 ? 'bg-green-400' : (m.val === 3 ? 'bg-yellow-400' : 'bg-red-400');
+                    html += `<div class="flex-1 flex flex-col justify-end items-center group relative">
+                        <div class="w-full ${color} rounded-t opacity-80 hover:opacity-100 transition" style="height: ${h}%"></div>
+                        <div class="text-[9px] text-gray-400 mt-1 transform -rotate-45 origin-left">${formatDate(m.date).substring(0,5)}</div>
+                        <div class="absolute bottom-full mb-1 hidden group-hover:block bg-black text-white text-[10px] p-1 rounded z-10">Nível ${m.val}</div>
+                    </div>`;
+                });
+                html += `</div></div>`;
+            }
+
+            // Timeline de Registros
+            html += `<h4 class="font-bold text-gray-700 mb-2">Diário de Bordo (Linha do Tempo)</h4>
+                     <div class="space-y-3">`;
+            
+            records.forEach(r => {
+                const isMentor = r.Autor_Tipo === 'Mentor';
+                const cardColor = isMentor ? 'border-blue-200 bg-blue-50' : 'border-green-200 bg-green-50';
+                const userLink = isMentor ? renderUserLink(season.ID_Mentor, mentorName) : renderUserLink(season.ID_Novato, novatoName);
+                
+                html += `
+                    <div class="border-l-4 ${isMentor ? 'border-blue-500' : 'border-green-500'} bg-white p-4 rounded shadow-sm text-sm">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <span class="font-bold text-gray-800">${formatDate(r.Data_Referencia)}</span>
+                                <span class="text-xs text-gray-500 ml-2">por ${userLink} (${r.Autor_Tipo})</span>
+                            </div>
+                            ${r.Avaliacao_Nota ? `<span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-bold"><i class="fas fa-star mr-1"></i>${r.Avaliacao_Nota}</span>` : ''}
+                        </div>
+                        ${r.Observacoes ? `<p class="text-gray-700 italic mb-2">"${r.Observacoes}"</p>` : ''}
+                        
+                        <div class="grid grid-cols-2 gap-4 mt-2">
+                            ${r.Elogios ? `<div class="text-xs"><span class="font-bold text-green-700">Elogios:</span> ${r.Elogios}</div>` : ''}
+                            ${r.Advertencias ? `<div class="text-xs"><span class="font-bold text-red-700">Advertências:</span> ${r.Advertencias}</div>` : ''}
+                        </div>
+                        
+                        ${r.Procedimentos_Feitos && r.Procedimentos_Feitos !== '{}' ? `
+                            <div class="mt-2 pt-2 border-t border-gray-100">
+                                <span class="text-xs font-bold text-gray-500 uppercase">Procedimentos:</span>
+                                <div class="flex flex-wrap gap-1 mt-1">
+                                    ${Object.entries(JSON.parse(r.Procedimentos_Feitos)).map(([k,v]) => `<span class="px-2 py-0.5 bg-gray-200 rounded text-xs text-gray-700">${k}: ${v}</span>`).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            html += `</div>`;
+
+            document.getElementById('seasonDetailsContent').innerHTML = html;
+            document.getElementById('modalSeasonDetails').classList.remove('hidden');
+        }
+
+        // --- DETALHES DO USUÁRIO (HISTÓRICO INTERLIGADO) ---
+        function openUserDetails(userId) {
+            const user = appData.users.find(u => u.ID == userId);
+            if(!user) return;
+            
+            // Histórico Rico
+            let historyHTML = '';
+            
+            if(user.Tipo === 'Novato') {
+                const seasons = appData.seasons.filter(s => s.ID_Novato == userId);
+                historyHTML = `<h4 class="font-bold text-sm mt-4 mb-2 text-gray-700 border-b">Histórico de Treinos</h4>
+                <ul class="text-sm space-y-2 mt-2">
+                ${seasons.length === 0 ? '<li class="text-gray-400">Nenhum histórico.</li>' : ''}
+                ${seasons.map(s => `
+                    <li class="bg-white p-3 rounded border shadow-sm flex justify-between items-center">
+                        <div>
+                            <span class="block font-bold text-blue-600 cursor-pointer hover:underline" onclick="closeModal('modalUserDetails'); openSeasonDetails('${s.ID_Temporada}')">Temporada ${s.ID_Temporada} <i class="fas fa-external-link-alt text-[10px]"></i></span>
+                            <span class="text-xs text-gray-500">${formatDate(s.Data_Inicio)} a ${formatDate(s.Data_Fim)}</span>
+                            <span class="text-xs block text-gray-400">Mentor: ${s.ID_Mentor==='SOLO'?'Auto':s.ID_Mentor}</span>
+                        </div>
+                        <span class="px-2 py-1 rounded-full text-xs ${s.Status==='Em Andamento'?'bg-blue-100 text-blue-700':'bg-gray-100'}">${s.Status}</span>
+                    </li>
+                `).join('')}</ul>`;
+            } else if (user.Tipo === 'Mentor') {
+                const seasons = appData.seasons.filter(s => s.ID_Mentor == userId);
+                historyHTML = `<h4 class="font-bold text-sm mt-4 mb-2 text-gray-700 border-b">Temporadas Ministradas</h4>
+                <ul class="text-sm space-y-2 mt-2">
+                ${seasons.length === 0 ? '<li class="text-gray-400">Nenhum histórico.</li>' : ''}
+                ${seasons.map(s => {
+                    const novato = appData.users.find(n => n.ID == s.ID_Novato);
+                    return `
+                    <li class="bg-white p-3 rounded border shadow-sm flex justify-between items-center">
+                        <div>
+                            <span class="block font-bold text-blue-600 cursor-pointer hover:underline" onclick="closeModal('modalUserDetails'); openSeasonDetails('${s.ID_Temporada}')">Temporada ${s.ID_Temporada} <i class="fas fa-external-link-alt text-[10px]"></i></span>
+                            <span class="text-xs text-gray-500">Novato: ${novato ? novato.Nome : 'N/A'}</span>
+                        </div>
+                        <span class="px-2 py-1 rounded-full text-xs ${s.Status==='Em Andamento'?'bg-blue-100 text-blue-700':'bg-gray-100'}">${s.Status}</span>
+                    </li>
+                `}).join('')}</ul>`;
+            }
+
+            const stats = getUserStats(user);
+
+            document.getElementById('userDetailsContent').innerHTML = `
+                <div class="flex items-center gap-4 mb-6">
+                    <img src="${user.Foto_URL || 'https://i.imgur.com/Knw2a6b.png'}" class="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg bg-gray-200">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">${user.Nome}</h2>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold ${user.Tipo==='Mentor'?'bg-blue-100 text-blue-700':(user.Tipo==='Novato'?'bg-green-100 text-green-700':'bg-gray-100')}">${user.Tipo}</span>
+                        <div class="flex items-center text-yellow-500 mt-1 font-bold">
+                            <i class="fas fa-star mr-1"></i> ${stats.avg} <span class="text-xs text-gray-400 font-normal ml-1">Média Global</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">Login: ${user.Login}</p>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    ${historyHTML}
+                </div>
+            `;
+            document.getElementById('modalUserDetails').classList.remove('hidden');
+        }
+
+        // ... [Demais funções: editUser, deleteUser, editSeason, deleteSeason, reports, etc mantidas] ...
+        
+        // --- FUNÇÕES DE CRUD (Mantidas para funcionalidade) ---
+        function editUser(id) {
+            const u = appData.users.find(x => x.ID == id);
+            if(!u) return;
+            document.getElementById('titleModalUser').innerText = "Editar Usuário";
+            document.getElementById('editUserId').value = u.ID;
+            document.getElementById('editUserNome').value = u.Nome;
+            document.getElementById('editUserLogin').value = u.Login;
+            document.getElementById('editUserSenha').value = u.Senha;
+            document.getElementById('editUserTipo').value = u.Tipo;
+            document.getElementById('editUserFoto').value = u.Foto_URL;
+            document.getElementById('modalNewUser').classList.remove('hidden');
+        }
+
+        async function deleteUser(id) {
+            const result = await Swal.fire({ title: 'Tem certeza?', text: "Irreversível.", icon: 'warning', showCancelButton: true, confirmButtonText: 'Sim' });
+            if(result.isConfirmed) sendPost('deleteUser', { ID: id });
+        }
+
+        function editSeason(id) {
+            const s = appData.seasons.find(x => x.ID_Temporada == id);
+            if(!s) return;
+            document.getElementById('titleModalSeason').innerText = "Editar Temporada";
+            document.getElementById('editSeasonId').value = s.ID_Temporada;
+            document.getElementById('dateStart').value = s.Data_Inicio.split('T')[0];
+            document.getElementById('dateEnd').value = s.Data_Fim.split('T')[0];
+            populateSeasonModal();
+            setTimeout(() => {
+                if(s.ID_Mentor === 'SOLO') { document.getElementById('checkSoloSeason').checked = true; toggleSoloSeason(); }
+                else { document.getElementById('checkSoloSeason').checked = false; toggleSoloSeason(); document.getElementById('selMentor').value = s.ID_Mentor; }
+                document.getElementById('selNovato').value = s.ID_Novato;
+                try { const metas = JSON.parse(s.Meta_Procedimentos); for (let [k, v] of Object.entries(metas)) { const inp = document.querySelector(`input[name="${k}"]`); if(inp) inp.value = v; } } catch(e){}
+            }, 100);
+            document.getElementById('modalNewSeason').classList.remove('hidden');
+        }
+
+        async function deleteSeason(id) {
+            const result = await Swal.fire({ title: 'Excluir Temporada?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Excluir' });
+            if(result.isConfirmed) sendPost('deleteSeason', { ID_Temporada: id });
+        }
+        
+        // --- RELATÓRIOS PDF ---
+        function openAdvancedReportModal() {
+            const select = document.getElementById('reportUserFilter');
+            select.innerHTML = '<option value="">Todos</option>';
+            appData.users.forEach(u => select.add(new Option(u.Nome, u.ID)));
+            document.getElementById('modalAdvancedReport').classList.remove('hidden');
+        }
+
+        function generateAdvancedReport(specificSeasonId = null) {
+            let start, end, userId;
+            let filteredRecords = appData.records;
+            if (specificSeasonId) { filteredRecords = filteredRecords.filter(r => r.ID_Temporada == specificSeasonId); } 
+            else {
+                start = document.getElementById('reportStartDate').value;
+                end = document.getElementById('reportEndDate').value;
+                userId = document.getElementById('reportUserFilter').value;
+                if(start) filteredRecords = filteredRecords.filter(r => r.Data_Referencia >= start);
+                if(end) filteredRecords = filteredRecords.filter(r => r.Data_Referencia <= end);
+                if(userId) {
+                    const userSeasons = appData.seasons.filter(s => s.ID_Mentor == userId || s.ID_Novato == userId).map(s => s.ID_Temporada);
+                    filteredRecords = filteredRecords.filter(r => userSeasons.includes(r.ID_Temporada));
+                }
+                closeModal('modalAdvancedReport');
+            }
+            filteredRecords.sort((a,b) => new Date(b.Data_Referencia) - new Date(a.Data_Referencia));
+            // HTML construction for PDF (Simplificado para brevidade, mantendo lógica anterior)
+             let html = `<div class="p-8 font-sans"><h1 class="text-xl font-bold mb-4">Relatório RL NET</h1><table class="w-full text-xs border-collapse"><thead class="bg-gray-800 text-white"><tr><th class="p-2 text-left">Data</th><th class="p-2">Autor</th><th class="p-2">Nota</th><th class="p-2">Info</th></tr></thead><tbody>${filteredRecords.map(r => `<tr class="border-b"><td class="p-2">${formatDate(r.Data_Referencia)}</td><td class="p-2">${r.Autor_Tipo}</td><td class="p-2">${r.Avaliacao_Nota||'-'}</td><td class="p-2">${r.Observacoes||''}</td></tr>`).join('')}</tbody></table></div>`;
+            const container = document.getElementById('pdfReportContainer');
+            container.innerHTML = html;
+            container.classList.remove('hidden');
+            const opt = { margin: 0.5, filename: `Relatorio.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
+            
+            // Wait a moment for rendering
+            setTimeout(() => {
+                 html2pdf().set(opt).from(container).save().then(() => container.classList.add('hidden'));
+            }, 500);
+        }
+
+        // --- UTILS & MODALS ---
+        function openModal(id) { 
+            if(id === 'modalNewUser') { document.getElementById('titleModalUser').innerText = "Adicionar Usuário"; document.getElementById('formNewUser').reset(); document.getElementById('editUserId').value = ''; }
+            if(id === 'modalNewSeason') { document.getElementById('titleModalSeason').innerText = "Iniciar Temporada"; document.getElementById('formNewSeason').reset(); document.getElementById('editSeasonId').value = ''; populateSeasonModal(); }
+            document.getElementById(id).classList.remove('hidden'); 
+            if(id==='modalConfigProcedures') document.getElementById('txtProcedures').value = proceduresList.join(', '); 
+        }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        
+        function populateSeasonModal() {
+            const selM = document.getElementById('selMentor');
+            const selN = document.getElementById('selNovato');
+            selM.innerHTML = ''; selN.innerHTML = '';
+            appData.users.filter(u => u.Tipo === 'Mentor').forEach(u => selM.add(new Option(u.Nome, u.ID)));
+            appData.users.filter(u => u.Tipo === 'Novato').forEach(u => selN.add(new Option(u.Nome, u.ID)));
+            const divGoals = document.getElementById('goalsInputs');
+            divGoals.innerHTML = '';
+            proceduresList.forEach(proc => {
+                divGoals.innerHTML += `<div><label class="text-[10px] text-gray-500">${proc}</label><input type="number" name="${proc}" class="w-full border rounded px-1" value="0" min="0"></div>`;
+            });
+        }
+        function toggleSoloSeason() { const isSolo = document.getElementById('checkSoloSeason').checked; document.getElementById('divSelMentor').style.display = isSolo ? 'none' : 'block'; }
+        
+        // --- SAVE FUNCTIONS ---
+        function saveSeason(e) {
+            e.preventDefault();
+            const goalsInputs = document.querySelectorAll('#goalsInputs input');
+            let metas = {};
+            goalsInputs.forEach(inp => { if(inp.value > 0) metas[inp.name] = parseInt(inp.value); });
+            const isSolo = document.getElementById('checkSoloSeason').checked;
+            const editId = document.getElementById('editSeasonId').value;
+            // FIX: isNew was wrong logic, if editId exists, isNew is false
+            const payload = { ID_Temporada: editId, isNew: !editId, ID_Mentor: isSolo ? 'SOLO' : document.getElementById('selMentor').value, ID_Novato: document.getElementById('selNovato').value, Data_Inicio: document.getElementById('dateStart').value, Data_Fim: document.getElementById('dateEnd').value, Meta_Procedimentos: JSON.stringify(metas) };
+            sendPost('updateSeason', payload, 'modalNewSeason');
+        }
+        function saveUser(e) {
+            e.preventDefault();
+            const form = new FormData(e.target);
+            const editId = document.getElementById('editUserId').value;
+            const payload = { isNew: !editId, ID: editId, Nome: form.get('nome'), Login: form.get('login'), Senha: form.get('senha'), Tipo: form.get('tipo'), Foto_URL: form.get('foto') || '' };
+            sendPost('updateUser', payload, 'modalNewUser');
+        }
+        function saveConfigProcedures() { sendPost('updateConfig', { key: "Procedimentos", value: document.getElementById('txtProcedures').value.replace(/\n/g, ",") }, 'modalConfigProcedures'); }
+
+        async function submitDailyReport(isEmpty) {
+            if (!currentSeason) return;
+            const dateRef = document.getElementById('recordDate').value;
+            if (!dateRef) return Swal.fire('Erro', 'Selecione a data.', 'error');
+            let procsDone = {};
+            const isMentor = currentUser.Tipo === 'Mentor';
+            const isSolo = currentSeason.ID_Mentor === 'SOLO';
+            if (!isEmpty && (isMentor || isSolo)) {
+                const checks = document.querySelectorAll('#proceduresList input[type="checkbox"]:checked');
+                checks.forEach(chk => { procsDone[chk.value] = 1; });
+            }
+            const payload = { ID_Temporada: currentSeason.ID_Temporada, Autor_Tipo: currentUser.Tipo, Data_Referencia: dateRef, Procedimentos_Feitos: JSON.stringify(procsDone), Observacoes: document.getElementById('generalObs').value, Status: isEmpty ? 'Vazio' : 'Preenchido' };
+            if (isMentor) { payload.Avaliacao_Nota = document.getElementById('mentorRatingValue').value; payload.Elogios = document.getElementById('mentorPraise').value; payload.Advertencias = document.getElementById('mentorWarning').value; } 
+            else { payload.Nivel_Confianca = document.getElementById('novatoConfidence').value; payload.Avaliacao_Nota = document.getElementById('novatoRatingValue').value; }
+            sendPost('saveRecord', payload, null);
+            localStorage.removeItem('rlnet_draft_' + currentUser.ID);
+        }
+
+        async function sendPost(action, payload, modalId) {
+            toggleLoading(true);
+            try {
+                await fetch(API_URL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action, payload }) });
+                await new Promise(r => setTimeout(r, 1500));
+                await fetchAllData();
+                refreshCurrentView();
+                toggleLoading(false);
+                if(modalId) closeModal(modalId);
+                Swal.fire('Sucesso', 'Operação realizada.', 'success');
+            } catch(e) { toggleLoading(false); Swal.fire('Erro', e.message, 'error'); }
+        }
+
+        // --- OPERACIONAL LOGIC ---
+        function setupOperacionalView() {
+            try {
+                document.getElementById('viewOperacional').classList.remove('hidden');
+                document.getElementById('viewGestor').classList.add('hidden');
+                const myId = String(currentUser.ID); 
+                if(!appData.seasons) appData.seasons = [];
+                currentSeason = appData.seasons.find(s => (String(s.ID_Mentor) === myId || String(s.ID_Novato) === myId || (s.ID_Novato == myId && s.ID_Mentor === 'SOLO')) && s.Status === 'Em Andamento');
+                if (!currentSeason) { document.getElementById('operacionalEmpty').classList.remove('hidden'); document.getElementById('operacionalContent').classList.add('hidden'); return; } 
+                else { document.getElementById('operacionalEmpty').classList.add('hidden'); document.getElementById('operacionalContent').classList.remove('hidden'); }
+
+                const isSolo = currentSeason.ID_Mentor === 'SOLO';
+                const isMentor = currentUser.Tipo === 'Mentor';
+                const partnerId = isMentor ? currentSeason.ID_Novato : currentSeason.ID_Mentor;
+                const partner = isSolo ? {Nome: "Autogestão (Solo)"} : appData.users.find(u => String(u.ID) === String(partnerId));
+                document.getElementById('opPartnerName').innerText = partner ? partner.Nome : 'Desconhecido';
+
+                if(isSolo) { document.getElementById('seasonTypeBadge').classList.remove('hidden'); document.getElementById('checklistContainer').classList.remove('hidden'); document.getElementById('novatoFields').classList.remove('hidden'); document.getElementById('mentorFields').classList.add('hidden'); document.getElementById('novatoEvalTitle').innerText = "Autoavaliação (Desempenho Geral)"; } 
+                else if (isMentor) { document.getElementById('seasonTypeBadge').classList.add('hidden'); document.getElementById('mentorFields').classList.remove('hidden'); document.getElementById('checklistContainer').classList.remove('hidden'); document.getElementById('novatoFields').classList.add('hidden'); } 
+                else { document.getElementById('seasonTypeBadge').classList.add('hidden'); document.getElementById('novatoFields').classList.remove('hidden'); document.getElementById('mentorFields').classList.add('hidden'); document.getElementById('checklistContainer').classList.add('hidden'); document.getElementById('novatoEvalTitle').innerText = "Avaliação do Mentor (Didática)"; }
+
+                const checkListDiv = document.getElementById('proceduresList');
+                checkListDiv.innerHTML = '';
+                proceduresList.forEach(proc => { checkListDiv.innerHTML += `<div class="flex items-center space-x-2"><input type="checkbox" id="proc_${proc}" value="${proc}" class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 cursor-pointer save-draft-check"><label for="proc_${proc}" class="text-sm text-gray-700 cursor-pointer select-none">${proc}</label></div>`; });
+
+                calculateProgress();
+                checkPendencies();
+                initAutoSave();
+            } catch(e) { console.error(e); }
+        }
+
+        function calculateProgress() {
+            if(!currentSeason) return;
+            const seasonRecords = appData.records.filter(r => String(r.ID_Temporada) === String(currentSeason.ID_Temporada) && r.Status !== 'Vazio');
+            let totalDays = 0, daysDone = 0;
+            try {
+                const start = new Date(currentSeason.Data_Inicio);
+                const end = new Date(currentSeason.Data_Fim);
+                if(!isNaN(start.getTime()) && !isNaN(end.getTime())) { totalDays = getBusinessDatesCount(start, end); daysDone = countUniqueDays(seasonRecords); }
+            } catch(e) {}
+            document.getElementById('opDayCounter').innerText = `Dia ${daysDone} de ${totalDays}`;
+
+            let metas = {}; try { metas = JSON.parse(currentSeason.Meta_Procedimentos); } catch(e){}
+            let realizadoTotal = {};
+            seasonRecords.forEach(rec => { try { let items = JSON.parse(rec.Procedimentos_Feitos); for (let [key, val] of Object.entries(items)) realizadoTotal[key] = (realizadoTotal[key] || 0) + parseInt(val); } catch(e){} });
+
+            const summaryDiv = document.getElementById('goalsSummary');
+            summaryDiv.innerHTML = '';
+            let totalMetaItems = 0, totalDoneItems = 0;
+            for (let [proc, metaQtd] of Object.entries(metas)) {
+                const feito = realizadoTotal[proc] || 0;
+                totalMetaItems += parseInt(metaQtd);
+                totalDoneItems += Math.min(feito, metaQtd);
+                const percent = Math.min(100, Math.round((feito / metaQtd) * 100));
+                summaryDiv.innerHTML += `<div class="flex justify-between text-xs mb-1"><span>${proc}</span><span class="${feito >= metaQtd ? 'text-green-600 font-bold' : ''}">${feito}/${metaQtd}</span></div><div class="w-full bg-gray-200 rounded-full h-1.5 mb-2"><div class="${feito >= metaQtd ? 'bg-green-500' : 'bg-blue-500'} h-1.5 rounded-full" style="width: ${percent}%"></div></div>`;
+            }
+            const globalPercent = totalMetaItems > 0 ? Math.round((totalDoneItems / totalMetaItems) * 100) : 0;
+            document.getElementById('opProgressPercent').innerText = `${globalPercent}%`;
+            
+            const icontainer = document.getElementById('insigniasContainer');
+            icontainer.innerHTML = '';
+            const addBadge = (icon, color, title, subtitle) => { icontainer.innerHTML += `<div class="insignia-card flex-shrink-0 w-24 h-24 bg-white rounded-lg shadow-sm border border-gray-100 flex flex-col items-center justify-center p-2"><i class="fas ${icon} text-3xl ${color} mb-2"></i><div class="text-[10px] text-gray-800 text-center font-bold leading-tight">${title}</div><div class="text-[9px] text-gray-400 text-center">${subtitle}</div></div>`; };
+            addBadge('fa-flag-checkered', 'text-blue-500', 'Iniciante', 'Começou');
+            if(totalDays > 0 && daysDone >= (totalDays * 0.5)) addBadge('fa-calendar-check', 'text-green-500', 'Persistente', '50% Dias');
+            let sumProcs = Object.values(realizadoTotal).reduce((a,b)=>a+b, 0);
+            if(sumProcs > 20) addBadge('fa-tools', 'text-orange-500', 'Mão na Massa', '+20 Procs');
+            if(sumProcs > 100) addBadge('fa-fire', 'text-red-500', 'Imparável', '+100 Procs');
+            if(globalPercent >= 100) addBadge('fa-trophy', 'text-yellow-400', 'Missão Cumprida', 'Meta 100%');
+        }
+
+        // Utils
+        function formatDate(s) { if(!s)return''; const p=s.split('T')[0].split('-'); return `${p[2]}/${p[1]}/${p[0]}`; }
+        function getBusinessDatesCount(s, e) { let c=0, d=new Date(s); while(d<=e){ const w=d.getDay(); if(w!=0&&w!=6)c++; d.setDate(d.getDate()+1); } return c; }
+        function countUniqueDays(r) { const u=new Set(); r.forEach(x=>u.add(x.Data_Referencia.split('T')[0])); return u.size; }
+        function toggleLoading(show) { document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none'; }
+        function checkPendencies(){
+            // Simplified for brevity, logic maintained in main app flow
+            const container = document.getElementById('pendenciesContainer');
+            const listDiv = document.getElementById('pendenciesList');
+            if(!currentSeason) return;
+            listDiv.innerHTML = '';
+            try {
+                const start = new Date(currentSeason.Data_Inicio);
+                const today = new Date(); today.setHours(0,0,0,0);
+                const records = appData.records.filter(r => String(r.ID_Temporada) === String(currentSeason.ID_Temporada));
+                let curr = new Date(start); let found = false; let guard = 0;
+                while(curr < today && guard < 365) {
+                    guard++; const dow = curr.getDay();
+                    if(dow>=1 && dow<=5) {
+                        const dStr = curr.toISOString().split('T')[0];
+                        if(!records.some(r => r.Data_Referencia.startsWith(dStr))) {
+                            found = true; const btn = document.createElement('button');
+                            btn.className="bg-yellow-200 text-yellow-800 text-xs px-2 py-1 rounded hover:bg-yellow-300"; btn.innerText=formatDate(dStr);
+                            btn.onclick=()=>{document.getElementById('recordDate').value=dStr; Swal.fire('Retroativo', `Dia ${formatDate(dStr)}`, 'info');};
+                            listDiv.appendChild(btn);
+                        }
+                    } curr.setDate(curr.getDate()+1);
+                }
+                container.classList.toggle('hidden', !found);
+            } catch(e) { container.classList.add('hidden'); }
+        }
+
+    </script>
+</body>
+</html>

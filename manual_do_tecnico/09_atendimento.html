@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 09 - Atendimento ao Cliente | RL NET</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        
+        /* Padrão de fundo "Conexão Humana" (Círculos Suaves) */
+        .service-pattern {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#c7d2fe 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Cores Temáticas: Indigo (Confiança/Serviço) */
+        .text-service-rl { color: #4f46e5; } /* Indigo-600 */
+        .bg-service-rl { background-color: #4f46e5; }
+        .border-service-rl { border-color: #4f46e5; }
+        
+        /* Estilo para listas de letras A, B, C... */
+        .letter-badge {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="md:pl-64 flex flex-col min-h-screen transition-all duration-300">
+        <div id="app-layout" class="flex flex-col min-h-screen">
+            
+            <main class="flex-1 p-4 md:p-8 service-pattern">
+                
+                <!-- CARD PRINCIPAL DO MÓDULO -->
+                <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-service-rl">
+                    
+                    <div class="p-6 md:p-10">
+                        
+                        <!-- ================================================================================= -->
+                        <!-- CABEÇALHO (HERO) -->
+                        <!-- ================================================================================= -->
+                        <div class="flex flex-col md:flex-row items-center gap-6 mb-8 border-b pb-8">
+                            <!-- Ícone/Número do Módulo -->
+                            <div class="w-20 h-20 rounded-full bg-service-rl flex items-center justify-center text-white text-3xl font-bold shadow-lg shrink-0 border-4 border-white ring-2 ring-indigo-300">
+                                09
+                            </div>
+                            <div class="text-center md:text-left flex-1">
+                                
+                                <h1 class="text-3xl md:text-4xl font-black text-[#003366] mb-2 uppercase">Atendimento ao Cliente</h1>
+                                <p class="text-gray-600 text-lg font-medium">Excelência, Empatia e Postura Profissional na Casa do Cliente.</p>
+                                
+                                <!-- FAIXA DE COMPETÊNCIAS (Tags) -->
+                                <div class="flex flex-wrap justify-center md:justify-start gap-2 mt-4">
+                                    <span class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold border border-indigo-200 flex items-center">
+                                        <i class="fa-solid fa-comments mr-2"></i> Comunicação
+                                    </span>
+                                    <span class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold border border-indigo-200 flex items-center">
+                                        <i class="fa-solid fa-user-tie mr-2"></i> Postura
+                                    </span>
+                                    <span class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold border border-indigo-200 flex items-center">
+                                        <i class="fa-solid fa-hand-holding-heart mr-2"></i> Empatia
+                                    </span>
+                                    <span class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold border border-indigo-200 flex items-center">
+                                        <i class="fa-solid fa-shirt mr-2"></i> Apresentação
+                                    </span>
+                                    <span class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold border border-indigo-200 flex items-center">
+                                        <i class="fa-solid fa-star mr-2"></i> Experiência do Cliente
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ================================================================================= -->
+                        <!-- INTRODUÇÃO -->
+                        <!-- ================================================================================= -->
+                        <section id="intro" class="mb-12">
+                            <div class="bg-gradient-to-r from-indigo-800 to-indigo-900 text-white p-8 rounded-xl shadow-lg relative overflow-hidden">
+                                <div class="relative z-10">
+                                    <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                                        <i class="fa-solid fa-heart-pulse"></i> O Diferencial Humano
+                                    </h3>
+                                    <p class="text-indigo-100 leading-relaxed font-light text-lg">
+                                        A internet pode ser a mais rápida, mas se o técnico for rude ou desleixado, o cliente cancela. 
+                                        <strong class="text-white font-bold">Você é a cara da RL NET.</strong> Sua postura vale tanto quanto seu conhecimento técnico.
+                                    </p>
+                                </div>
+                                <i class="fa-solid fa-people-arrows absolute -right-6 -bottom-6 text-9xl text-white opacity-10 rotate-12"></i>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- TÓPICO 1: CONCEITOS FUNDAMENTAIS -->
+                        <!-- ================================================================================= -->
+                        <section id="section1" class="mb-12 border-b border-indigo-100 pb-12">
+                            
+                            <h2 class="text-2xl font-bold text-[#003366] mb-8 flex items-center gap-2">
+                                <span class="bg-service-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">1</span>
+                                Conceitos Fundamentais de Atendimento
+                            </h2>
+
+                            <!-- 1.1 O QUE É ATENDIMENTO DE EXCELÊNCIA -->
+                            <div class="mb-10">
+                                <h3 class="text-lg font-bold text-indigo-800 mb-4 flex items-center gap-2 border-l-4 border-indigo-500 pl-3 bg-indigo-50 py-2 rounded-r">
+                                    1.1 O que é atendimento de excelência?
+                                </h3>
+                                <p class="text-gray-600 mb-6 pl-4 text-sm">Não é apenas ser "simpático". É um conjunto de competências técnicas e comportamentais:</p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pl-2">
+                                    <!-- A -->
+                                    <div class="border border-indigo-100 rounded-lg p-4 hover:shadow-md transition bg-white">
+                                        <div class="flex items-start gap-3">
+                                            <span class="letter-badge bg-indigo-600 text-white">A</span>
+                                            <div>
+                                                <h4 class="font-bold text-gray-800 text-sm">Clareza na Comunicação</h4>
+                                                <p class="text-xs text-gray-500 mt-1">Falar de forma que o cliente entenda, sem "tecniquês" excessivo.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- B -->
+                                    <div class="border border-indigo-100 rounded-lg p-4 hover:shadow-md transition bg-white">
+                                        <div class="flex items-start gap-3">
+                                            <span class="letter-badge bg-indigo-600 text-white">B</span>
+                                            <div>
+                                                <h4 class="font-bold text-gray-800 text-sm">Eficiência e Objetividade</h4>
+                                                <p class="text-xs text-gray-500 mt-1">Resolver o problema no menor tempo possível, sem enrolação.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- C -->
+                                    <div class="border border-indigo-100 rounded-lg p-4 hover:shadow-md transition bg-white">
+                                        <div class="flex items-start gap-3">
+                                            <span class="letter-badge bg-indigo-600 text-white">C</span>
+                                            <div>
+                                                <h4 class="font-bold text-gray-800 text-sm">Postura Profissional</h4>
+                                                <p class="text-xs text-gray-500 mt-1">Comportamento sério, educado e focado no trabalho.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- D -->
+                                    <div class="border border-indigo-100 rounded-lg p-4 hover:shadow-md transition bg-white">
+                                        <div class="flex items-start gap-3">
+                                            <span class="letter-badge bg-indigo-600 text-white">D</span>
+                                            <div>
+                                                <h4 class="font-bold text-gray-800 text-sm">Foco na Solução</h4>
+                                                <p class="text-xs text-gray-500 mt-1">Não reclamar do problema, mas sim apresentar a solução.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- E -->
+                                    <div class="border border-indigo-100 rounded-lg p-4 hover:shadow-md transition bg-white">
+                                        <div class="flex items-start gap-3">
+                                            <span class="letter-badge bg-indigo-600 text-white">E</span>
+                                            <div>
+                                                <h4 class="font-bold text-gray-800 text-sm">Acompanhamento</h4>
+                                                <p class="text-xs text-gray-500 mt-1">Manter o cliente informado sobre o que está sendo feito.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- F -->
+                                    <div class="border border-indigo-100 rounded-lg p-4 hover:shadow-md transition bg-white">
+                                        <div class="flex items-start gap-3">
+                                            <span class="letter-badge bg-indigo-600 text-white">F</span>
+                                            <div>
+                                                <h4 class="font-bold text-gray-800 text-sm">Experiência do Usuário</h4>
+                                                <p class="text-xs text-gray-500 mt-1">Entender que você não vende internet, vende conexão e lazer.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 1.2 PERFIL IDEAL DO TÉCNICO -->
+                            <div class="mb-10">
+                                <h3 class="text-lg font-bold text-indigo-800 mb-4 flex items-center gap-2 border-l-4 border-indigo-500 pl-3 bg-indigo-50 py-2 rounded-r">
+                                    1.2 Perfil Ideal do Técnico RL NET
+                                </h3>
+                                
+                                <div class="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl p-6 text-white shadow-md">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
+                                        <div class="flex items-center gap-3">
+                                            <div class="bg-white/20 p-2 rounded-full"><i class="fa-solid fa-handshake"></i></div>
+                                            <div>
+                                                <span class="font-bold block text-sm">Cordialidade e Respeito</span>
+                                                <span class="text-xs text-indigo-100">Tratar todos bem, independente da situação.</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="bg-white/20 p-2 rounded-full"><i class="fa-solid fa-hourglass-half"></i></div>
+                                            <div>
+                                                <span class="font-bold block text-sm">Paciência</span>
+                                                <span class="text-xs text-indigo-100">Saber lidar com clientes leigos ou estressados.</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="bg-white/20 p-2 rounded-full"><i class="fa-solid fa-clipboard-check"></i></div>
+                                            <div>
+                                                <span class="font-bold block text-sm">Auto-organização</span>
+                                                <span class="text-xs text-indigo-100">Ferramentas limpas e cronograma em dia.</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="bg-white/20 p-2 rounded-full"><i class="fa-solid fa-scale-balanced"></i></div>
+                                            <div>
+                                                <span class="font-bold block text-sm">Ética</span>
+                                                <span class="text-xs text-indigo-100">Honestidade técnica e respeito à privacidade.</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="bg-white/20 p-2 rounded-full"><i class="fa-solid fa-award"></i></div>
+                                            <div>
+                                                <span class="font-bold block text-sm">Compromisso</span>
+                                                <span class="text-xs text-indigo-100">Fazer bem feito na primeira vez.</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="bg-white/20 p-2 rounded-full"><i class="fa-solid fa-bolt"></i></div>
+                                            <div>
+                                                <span class="font-bold block text-sm">Proatividade</span>
+                                                <span class="text-xs text-indigo-100">Antecipar problemas antes que eles ocorram.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 1.3 PRIMEIRA IMPRESSÃO -->
+                            <div>
+                                <h3 class="text-lg font-bold text-indigo-800 mb-4 flex items-center gap-2 border-l-4 border-indigo-500 pl-3 bg-indigo-50 py-2 rounded-r">
+                                    1.3 A Importância da Primeira Impressão
+                                </h3>
+                                <p class="text-gray-600 mb-6 pl-4 text-sm">
+                                    Você só tem uma chance de causar uma boa primeira impressão. Antes de você dizer "bom dia", o cliente já te avaliou visualmente.
+                                </p>
+
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                    
+                                    <!-- A: Uniforme -->
+                                    <div class="flex flex-col items-center text-center p-4 border border-gray-200 rounded-xl hover:border-indigo-400 transition bg-white">
+                                        <i class="fa-solid fa-shirt text-3xl text-indigo-500 mb-2"></i>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-1">Uniforme</h4>
+                                        <p class="text-xs text-gray-500">Limpo, passado e completo. Camisa para dentro se possível.</p>
+                                    </div>
+
+                                    <!-- B: Identificação -->
+                                    <div class="flex flex-col items-center text-center p-4 border border-gray-200 rounded-xl hover:border-indigo-400 transition bg-white">
+                                        <i class="fa-solid fa-id-card text-3xl text-indigo-500 mb-2"></i>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-1">Crachá</h4>
+                                        <p class="text-xs text-gray-500">Visível o tempo todo. Gera segurança imediata.</p>
+                                    </div>
+
+                                    <!-- C: Comunicação -->
+                                    <div class="flex flex-col items-center text-center p-4 border border-gray-200 rounded-xl hover:border-indigo-400 transition bg-white">
+                                        <i class="fa-solid fa-comment-dots text-3xl text-indigo-500 mb-2"></i>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-1">Saudação</h4>
+                                        <p class="text-xs text-gray-500">"Bom dia, sou [Nome] da RL NET". Claro e audível.</p>
+                                    </div>
+
+                                    <!-- D: Postura -->
+                                    <div class="flex flex-col items-center text-center p-4 border border-gray-200 rounded-xl hover:border-indigo-400 transition bg-white">
+                                        <i class="fa-solid fa-person text-3xl text-indigo-500 mb-2"></i>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-1">Postura</h4>
+                                        <p class="text-xs text-gray-500">Ereta, confiante, sem mãos no bolso ou encostado na parede.</p>
+                                    </div>
+
+                                    <!-- E: Organização -->
+                                    <div class="flex flex-col items-center text-center p-4 border border-gray-200 rounded-xl hover:border-indigo-400 transition bg-white">
+                                        <i class="fa-solid fa-toolbox text-3xl text-indigo-500 mb-2"></i>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-1">Maleta</h4>
+                                        <p class="text-xs text-gray-500">Organizada. Não chegue com ferramentas caindo.</p>
+                                    </div>
+
+                                    <!-- F: Limpeza -->
+                                    <div class="flex flex-col items-center text-center p-4 border border-gray-200 rounded-xl hover:border-indigo-400 transition bg-white">
+                                        <i class="fa-solid fa-hands-bubbles text-3xl text-indigo-500 mb-2"></i>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-1">Higiene</h4>
+                                        <p class="text-xs text-gray-500">Aparencia asseada, cheiro neutro.</p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+<!-- TÓPICO 2: COMUNICAÇÃO COM O CLIENTE -->
+<!-- ================================================================================= -->
+<section id="section2" class="mb-12 border-b border-indigo-100 pb-12">
+    
+    <h2 class="text-2xl font-bold text-[#003366] mb-8 flex items-center gap-2">
+        <span class="bg-service-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">2</span>
+        Comunicação com o Cliente
+    </h2>
+
+    <p class="text-gray-600 mb-8 leading-relaxed">
+        A maior parte das reclamações não é sobre o problema técnico, mas sobre como o técnico se comunicou. Saber falar é tão importante quanto saber crimpar.
+    </p>
+
+    <!-- 2.1 COMUNICAÇÃO VERBAL -->
+    <div class="mb-10">
+        <h3 class="text-lg font-bold text-indigo-800 mb-6 flex items-center gap-2 border-l-4 border-indigo-500 pl-3 bg-indigo-50 py-2 rounded-r">
+            <i class="fa-solid fa-microphone-lines text-indigo-500"></i> 2.1 Comunicação Verbal
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- Item A: Calma -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition flex items-start gap-4 group">
+                <div class="bg-indigo-50 text-indigo-600 w-10 h-10 rounded-full flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition font-bold text-lg">
+                    A
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-lg mb-1">Falar com Calma</h4>
+                    <p class="text-sm text-gray-600">
+                        Mesmo que o cliente esteja agitado, mantenha sua voz em volume normal e ritmo pausado. A calma é contagiosa.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item B: Termos Técnicos -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition flex items-start gap-4 group">
+                <div class="bg-indigo-50 text-indigo-600 w-10 h-10 rounded-full flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition font-bold text-lg">
+                    B
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-lg mb-1">Sem "Tecniquês"</h4>
+                    <p class="text-sm text-gray-600">
+                        Evite dizer "O sinal da ONU está -27dBm". Diga: "O sinal que chega no seu equipamento está fraco, como uma torneira com pouca pressão."
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item C: Explicar Etapas -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition flex items-start gap-4 group">
+                <div class="bg-indigo-50 text-indigo-600 w-10 h-10 rounded-full flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition font-bold text-lg">
+                    C
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-lg mb-1">Narrar o Atendimento</h4>
+                    <p class="text-sm text-gray-600">
+                        Não suma dentro da casa. Avise: "Agora vou subir no poste", "Vou desligar a energia rapidinho", "Estou testando o sinal".
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item D: Segurança -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition flex items-start gap-4 group">
+                <div class="bg-indigo-50 text-indigo-600 w-10 h-10 rounded-full flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition font-bold text-lg">
+                    D
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-lg mb-1">Reforçar Segurança</h4>
+                    <p class="text-sm text-gray-600">
+                        Verbalize a segurança para gerar valor: "Senhor, vou colocar meu cinto de segurança antes de subir, só um minuto."
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item E: Revalidar -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition flex items-start gap-4 group">
+                <div class="bg-indigo-50 text-indigo-600 w-10 h-10 rounded-full flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition font-bold text-lg">
+                    E
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-lg mb-1">Checar Entendimento</h4>
+                    <p class="text-sm text-gray-600">
+                        Não assuma que ele entendeu. Pergunte: "Ficou claro como reiniciar?", "O senhor tem alguma dúvida sobre o que expliquei?".
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item F: Respeito -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition flex items-start gap-4 group">
+                <div class="bg-indigo-50 text-indigo-600 w-10 h-10 rounded-full flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition font-bold text-lg">
+                    F
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-lg mb-1">Tom Respeitoso</h4>
+                    <p class="text-sm text-gray-600">
+                        Use sempre "Senhor" e "Senhora" até que o cliente dê liberdade. Jamais use gírias, palavrões ou intimidade forçada ("amigão", "parceiro").
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+                      <!-- ================================================================================= -->
+<!-- SUBSEÇÃO 2.2: COMUNICAÇÃO NÃO VERBAL -->
+<!-- ================================================================================= -->
+<div class="mb-12">
+    
+    <h3 class="text-lg font-bold text-indigo-800 mb-6 flex items-center gap-2 border-l-4 border-indigo-500 pl-3 bg-indigo-50 py-2 rounded-r">
+        <i class="fa-solid fa-user-check text-indigo-500"></i> 2.2 Comunicação Não Verbal
+    </h3>
+ <p class="text-gray-600 mb-8 leading-relaxed">
+        Comunicação não verbal é a transmissão de mensagens e emoções sem o uso de palavras, através de gestos, expressões faciais, postura corporal, contato visual ( oculésica ), proximidade ( proxêmica ), toque ( tátil ), tom de voz ( paralinguagem ) e até mesmo o ambiente e vestuário, complementando ou contradizendo a comunicação verbal e revelando sentimentos e intenções.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Item A: Linguagem Coerente -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 p-4 rounded-full text-indigo-600 mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-sync text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Coerência</h4>
+                <p class="text-sm text-gray-600">
+                    Sua fala deve combinar com seu corpo. Não diga "estou feliz em ajudar" com cara de tédio. O corpo não mente.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item B: Postura Firme -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 p-4 rounded-full text-indigo-600 mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-person-arrow-up-from-line text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Postura Firme</h4>
+                <p class="text-sm text-gray-600">
+                    Mantenha a coluna ereta e cabeça erguida. Ombros caídos passam imagem de cansaço ou derrota. Demonstre prontidão.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item C: Expressão Facial -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 p-4 rounded-full text-indigo-600 mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-regular fa-face-smile text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Semblante Amigável</h4>
+                <p class="text-sm text-gray-600">
+                    Expressão neutra ou levemente sorridente. Evite testa franzida (bravo) ou olhar vago (desinteresse). Olhe nos olhos.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item D: Gesto de Atenção -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 p-4 rounded-full text-indigo-600 mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-ear-listen text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Escuta Ativa</h4>
+                <p class="text-sm text-gray-600">
+                    Balance a cabeça afirmando enquanto o cliente fala. Incline o corpo levemente para frente para mostrar interesse.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item E: Distância Segura -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 p-4 rounded-full text-indigo-600 mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-arrows-left-right-to-line text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Distância Segura</h4>
+                <p class="text-sm text-gray-600">
+                    Respeite o espaço pessoal (aprox. 1 metro). Não "cole" no cliente, nem fale de longe gritando.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item F: Movimentos Organizados -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 p-4 rounded-full text-indigo-600 mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-briefcase text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Movimentos Precisos</h4>
+                <p class="text-sm text-gray-600">
+                    Evite movimentos bruscos ou desastrados. Abra a mala com cuidado, manuseie ferramentas com calma. Isso passa competência.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+                      <!-- ================================================================================= -->
+<!-- SUBSEÇÃO 2.3: COMUNICAÇÃO ESCRITA -->
+<!-- ================================================================================= -->
+<div class="mb-12">
+    
+    <h3 class="text-lg font-bold text-indigo-800 mb-6 flex items-center gap-2 border-l-4 border-indigo-500 pl-3 bg-indigo-50 py-2 rounded-r">
+        <i class="fa-solid fa-file-signature text-indigo-500"></i> 2.3 Comunicação Escrita (OS e Relatos)
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Item A: Descrição Objetiva -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 p-4 rounded-full text-indigo-600 mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-bullseye text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Descrição Objetiva</h4>
+                <p class="text-sm text-gray-600">
+                    Seja direto. Em vez de "o cliente disse que a internet tá ruim", escreva "Cliente relata lentidão via Wi-Fi no quarto".
+                </p>
+            </div>
+        </div>
+
+        <!-- Item B: Sem Abreviações -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 p-4 rounded-full text-indigo-600 mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-font text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Sem Abreviações Confusas</h4>
+                <p class="text-sm text-gray-600">
+                    Evite "vc", "tb", "mto", "eqpto". O relato na O.S. é um documento oficial. Abreviações técnicas (ONU, CTO, dBm) são permitidas.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item C: Relatórios Completos -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 p-4 rounded-full text-indigo-600 mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-list-check text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Relato Completo</h4>
+                <p class="text-sm text-gray-600">
+                    Não escreva apenas "Feito". Descreva: Causa (Fio rompido), Solução (Troca de drop) e Teste Final (Navegação OK).
+                </p>
+            </div>
+        </div>
+
+        <!-- Item D: Ortografia -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 p-4 rounded-full text-indigo-600 mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-spell-check text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Ortografia Correta</h4>
+                <p class="text-sm text-gray-600">
+                    Revise antes de enviar. Erros graves de português diminuem sua autoridade profissional perante a supervisão e o cliente.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item E: Padrão RL NET -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 p-4 rounded-full text-indigo-600 mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-copyright text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Padronização RL NET</h4>
+                <p class="text-sm text-gray-600">
+                    Siga o modelo de texto padrão da empresa para encerramento de O.S. (Causa / Ação / Resultado / Materiais).
+                </p>
+            </div>
+        </div>
+
+        <!-- Item F: Fotos Obrigatórias -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 p-4 rounded-full text-indigo-600 mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-camera text-2xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Evidência Fotográfica</h4>
+                <p class="text-sm text-gray-600">
+                    
+                    O texto sem foto não prova nada. Anexe fotos nítidas de todo o reparo realizado.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+                      <!-- ================================================================================= -->
+<!-- TÓPICO 3: CONDUÇÃO DO ATENDIMENTO PRESENCIAL -->
+<!-- ================================================================================= -->
+<section id="section3" class="mb-12 border-b border-indigo-100 pb-12">
+    
+    <h2 class="text-2xl font-bold text-[#003366] mb-8 flex items-center gap-2">
+        <span class="bg-service-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">3</span>
+        Condução do Atendimento Presencial
+    </h2>
+
+    <p class="text-gray-600 mb-8 leading-relaxed">
+        O momento da verdade. Os primeiros 30 segundos do atendimento definem se ele vai confiar no seu trabalho ou se vai ficar fiscalizando cada passo seu.
+    </p>
+
+    <!-- 3.1 CHEGADA AO LOCAL -->
+    <div class="mb-10">
+        <h3 class="text-lg font-bold text-indigo-800 mb-8 flex items-center gap-2 border-l-4 border-indigo-500 pl-3 bg-indigo-50 py-2 rounded-r">
+            <i class="fa-solid fa-door-open text-indigo-500"></i> 3.1 Chegada ao Local (Passo a Passo)
+        </h3>
+
+        <div class="relative pl-8 border-l-4 border-indigo-100 space-y-8">
+            
+            <!-- Passo A: Cumprimento -->
+            <div class="relative group">
+                <span class="absolute -left-[42px] top-1 bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center border-4 border-white shadow-md z-10 font-bold text-sm">•</span>
+                <div class="bg-white border border-indigo-100 p-5 rounded-xl hover:shadow-lg transition group-hover:border-indigo-300">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-handshake text-indigo-500 text-xl"></i>
+                        <h4 class="font-bold text-gray-800 text-lg">Cumprimento e Apresentação</h4>
+                    </div>
+                    <p class="text-sm text-gray-600">
+                        Sorria, olhe nos olhos e apresente-se: "Bom dia, sou o [Nome] da RL NET." Mostre o crachá se necessário. Aguarde o convite para entrar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Passo B: Confirmação OS -->
+            <div class="relative group">
+                <span class="absolute -left-[42px] top-1 bg-indigo-500 text-white w-8 h-8 rounded-full flex items-center justify-center border-4 border-white shadow-md z-10 font-bold text-sm">•</span>
+                <div class="bg-white border border-indigo-100 p-5 rounded-xl hover:shadow-lg transition group-hover:border-indigo-300">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-clipboard-check text-indigo-500 text-xl"></i>
+                        <h4 class="font-bold text-gray-800 text-lg">Confirmação da O.S.</h4>
+                    </div>
+                    <p class="text-sm text-gray-600">
+                        Valide o motivo da visita: "Minha ordem de serviço diz que o senhor está sem conexão desde ontem, correto?". Isso evita consertar o problema errado.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Passo C: Explicação -->
+            <div class="relative group">
+                <span class="absolute -left-[42px] top-1 bg-indigo-400 text-white w-8 h-8 rounded-full flex items-center justify-center border-4 border-white shadow-md z-10 font-bold text-sm">•</span>
+                <div class="bg-white border border-indigo-100 p-5 rounded-xl hover:shadow-lg transition group-hover:border-indigo-300">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-chalkboard-user text-indigo-500 text-xl"></i>
+                        <h4 class="font-bold text-gray-800 text-lg">Explicação do Procedimento</h4>
+                    </div>
+                    <p class="text-sm text-gray-600">
+                        Alinhe expectativas: "Vou precisar verificar o roteador aqui na sala e depois olhar a caixa lá fora no poste. Deve levar uns 40 minutos."
+                    </p>
+                </div>
+            </div>
+
+            <!-- Passo D: Solicitação de Acesso -->
+            <div class="relative group">
+                <span class="absolute -left-[42px] top-1 bg-indigo-400 text-white w-8 h-8 rounded-full flex items-center justify-center border-4 border-white shadow-md z-10 font-bold text-sm">•</span>
+                <div class="bg-white border border-indigo-100 p-5 rounded-xl hover:shadow-lg transition group-hover:border-indigo-300">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-key text-indigo-500 text-xl"></i>
+                        <h4 class="font-bold text-gray-800 text-lg">Solicitação de Acesso</h4>
+                    </div>
+                    <p class="text-sm text-gray-600">
+                        Peça licença antes de mover móveis ou entrar em cômodos fechados (quartos). "Posso afastar esse sofá para acessar a tomada?".
+                    </p>
+                </div>
+            </div>
+
+            <!-- Passo E: Avaliação do Ambiente -->
+            <div class="relative group">
+                <span class="absolute -left-[42px] top-1 bg-indigo-500 text-white w-8 h-8 rounded-full flex items-center justify-center border-4 border-white shadow-md z-10 font-bold text-sm">•</span>
+                <div class="bg-white border border-indigo-100 p-5 rounded-xl hover:shadow-lg transition group-hover:border-indigo-300">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-house-chimney-user text-indigo-500 text-xl"></i>
+                        <h4 class="font-bold text-gray-800 text-lg">Avaliação do Ambiente (Raio-X)</h4>
+                    </div>
+                    <p class="text-sm text-gray-600">
+                        Olhe ao redor discretamente. Tem crianças? Pets? O local é úmido? O roteador está abafado? Identifique riscos e causas ocultas.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Passo F: Primeira Análise -->
+            <div class="relative group">
+                <span class="absolute -left-[42px] top-1 bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center border-4 border-white shadow-md z-10 font-bold text-sm">•</span>
+                <div class="bg-indigo-50 border border-indigo-200 p-5 rounded-xl hover:shadow-lg transition group-hover:border-indigo-400">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-magnifying-glass-chart text-indigo-600 text-xl"></i>
+                        <h4 class="font-bold text-gray-800 text-lg">Primeira Análise Técnica</h4>
+                    </div>
+                    <p class="text-sm text-gray-600">
+                        Antes de abrir a mala, olhe as luzes da ONU. Verifique se os cabos estão plugados firmemente. Muitas vezes o problema se resolve aqui.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- O restante da Seção 3 (3.2 Escuta Ativa, 3.3 Diagnóstico) será inserido abaixo -->
+    <div id="section3-continuation"></div>
+
+</section>
+                      <!-- ================================================================================= -->
+<!-- SUBSEÇÃO 3.2: ESCUTA ATIVA -->
+<!-- ================================================================================= -->
+<div class="mb-12">
+    
+    <h3 class="text-lg font-bold text-indigo-800 mb-6 flex items-center gap-2 border-l-4 border-indigo-500 pl-3 bg-indigo-50 py-2 rounded-r">
+        <i class="fa-solid fa-ear-listen text-indigo-500"></i> 3.2 Escuta Ativa
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Item 1: Ouvir sem interromper -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-indigo-400">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 w-14 h-14 rounded-full flex items-center justify-center text-indigo-600 mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-comment-slash text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Ouvir sem Interromper</h4>
+                <p class="text-sm text-gray-600">
+                    Deixe o cliente desabafar. Mesmo que você já saiba a solução, interrompê-lo passa a mensagem de "não me importo com o que você diz".
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 2: Perguntas Abertas -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-indigo-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 w-14 h-14 rounded-full flex items-center justify-center text-indigo-600 mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-question text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Perguntas Abertas</h4>
+                <p class="text-sm text-gray-600">
+                    Use "Como", "Quando", "Onde". <br>
+                    <em>Errado:</em> "Caiu ontem?" (Sim/Não)<br>
+                    <em>Certo:</em> "Como o problema começou ontem?"
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 3: Identificar Expectativas -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-purple-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-purple-50 w-14 h-14 rounded-full flex items-center justify-center text-purple-600 mb-4 group-hover:bg-purple-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-bullseye text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Identificar Expectativas</h4>
+                <p class="text-sm text-gray-600">
+                    O que o cliente realmente quer? Às vezes ele não quer só a internet de volta, ele quer a garantia de que não vai cair na reunião de amanhã.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 4: Reconfirmar Entendimento -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-blue-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-blue-50 w-14 h-14 rounded-full flex items-center justify-center text-blue-600 mb-4 group-hover:bg-blue-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-rotate-left text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Reconfirmar (Parafrasear)</h4>
+                <p class="text-sm text-gray-600">
+                    Repita o que ouviu para garantir: "Então, se entendi bem, o Wi-Fi só cai quando o micro-ondas está ligado, certo?"
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 5: Empatia -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-pink-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-pink-50 w-14 h-14 rounded-full flex items-center justify-center text-pink-600 mb-4 group-hover:bg-pink-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-hand-holding-heart text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Demonstrar Empatia</h4>
+                <p class="text-sm text-gray-600">
+                    Valide o sentimento dele: "Imagino como deve ser frustrante ficar sem trabalhar." Isso baixa a guarda do cliente imediatamente.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 6: Registrar Informações -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-slate-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-slate-100 w-14 h-14 rounded-full flex items-center justify-center text-slate-600 mb-4 group-hover:bg-slate-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-pen-to-square text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Registrar Detalhes</h4>
+                <p class="text-sm text-gray-600">
+                    
+                    Anote o que o cliente disse. Detalhes como horários específicos ou luzes que piscam são ouro para o diagnóstico técnico.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+                      <!-- ================================================================================= -->
+<!-- SUBSEÇÃO 3.3: EXPLICAÇÃO DO DIAGNÓSTICO -->
+<!-- ================================================================================= -->
+<div class="mb-12">
+    
+    <h3 class="text-lg font-bold text-indigo-800 mb-6 flex items-center gap-2 border-l-4 border-indigo-500 pl-3 bg-indigo-50 py-2 rounded-r">
+        <i class="fa-solid fa-chalkboard-user text-indigo-500"></i> 3.3 Explicação do Diagnóstico
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Item A: Explicar a Causa -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-indigo-400">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 w-14 h-14 rounded-full flex items-center justify-center text-indigo-600 mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-virus-slash text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Explicar a Causa Raiz</h4>
+                <p class="text-sm text-gray-600">
+                    Não diga apenas "quebrou". Diga o motivo: "O conector estava oxidado por umidade" ou "O cabo foi mordido pelo cachorro".
+                </p>
+            </div>
+        </div>
+
+        <!-- Item B: Linguagem Simples -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-indigo-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 w-14 h-14 rounded-full flex items-center justify-center text-indigo-600 mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-child-reaching text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Linguagem Simples</h4>
+                <p class="text-sm text-gray-600">
+                    Use metáforas. <br>
+                    <em>Largura de banda</em> = "Tamanho do cano de água".<br>
+                    <em>Interferência</em> = "Rádio chiando".
+                </p>
+            </div>
+        </div>
+
+        <!-- Item C: Mostrar Evidências -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-purple-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-purple-50 w-14 h-14 rounded-full flex items-center justify-center text-purple-600 mb-4 group-hover:bg-purple-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-magnifying-glass-chart text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Mostrar Evidências</h4>
+                <p class="text-sm text-gray-600">
+                    Contra fatos não há argumentos. Mostre o cabo rompido, o teste de velocidade no celular dele ou a luz vermelha na ONU.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item D: Informar Alternativas -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-blue-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-blue-50 w-14 h-14 rounded-full flex items-center justify-center text-blue-600 mb-4 group-hover:bg-blue-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-code-branch text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Propor Soluções</h4>
+                <p class="text-sm text-gray-600">
+                    Se não der para passar o cabo por onde ele quer, dê opções: "Por ali não passa, mas podemos passar por aqui."
+                </p>
+            </div>
+        </div>
+
+        <!-- Item E: Validar Compreensão -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-pink-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-pink-50 w-14 h-14 rounded-full flex items-center justify-center text-pink-600 mb-4 group-hover:bg-pink-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-clipboard-question text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Validar Entendimento</h4>
+                <p class="text-sm text-gray-600">
+                    "Faz sentido para o senhor?" ou "Ficou claro por que precisamos trocar o roteador de lugar?". Garanta o "Sim".
+                </p>
+            </div>
+        </div>
+
+        <!-- Item F: Alinhar Próximos Passos -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-slate-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-slate-100 w-14 h-14 rounded-full flex items-center justify-center text-slate-600 mb-4 group-hover:bg-slate-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-list-check text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Próximos Passos</h4>
+                <p class="text-sm text-gray-600">
+                    Diga o que vem a seguir: "Agora que identificamos o problema, vou lá fora trocar o drop e volto em 20 minutos para testar."
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+                      <!-- ================================================================================= -->
+<!-- TÓPICO 4: EXECUÇÃO DO SERVIÇO COM TRANSPARÊNCIA -->
+<!-- ================================================================================= -->
+<section id="section4" class="mb-12 border-b border-indigo-100 pb-12">
+    
+    <h2 class="text-2xl font-bold text-[#003366] mb-8 flex items-center gap-2">
+        <span class="bg-service-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">4</span>
+        Execução do Serviço com Transparência
+    </h2>
+
+    <p class="text-gray-600 mb-8 leading-relaxed">
+        O cliente não é técnico. Se você ficar em silêncio mexendo em cabos, ele vai ficar desconfiado. Narrar o processo gera confiança e valoriza seu trabalho.
+    </p>
+
+    <!-- 4.1 INFORMAR O QUE SERÁ FEITO -->
+    <div class="mb-10">
+        <h3 class="text-lg font-bold text-indigo-800 mb-6 flex items-center gap-2 border-l-4 border-indigo-500 pl-3 bg-indigo-50 py-2 rounded-r">
+            <i class="fa-solid fa-bullhorn text-indigo-500"></i> 4.1 Informar o Procedimento
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Item A: Tempo Estimado -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-indigo-400">
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-indigo-50 w-14 h-14 rounded-full flex items-center justify-center text-indigo-600 mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">
+                        <i class="fa-regular fa-clock text-xl"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-2">Tempo Estimado</h4>
+                    <p class="text-sm text-gray-600">
+                        Seja realista. Diga: "Esse procedimento deve levar cerca de 40 minutos." É melhor prometer mais tempo e acabar antes.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item B: Etapas Principais -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-indigo-500">
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-indigo-50 w-14 h-14 rounded-full flex items-center justify-center text-indigo-600 mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-layer-group text-xl"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-2">Etapas Principais</h4>
+                    <p class="text-sm text-gray-600">
+                        Dê um roteiro: "Primeiro vou testar o roteador aqui, depois vou até a caixa no poste e volto para configurar."
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item C: Riscos e Cuidados -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-purple-500">
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-purple-50 w-14 h-14 rounded-full flex items-center justify-center text-purple-600 mb-4 group-hover:bg-purple-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-2">Riscos e Cuidados</h4>
+                    <p class="text-sm text-gray-600">
+                        Avise antes de sujar ou furar: "Vou precisar fazer um furo aqui, pode gerar um pouco de pó. Tudo bem?"
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item D: Impactos no Serviço -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-blue-500">
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-blue-50 w-14 h-14 rounded-full flex items-center justify-center text-blue-600 mb-4 group-hover:bg-blue-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-wifi text-xl"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-2">Impactos Temporários</h4>
+                    <p class="text-sm text-gray-600">
+                        
+                        "Durante a troca do conector, a internet vai cair por uns 15 minutos. Alguém está em reunião agora?"
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item E: Confirmação -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-pink-500">
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-pink-50 w-14 h-14 rounded-full flex items-center justify-center text-pink-600 mb-4 group-hover:bg-pink-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-thumbs-up text-xl"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-2">Confirmação (Aceite)</h4>
+                    <p class="text-sm text-gray-600">
+                        Só comece após o "Sim" do cliente. "Posso iniciar?". Isso evita reclamações de "não sabia que ia demorar".
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item F: Alinhamento -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-slate-500">
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-slate-100 w-14 h-14 rounded-full flex items-center justify-center text-slate-600 mb-4 group-hover:bg-slate-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-scale-balanced text-xl"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-2">Alinhamento de Expectativa</h4>
+                    <p class="text-sm text-gray-600">
+                        Não prometa milagres. "A troca do roteador vai melhorar a estabilidade, mas o alcance do Wi-Fi continua limitado pelas paredes."
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- O restante da Seção 4 será inserido abaixo -->
+    <div id="section4-continuation"></div>
+
+</section>
+                      <!-- ================================================================================= -->
+<!-- SUBSEÇÃO 4.2: CUIDADOS DURANTE A EXECUÇÃO -->
+<!-- ================================================================================= -->
+<div class="mb-12">
+    
+    <h3 class="text-lg font-bold text-indigo-800 mb-6 flex items-center gap-2 border-l-4 border-indigo-500 pl-3 bg-indigo-50 py-2 rounded-r">
+        <i class="fa-solid fa-hand-holding-medical text-indigo-500"></i> 4.2 Cuidados Essenciais (Etiqueta)
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Item 1: Minimizar Sujeira -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-indigo-400">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 w-14 h-14 rounded-full flex items-center justify-center text-indigo-600 mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-broom text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Minimizar Sujeira</h4>
+                <p class="text-sm text-gray-600">
+                    Se for furar a parede, use um aparador de pó ou peça uma vassoura <em>antes</em> de sujar. Nunca deixe restos de fio ou cinta plástica no chão.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 2: Evitar Barulhos -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-indigo-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 w-14 h-14 rounded-full flex items-center justify-center text-indigo-600 mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-volume-xmark text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Silêncio é Ouro</h4>
+                <p class="text-sm text-gray-600">
+                    Evite gritar com o colega que está lá fora. Use o celular/rádio. Não arraste móveis pesados sem avisar. O cliente pode estar trabalhando (Home Office).
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 3: Proteger Objetos -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-purple-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-purple-50 w-14 h-14 rounded-full flex items-center justify-center text-purple-600 mb-4 group-hover:bg-purple-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-shield-cat text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Cuidado com Objetos</h4>
+                <p class="text-sm text-gray-600">
+                    Cuidado com a escada perto da TV 4K. Cuidado com a mochila nas costas em corredores estreitos (vasos, quadros). Olhe ao redor.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 4: Áreas Privadas -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-blue-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-blue-50 w-14 h-14 rounded-full flex items-center justify-center text-blue-600 mb-4 group-hover:bg-blue-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-door-closed text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Respeito à Privacidade</h4>
+                <p class="text-sm text-gray-600">
+                    Mantenha a porta do quarto/banheiro aberta se estiver lá dentro. Não fique olhando fotos de família ou itens pessoais.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 5: Organização -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-pink-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-pink-50 w-14 h-14 rounded-full flex items-center justify-center text-pink-600 mb-4 group-hover:bg-pink-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-toolbox text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Manter Organização</h4>
+                <p class="text-sm text-gray-600">
+                    Não espalhe ferramentas por todo o sofá ou mesa de jantar do cliente. Concentre sua bagunça em um único ponto (chão sobre pano/plástico).
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 6: Foco -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-slate-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-slate-100 w-14 h-14 rounded-full flex items-center justify-center text-slate-600 mb-4 group-hover:bg-slate-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-crosshairs text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Foco no Procedimento</h4>
+                <p class="text-sm text-gray-600">
+                    Evite conversas paralelas sobre futebol, política ou religião, mesmo que o cliente puxe assunto. Seja educado, mas volte ao trabalho.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+                      <!-- ================================================================================= -->
+<!-- SUBSEÇÃO 4.3: FINALIZAÇÃO DO SERVIÇO -->
+<!-- ================================================================================= -->
+<div class="mb-12">
+    
+    <h3 class="text-lg font-bold text-indigo-800 mb-6 flex items-center gap-2 border-l-4 border-indigo-500 pl-3 bg-indigo-50 py-2 rounded-r">
+        <i class="fa-solid fa-flag-checkered text-indigo-500"></i> 4.3 Finalização do Serviço (O "Gran Finale")
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Item 1: Testes de Funcionamento -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-indigo-400">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 w-14 h-14 rounded-full flex items-center justify-center text-indigo-600 mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-laptop-medical text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Bateria de Testes</h4>
+                <p class="text-sm text-gray-600">
+                    Não confie só na luz verde da ONU. Faça Speedtest (cabo e Wi-Fi), abra vídeos em 4K e teste a latência (ping).
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 2: Demonstração ao Cliente -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-indigo-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-indigo-50 w-14 h-14 rounded-full flex items-center justify-center text-indigo-600 mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-mobile-screen-button text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Demonstração Real</h4>
+                <p class="text-sm text-gray-600">
+                    Peça para o cliente testar no celular <strong>dele</strong>. "Senhor, pode abrir seus site preferido e testar a navegação."
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 3: Limpeza do Local -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-purple-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-purple-50 w-14 h-14 rounded-full flex items-center justify-center text-purple-600 mb-4 group-hover:bg-purple-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-sparkles text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Limpeza Impecável</h4>
+                <p class="text-sm text-gray-600">
+                    Recolha cada pedacinho de fio e abraçadeira cortada. O chão deve ficar mais limpo do que quando você chegou.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 4: Fotos Comprobatórias -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-blue-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-blue-50 w-14 h-14 rounded-full flex items-center justify-center text-blue-600 mb-4 group-hover:bg-blue-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-camera text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Fotos de Evidência</h4>
+                <p class="text-sm text-gray-600">
+                    Registre todas as fotos necessárias requisitadas pelo CQI para validação e documentação da sua O.S.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 5: Preenchimento da O.S. -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-pink-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-pink-50 w-14 h-14 rounded-full flex items-center justify-center text-pink-600 mb-4 group-hover:bg-pink-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-file-contract text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Baixa no IXC</h4>
+                <p class="text-sm text-gray-600">
+                    Preencha o encerramento com o código correto. Descreva tecnicamente o que foi feito para manter o histórico do cliente.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 6: Comunicação do Resultado -->
+        <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-slate-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-slate-100 w-14 h-14 rounded-full flex items-center justify-center text-slate-600 mb-4 group-hover:bg-slate-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-check-double text-xl"></i>
+                </div>
+                <h4 class="font-bold text-gray-800 mb-2">Veredito Final</h4>
+                <p class="text-sm text-gray-600">
+                    Olhe para o cliente e diga: "Serviço concluído. Sua internet está 100% operacional. Há algo mais em que posso ajudar?"
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+                      <!-- ================================================================================= -->
+<!-- TÓPICO 5: FECHAMENTO DO ATENDIMENTO -->
+<!-- ================================================================================= -->
+<section id="section5" class="mb-12 border-b border-indigo-100 pb-12">
+    
+    <h2 class="text-2xl font-bold text-[#003366] mb-8 flex items-center gap-2">
+        <span class="bg-service-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">5</span>
+        Fechamento do Atendimento
+    </h2>
+
+    <p class="text-gray-600 mb-8 leading-relaxed">
+        Não basta consertar e ir embora. O técnico consultor garante que o cliente saiba usar o produto e se sinta seguro com o serviço prestado.
+    </p>
+
+    <!-- 5.1 ORIENTAÇÃO FINAL -->
+    <div class="mb-12">
+        <h3 class="text-lg font-bold text-indigo-800 mb-6 flex items-center gap-2 border-l-4 border-indigo-500 pl-3 bg-indigo-50 py-2 rounded-r">
+            <i class="fa-solid fa-chalkboard-user text-indigo-500"></i> 5.1 Orientação Final (Educar o Cliente)
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Item A: Como Usar -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-indigo-400">
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-indigo-50 w-12 h-12 rounded-full flex items-center justify-center text-indigo-600 mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-power-off text-lg"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-1">Como Usar</h4>
+                    <p class="text-xs text-gray-600">
+                        Ensine o básico: onde liga/desliga, o que significam as luzes principais e como conectar um novo celular no Wi-Fi.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item B: Cuidados Rede Interna -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-indigo-500">
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-indigo-50 w-12 h-12 rounded-full flex items-center justify-center text-indigo-600 mb-3 group-hover:bg-indigo-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-shield-dog text-lg"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-1">Cuidados Internos</h4>
+                    <p class="text-xs text-gray-600">
+                        Alerte sobre riscos: "Cuidado ao arrastar este móvel para não esmagar a fibra" ou "O pet pode roer este cabo se ficar solto".
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item C: Evitar Problemas -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-purple-500">
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-purple-50 w-12 h-12 rounded-full flex items-center justify-center text-purple-600 mb-3 group-hover:bg-purple-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-1">Evitar Problemas</h4>
+                    <p class="text-xs text-gray-600">
+                        Explique erros comuns: "Não dobre o cabo amarelo" ou "Não coloque objetos metálicos em cima do roteador".
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item D: Sinais a Observar -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-blue-500">
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-blue-50 w-12 h-12 rounded-full flex items-center justify-center text-blue-600 mb-3 group-hover:bg-blue-600 group-hover:text-white transition">
+                        <i class="fa-regular fa-lightbulb text-lg"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-1">Sinais de Alerta</h4>
+                    <p class="text-xs text-gray-600">
+                        "Se esta luz 'LOS' ficar vermelha, significa que o cabo rompeu. Se a 'PON' piscar, é sinal de rede."
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item E: Solicitar Suporte -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-pink-500">
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-pink-50 w-12 h-12 rounded-full flex items-center justify-center text-pink-600 mb-3 group-hover:bg-pink-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-headset text-lg"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-1">Canais de Suporte</h4>
+                    <p class="text-xs text-gray-600">
+                        Deixe o contato fácil (adesivo no roteador). "Qualquer problema, nosso WhatsApp é este aqui."
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item F: Políticas Básicas -->
+            <div class="bg-white border border-indigo-100 rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-slate-500">
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-slate-100 w-12 h-12 rounded-full flex items-center justify-center text-slate-600 mb-3 group-hover:bg-slate-600 group-hover:text-white transition">
+                        <i class="fa-solid fa-file-contract text-lg"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-1">Garantias</h4>
+                    <p class="text-xs text-gray-600">
+                        Informe prazos básicos: "A visita de hoje tem garantia de X dias para o mesmo problema."
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 5.2 COLETA DE SATISFAÇÃO -->
+    <div class="mb-12">
+        <h3 class="text-lg font-bold text-green-800 mb-6 flex items-center gap-2 border-l-4 border-green-500 pl-3 bg-green-50 py-2 rounded-r">
+            <i class="fa-solid fa-thumbs-up text-green-500"></i> 5.2 Coleta de Satisfação
+        </h3>
+
+        <div class="bg-white border border-green-100 rounded-xl p-6 shadow-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <div class="bg-green-100 text-green-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0">A</div>
+                        <div>
+                            <span class="font-bold text-gray-800 block text-sm">Ficou claro?</span>
+                            <span class="text-xs text-gray-600">"Consegui explicar tudo? O senhor tem mais alguma dúvida?"</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="bg-green-100 text-green-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0">B</div>
+                        <div>
+                            <span class="font-bold text-gray-800 block text-sm">Falta algo?</span>
+                            <span class="text-xs text-gray-600">"Havia mais algum ponto que o senhor queria que eu olhasse?"</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="bg-green-100 text-green-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0">C</div>
+                        <div>
+                            <span class="font-bold text-gray-800 block text-sm">Ajustes Finais</span>
+                            <span class="text-xs text-gray-600">Se o cliente pedir para arrumar um fio solto, faça na hora.</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <div class="bg-green-100 text-green-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0">D</div>
+                        <div>
+                            <span class="font-bold text-gray-800 block text-sm">Agradecer</span>
+                            <span class="text-xs text-gray-600">"Obrigado por receber a RL NET na sua casa."</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="bg-green-100 text-green-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0">E</div>
+                        <div>
+                            <span class="font-bold text-gray-800 block text-sm">Incentivar Feedback</span>
+                            <span class="text-xs text-gray-600">"O senhor vai receber um SMS de avaliação, sua nota 10 me ajuda muito."</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="bg-green-100 text-green-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0">F</div>
+                        <div>
+                            <span class="font-bold text-gray-800 block text-sm">Despedida</span>
+                            <span class="text-xs text-gray-600">Saia com cordialidade. "Tenha uma excelente semana."</span>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 5.3 QUANDO O CLIENTE ESTÁ INSATISFEITO -->
+    <div>
+        <h3 class="text-lg font-bold text-amber-800 mb-6 flex items-center gap-2 border-l-4 border-amber-500 pl-3 bg-amber-50 py-2 rounded-r">
+            <i class="fa-solid fa-fire-extinguisher text-amber-500"></i> 5.3 Gestão de Conflito (Cliente Insatisfeito)
+        </h3>
+
+        <div class="bg-white border border-amber-200 rounded-xl p-6 shadow-sm relative overflow-hidden">
+            <!-- Marca d'água -->
+            <i class="fa-solid fa-shield-halved absolute -right-4 -bottom-4 text-9xl text-amber-50 opacity-20"></i>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                
+                <!-- Protocolo de Calma -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 bg-amber-50 p-3 rounded-lg border border-amber-100">
+                        <i class="fa-solid fa-peace text-amber-600 text-xl"></i>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">A) Manter a Calma</h4>
+                            <p class="text-xs text-gray-600">Não leve para o pessoal. Respire fundo e mantenha o tom de voz baixo.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 bg-amber-50 p-3 rounded-lg border border-amber-100">
+                        <i class="fa-solid fa-hand-holding text-amber-600 text-xl"></i>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">B) Não Entrar em Conflito</h4>
+                            <p class="text-xs text-gray-600">Nunca diga "o senhor está errado". Diga "entendo seu ponto de vista".</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 bg-amber-50 p-3 rounded-lg border border-amber-100">
+                        <i class="fa-solid fa-rotate text-amber-600 text-xl"></i>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">C) Repetir Explicações</h4>
+                            <p class="text-xs text-gray-600">Explique de outra forma, com paciência. Use analogias novas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Protocolo de Ação -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 bg-amber-50 p-3 rounded-lg border border-amber-100">
+                        <i class="fa-solid fa-route text-amber-600 text-xl"></i>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">D) Buscar Alternativas</h4>
+                            <p class="text-xs text-gray-600">"O que podemos fazer para o senhor ficar satisfeito dentro do possível?"</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 bg-amber-50 p-3 rounded-lg border border-amber-100">
+                        <i class="fa-solid fa-user-shield text-amber-600 text-xl"></i>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">E) Acionar Supervisor</h4>
+                            <p class="text-xs text-gray-600">Se fugir do controle, ligue para a supervisão. "Vou passar para meu gerente resolver."</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 bg-amber-50 p-3 rounded-lg border border-amber-100">
+                        <i class="fa-solid fa-pen-to-square text-amber-600 text-xl"></i>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">F) Registrar Ocorrência</h4>
+                            <p class="text-xs text-gray-600">Anote tudo na O.S. (cliente agressivo, exigência indevida) para se proteger.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+                      <!-- ================================================================================= -->
+<!-- TÓPICO 6: SITUAÇÕES ESPECIAIS (PERFIS DE CLIENTE) -->
+<!-- ================================================================================= -->
+<section id="section6" class="mb-12 border-b border-indigo-100 pb-12">
+    
+    <h2 class="text-2xl font-bold text-[#003366] mb-8 flex items-center gap-2">
+        <span class="bg-service-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">6</span>
+        Situações Especiais (Perfis de Cliente)
+    </h2>
+
+    <p class="text-gray-600 mb-8 leading-relaxed">
+        Nem todo atendimento é um "mar de rosas". Você encontrará clientes difíceis, clientes que não sabem nada e clientes que acham que sabem mais que você. Veja como lidar com cada um.
+    </p>
+
+    <!-- 6.1 CLIENTE AGRESSIVO -->
+    <div class="mb-12">
+        <h3 class="text-lg font-bold text-red-800 mb-6 flex items-center gap-2 border-l-4 border-red-500 pl-3 bg-red-50 py-2 rounded-r">
+            <i class="fa-solid fa-triangle-exclamation text-red-500"></i> 6.1 O Cliente Agressivo ou Impaciente
+        </h3>
+
+        <div class="bg-white border border-red-100 rounded-xl p-6 shadow-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- A -->
+                <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-red-50 transition">
+                    <div class="bg-red-100 text-red-600 w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg shrink-0">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Não Revidar</h4>
+                        <p class="text-xs text-gray-600 mt-1">
+                            Nunca aumente o tom de voz. Se ele gritar, fale mais baixo. Isso quebra o padrão de agressividade.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- B -->
+                <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-red-50 transition">
+                    <div class="bg-red-100 text-red-600 w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg shrink-0">
+                        <i class="fa-solid fa-volume-low"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Voz Neutra</h4>
+                        <p class="text-xs text-gray-600 mt-1">
+                            Mantenha a emoção fora da voz. Seja profissional e objetivo, como um piloto de avião na turbulência.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- C -->
+                <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-red-50 transition">
+                    <div class="bg-red-100 text-red-600 w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg shrink-0">
+                        <i class="fa-solid fa-ear-listen"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Ouvir e Entender</h4>
+                        <p class="text-xs text-gray-600 mt-1">
+                            Deixe ele desabafar até cansar. Geralmente a raiva é com a empresa, não com você (CPF).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- D -->
+                <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-red-50 transition">
+                    <div class="bg-red-100 text-red-600 w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg shrink-0">
+                        <i class="fa-solid fa-hand-holding-medical"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Foco na Solução</h4>
+                        <p class="text-xs text-gray-600 mt-1">
+                            "Entendo sua frustração, senhor. O que posso fazer agora para resolver é X e Y."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- E -->
+                <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-red-50 transition">
+                    <div class="bg-red-100 text-red-600 w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg shrink-0">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Envolver Coordenação</h4>
+                        <p class="text-xs text-gray-600 mt-1">
+                            Se houver ameaça ou desrespeito grave, retire-se e acione o supervisor imediatamente.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- F -->
+                <div class="flex items-start gap-4 p-3 rounded-lg hover:bg-red-50 transition">
+                    <div class="bg-red-100 text-red-600 w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg shrink-0">
+                        <i class="fa-solid fa-file-pen"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Registrar Tudo</h4>
+                        <p class="text-xs text-gray-600 mt-1">
+                            Documente o comportamento na O.S. para proteger a si mesmo e a empresa em atendimentos futuros.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 6.2 CLIENTE LEIGO -->
+    <div class="mb-12">
+        <h3 class="text-lg font-bold text-green-800 mb-6 flex items-center gap-2 border-l-4 border-green-500 pl-3 bg-green-50 py-2 rounded-r">
+            <i class="fa-solid fa-person-circle-question text-green-500"></i> 6.2 O Cliente Leigo
+        </h3>
+
+        <div class="bg-white border border-green-100 rounded-xl p-6 shadow-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- A -->
+                <div class="flex flex-col items-center text-center p-4 border border-gray-100 rounded-xl hover:border-green-400 transition">
+                    <i class="fa-solid fa-hourglass-start text-3xl text-green-500 mb-2"></i>
+                    <h4 class="font-bold text-gray-800 text-sm">Paciência Infinita</h4>
+                    <p class="text-xs text-gray-500 mt-1">Não revire os olhos para perguntas "bobas". Para ele, é tudo novo.</p>
+                </div>
+
+                <!-- B -->
+                <div class="flex flex-col items-center text-center p-4 border border-gray-100 rounded-xl hover:border-green-400 transition">
+                    <i class="fa-solid fa-chalkboard text-3xl text-green-500 mb-2"></i>
+                    <h4 class="font-bold text-gray-800 text-sm">Mostrar Exemplos</h4>
+                    <p class="text-xs text-gray-500 mt-1">Use analogias: "A fibra é como uma mangueira de luz, se dobrar a água não passa".</p>
+                </div>
+
+                <!-- C -->
+                <div class="flex flex-col items-center text-center p-4 border border-gray-100 rounded-xl hover:border-green-400 transition">
+                    <i class="fa-solid fa-ban text-3xl text-green-500 mb-2"></i>
+                    <h4 class="font-bold text-gray-800 text-sm">Zero Tecniquês</h4>
+                    <p class="text-xs text-gray-500 mt-1">Evite "DBm", "Latência", "Jitter". Fale "Força do sinal", "Atraso", "Engasgo".</p>
+                </div>
+
+                <!-- D -->
+                <div class="flex flex-col items-center text-center p-4 border border-gray-100 rounded-xl hover:border-green-400 transition">
+                    <i class="fa-solid fa-lightbulb text-3xl text-green-500 mb-2"></i>
+                    <h4 class="font-bold text-gray-800 text-sm">Didática Clara</h4>
+                    <p class="text-xs text-gray-500 mt-1">Ensine passo-a-passo. Peça para ele fazer enquanto você observa.</p>
+                </div>
+
+                <!-- E -->
+                <div class="flex flex-col items-center text-center p-4 border border-gray-100 rounded-xl hover:border-green-400 transition">
+                    <i class="fa-solid fa-clipboard-check text-3xl text-green-500 mb-2"></i>
+                    <h4 class="font-bold text-gray-800 text-sm">Validar Entendimento</h4>
+                    <p class="text-xs text-gray-500 mt-1">"O senhor conseguiu conectar? Quer tentar de novo?"</p>
+                </div>
+
+                <!-- F -->
+                <div class="flex flex-col items-center text-center p-4 border border-gray-100 rounded-xl hover:border-green-400 transition">
+                    <i class="fa-solid fa-file-contract text-3xl text-green-500 mb-2"></i>
+                    <h4 class="font-bold text-gray-800 text-sm">Documentar Orientação</h4>
+                    <p class="text-xs text-gray-500 mt-1">Registre que o cliente foi treinado no uso básico.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 6.3 CLIENTE TÉCNICO -->
+    <div class="mb-12">
+        <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2 border-l-4 border-slate-500 pl-3 bg-slate-100 py-2 rounded-r">
+            <i class="fa-solid fa-user-graduate text-slate-600"></i> 6.3 O Cliente Altamente Técnico (TI)
+        </h3>
+
+        <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- A -->
+                <div class="flex items-start gap-3 p-3 border-b border-slate-100">
+                    <i class="fa-solid fa-crosshairs text-slate-500 mt-1"></i>
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Ser Objetivo</h4>
+                        <p class="text-xs text-gray-600">Não tente "enrolar". Ele sabe do que está falando. Vá direto ao ponto técnico.</p>
+                    </div>
+                </div>
+
+                <!-- B -->
+                <div class="flex items-start gap-3 p-3 border-b border-slate-100">
+                    <i class="fa-solid fa-chart-line text-slate-500 mt-1"></i>
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Usar Dados Técnicos</h4>
+                        <p class="text-xs text-gray-600">Aqui você pode (e deve) falar em dBm, perda de pacote e frequência de canal.</p>
+                    </div>
+                </div>
+
+                <!-- C -->
+                <div class="flex items-start gap-3 p-3 border-b border-slate-100">
+                    <i class="fa-solid fa-laptop-code text-slate-500 mt-1"></i>
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Mostrar Testes</h4>
+                        <p class="text-xs text-gray-600">Mostre a tela do Power Meter e do Speedtest. Ele confia em números, não em palavras.</p>
+                    </div>
+                </div>
+
+                <!-- D -->
+                <div class="flex items-start gap-3 p-3 border-b border-slate-100">
+                    <i class="fa-solid fa-scale-unbalanced text-slate-500 mt-1"></i>
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Evitar Achismos</h4>
+                        <p class="text-xs text-gray-600">Se ele fizer uma pergunta difícil que você não sabe, diga "Vou consultar o NOC" em vez de chutar.</p>
+                    </div>
+                </div>
+
+                <!-- E -->
+                <div class="flex items-start gap-3 p-3 border-b border-slate-100">
+                    <i class="fa-solid fa-handshake-simple text-slate-500 mt-1"></i>
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Aceitar Contribuições</h4>
+                        <p class="text-xs text-gray-600">Se ele sugerir algo técnico válido, escute. Não entre em competição de ego.</p>
+                    </div>
+                </div>
+
+                <!-- F -->
+                <div class="flex items-start gap-3 p-3 border-b border-slate-100">
+                    <i class="fa-solid fa-user-tie text-slate-500 mt-1"></i>
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Postura Profissional</h4>
+                        <p class="text-xs text-gray-600">Trate-o como um "colega" de área, mas mantenha a autoridade sobre a rede da RL NET.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+                      <!-- ================================================================================= -->
+<!-- TÓPICO 7: BOAS PRÁTICAS GERAIS -->
+<!-- ================================================================================= -->
+<section id="section7" class="mb-12">
+    
+    <h2 class="text-2xl font-bold text-[#003366] mb-8 flex items-center gap-2">
+        <span class="bg-service-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">7</span>
+        Boas Práticas Gerais (Mandamentos)
+    </h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+
+        <!-- 7.1 O QUE FAZER (SEMPRE) -->
+        <div class="bg-green-50 border border-green-200 rounded-xl overflow-hidden">
+            <div class="bg-green-100 p-4 border-b border-green-200 flex items-center gap-2">
+                <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                <h3 class="font-bold text-green-800">7.1 O Técnico DEVE Sempre:</h3>
+            </div>
+            <ul class="divide-y divide-green-200 p-2">
+                <li class="p-3 flex items-start gap-3 hover:bg-green-100/50 transition rounded">
+                    <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                    <div>
+                        <strong class="block text-green-900 text-sm">Ser Organizado</strong>
+                        <span class="text-xs text-green-800">Ferramentas limpas e bolsa arrumada.</span>
+                    </div>
+                </li>
+                <li class="p-3 flex items-start gap-3 hover:bg-green-100/50 transition rounded">
+                    <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                    <div>
+                        <strong class="block text-green-900 text-sm">Registrar Tudo</strong>
+                        <span class="text-xs text-green-800">Não confie na memória. Anote na O.S.</span>
+                    </div>
+                </li>
+                <li class="p-3 flex items-start gap-3 hover:bg-green-100/50 transition rounded">
+                    <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                    <div>
+                        <strong class="block text-green-900 text-sm">Ser Educado</strong>
+                        <span class="text-xs text-green-800">Bom dia, por favor, com licença, obrigado.</span>
+                    </div>
+                </li>
+                <li class="p-3 flex items-start gap-3 hover:bg-green-100/50 transition rounded">
+                    <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                    <div>
+                        <strong class="block text-green-900 text-sm">Realizar Testes Completos</strong>
+                        <span class="text-xs text-green-800">Cabo e Wi-Fi, antes de sair.</span>
+                    </div>
+                </li>
+                <li class="p-3 flex items-start gap-3 hover:bg-green-100/50 transition rounded">
+                    <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                    <div>
+                        <strong class="block text-green-900 text-sm">Ser Proativo</strong>
+                        <span class="text-xs text-green-800">Viu um conector frouxo? Aperte, mesmo que não seja o defeito.</span>
+                    </div>
+                </li>
+                <li class="p-3 flex items-start gap-3 hover:bg-green-100/50 transition rounded">
+                    <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                    <div>
+                        <strong class="block text-green-900 text-sm">Informar Falhas Externas</strong>
+                        <span class="text-xs text-green-800">CTO bagunçada ou poste perigoso? Avise o supervisor.</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 7.2 O QUE NÃO FAZER (NUNCA) -->
+        <div class="bg-red-50 border border-red-200 rounded-xl overflow-hidden">
+            <div class="bg-red-100 p-4 border-b border-red-200 flex items-center gap-2">
+                <i class="fa-solid fa-circle-xmark text-red-600 text-xl"></i>
+                <h3 class="font-bold text-red-800">7.2 O Técnico NUNCA Deve:</h3>
+            </div>
+            <ul class="divide-y divide-red-200 p-2">
+                <li class="p-3 flex items-start gap-3 hover:bg-red-100/50 transition rounded">
+                    <i class="fa-solid fa-xmark text-red-500 mt-1"></i>
+                    <div>
+                        <strong class="block text-red-900 text-sm">Culpar Outro Técnico</strong>
+                        <span class="text-xs text-red-800">Não fale mal do colega. Resolva o problema.</span>
+                    </div>
+                </li>
+                <li class="p-3 flex items-start gap-3 hover:bg-red-100/50 transition rounded">
+                    <i class="fa-solid fa-xmark text-red-500 mt-1"></i>
+                    <div>
+                        <strong class="block text-red-900 text-sm">Falar Mal da Empresa</strong>
+                        <span class="text-xs text-red-800">"A RL NET não presta" na frente do cliente é demissão.</span>
+                    </div>
+                </li>
+                <li class="p-3 flex items-start gap-3 hover:bg-red-100/50 transition rounded">
+                    <i class="fa-solid fa-xmark text-red-500 mt-1"></i>
+                    <div>
+                        <strong class="block text-red-900 text-sm">Deixar Sujeira</strong>
+                        <span class="text-xs text-red-800">Resto de fio no chão é inaceitável.</span>
+                    </div>
+                </li>
+                <li class="p-3 flex items-start gap-3 hover:bg-red-100/50 transition rounded">
+                    <i class="fa-solid fa-xmark text-red-500 mt-1"></i>
+                    <div>
+                        <strong class="block text-red-900 text-sm">Omitir Falhas</strong>
+                        <span class="text-xs text-red-800">Quebrou algo? Avise. Mentir é pior.</span>
+                    </div>
+                </li>
+                <li class="p-3 flex items-start gap-3 hover:bg-red-100/50 transition rounded">
+                    <i class="fa-solid fa-xmark text-red-500 mt-1"></i>
+                    <div>
+                        <strong class="block text-red-900 text-sm">Fazer "Gambiarra"</strong>
+                        <span class="text-xs text-red-800">Emenda com fita isolante em fibra? Jamais.</span>
+                    </div>
+                </li>
+                <li class="p-3 flex items-start gap-3 hover:bg-red-100/50 transition rounded">
+                    <i class="fa-solid fa-xmark text-red-500 mt-1"></i>
+                    <div>
+                        <strong class="block text-red-900 text-sm">Sair Sem Solução</strong>
+                        <span class="text-xs text-red-800">Não abandone o cliente. Se não resolver, escale.</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- 7.3 PADRÕES DE QUALIDADE -->
+    <div class="mb-12">
+        <h3 class="text-lg font-bold text-indigo-800 mb-6 flex items-center gap-2 border-l-4 border-indigo-500 pl-3 bg-indigo-50 py-2 rounded-r">
+            <i class="fa-solid fa-award text-indigo-500"></i> 7.3 Padrão de Qualidade RL NET
+        </h3>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            
+            <div class="bg-white border border-indigo-100 p-4 rounded-xl text-center hover:shadow-md transition">
+                <i class="fa-solid fa-camera text-2xl text-indigo-500 mb-2"></i>
+                <span class="block text-xs font-bold text-gray-700">Fotos Obrigatórias</span>
+            </div>
+            
+            <div class="bg-white border border-indigo-100 p-4 rounded-xl text-center hover:shadow-md transition">
+                <i class="fa-solid fa-laptop-medical text-2xl text-indigo-500 mb-2"></i>
+                <span class="block text-xs font-bold text-gray-700">Testes Padrão</span>
+            </div>
+
+            <div class="bg-white border border-indigo-100 p-4 rounded-xl text-center hover:shadow-md transition">
+                <i class="fa-solid fa-file-contract text-2xl text-indigo-500 mb-2"></i>
+                <span class="block text-xs font-bold text-gray-700">Doc. Completa</span>
+            </div>
+
+            <div class="bg-white border border-indigo-100 p-4 rounded-xl text-center hover:shadow-md transition">
+                <i class="fa-solid fa-comments text-2xl text-indigo-500 mb-2"></i>
+                <span class="block text-xs font-bold text-gray-700">Comunicação</span>
+            </div>
+
+            <div class="bg-white border border-indigo-100 p-4 rounded-xl text-center hover:shadow-md transition">
+                <i class="fa-solid fa-clock text-2xl text-indigo-500 mb-2"></i>
+                <span class="block text-xs font-bold text-gray-700">Pontualidade</span>
+            </div>
+
+            <div class="bg-white border border-indigo-100 p-4 rounded-xl text-center hover:shadow-md transition">
+                <i class="fa-solid fa-user-tie text-2xl text-indigo-500 mb-2"></i>
+                <span class="block text-xs font-bold text-gray-700">Profissionalismo</span>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<!-- ================================================================================= -->
+<!-- RESUMO FINAL DO MÓDULO -->
+<!-- ================================================================================= -->
+<div class="bg-[#003366] text-white rounded-xl shadow-lg mt-12 overflow-hidden relative print:hidden">
+    
+    <!-- Elemento Decorativo de Fundo -->
+    <div class="absolute top-0 right-0 opacity-10 transform translate-x-1/4 -translate-y-1/4">
+        <i class="fa-solid fa-hand-holding-heart text-[150px]"></i>
+    </div>
+    
+    <div class="p-8 md:p-12 relative z-10 text-center">
+        
+        <!-- Troféu Animado -->
+        <div class="bg-[#003366] text-white p-8 rounded-xl text-center shadow-lg mt-12">
+                          <div class="inline-block bg-amber-500 p-4 rounded-full mb-6 shadow-lg animate-bounce">
+            <i class="fa-solid fa-trophy text-3xl text-white"></i>
+        </div>
+
+        <h3 class="text-2xl md:text-3xl font-black mb-4 uppercase tracking-wide">
+            Excelência em Atendimento Conquistada!
+        </h3>
+        
+        <p class="text-indigo-100 text-lg md:text-xl mb-10 max-w-3xl mx-auto font-light leading-relaxed">
+            "Você entendeu que o técnico não conserta apenas internet, ele <strong class="text-white font-bold">conecta pessoas</strong>. Sua postura, empatia e clareza são tão importantes quanto seu alicate. Um cliente bem atendido é um cliente fiel da RL NET."
+        </p>
+
+        <!-- Tags de Competências Adquiridas -->
+        <div class="flex flex-wrap justify-center gap-3 mb-8">
+            <span class="bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold border border-white/20 flex items-center gap-2 hover:bg-indigo-500 hover:border-indigo-500 transition-all cursor-default">
+                <i class="fa-solid fa-check text-green-400"></i> Empatia Técnica
+            </span>
+            <span class="bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold border border-white/20 flex items-center gap-2 hover:bg-indigo-500 hover:border-indigo-500 transition-all cursor-default">
+                <i class="fa-solid fa-check text-green-400"></i> Comunicação Clara
+            </span>
+            <span class="bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold border border-white/20 flex items-center gap-2 hover:bg-indigo-500 hover:border-indigo-500 transition-all cursor-default">
+                <i class="fa-solid fa-check text-green-400"></i> Gestão de Conflito
+            </span>
+            <span class="bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold border border-white/20 flex items-center gap-2 hover:bg-indigo-500 hover:border-indigo-500 transition-all cursor-default">
+                <i class="fa-solid fa-check text-green-400"></i> Postura Profissional
+            </span>
+            <span class="bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold border border-white/20 flex items-center gap-2 hover:bg-indigo-500 hover:border-indigo-500 transition-all cursor-default">
+                <i class="fa-solid fa-check text-green-400"></i> Transparência
+            </span>
+        </div>
+
+    </div>
+    
+    <!-- Barra Inferior -->
+    <div class="bg-gradient-to-r from-indigo-600 via-indigo-400 to-indigo-600 h-2 w-full"></div>
+</div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="layout.js"></script>
+</body>
+</html>

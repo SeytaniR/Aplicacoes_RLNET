@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 01 - Cultura e Papel do Técnico | RL NET</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="md:pl-64 flex flex-col min-h-screen transition-all duration-300">
+        <div id="app-layout" class="flex flex-col min-h-screen">
+            
+            <main class="flex-1 p-4 md:p-8">
+                <!-- Card Principal (PADRÃO) -->
+                <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-[#003366]">
+                    
+                    <div class="p-6 md:p-10">
+                        <!-- Cabeçalho do Módulo (PADRÃO) -->
+                        <div class="flex flex-col md:flex-row items-center gap-6 mb-10 border-b pb-8">
+                            <div class="w-20 h-20 rounded-full bg-[#003366] flex items-center justify-center text-white text-3xl font-bold shadow-lg shrink-0 border-4 border-white ring-2 ring-blue-100">
+                                01
+                            </div>
+                            <div class="text-center md:text-left">
+                                <h1 class="text-3xl md:text-4xl font-black text-[#003366] mb-2 uppercase">Cultura e Papel do Técnico</h1>
+                                <p class="text-gray-600 text-lg font-medium">Conhecendo a RL NET, nossa estrutura e a importância da sua postura em campo.</p>
+                            </div>
+                        </div>
+
+                        <!-- 1. Apresentação -->
+                        <section class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <i class="fa-solid fa-building text-blue-600"></i> Sobre a RL NET
+                            </h2>
+                            <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-r-lg shadow-sm">
+                                <p class="text-gray-700 leading-relaxed mb-4">
+                                    A <strong>RL NET</strong> é uma empresa provedora de internet que nasceu com o propósito de levar conectividade de qualidade a cada cliente, unindo tecnologia, atendimento humano e compromisso com resultados.
+                                </p>
+                                <p class="text-gray-700 leading-relaxed mb-4">
+                                    Nossas operações iniciaram em <strong>2008</strong> provendo internet via rádio. O crescimento foi rápido e, em <strong>2015</strong>, passamos a fornecer internet fibra óptica para a zona sul de Porto Alegre.
+                                </p>
+                                <p class="text-gray-700 leading-relaxed">
+                                    Atualmente, atuamos com uma estrutura sólida composta por equipes de instalação, reparo, suporte e controle de qualidade. O sucesso da RL NET está diretamente ligado à qualidade do trabalho técnico e à postura profissional de cada colaborador.
+                                </p>
+                            </div>
+                        </section>
+
+                        <!-- 2. Missão, Visão e Valores -->
+                        <section class="mb-16 border-b pb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-[#003366] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">2</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Nossa Identidade</h2>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                                <!-- Missão -->
+                                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                                    <div class="w-14 h-14 mx-auto bg-blue-100 text-[#003366] rounded-full flex items-center justify-center text-2xl mb-4">
+                                        <i class="fa-solid fa-bullseye"></i>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-[#003366] mb-2">Missão</h3>
+                                    <p class="text-sm text-gray-600">Fornecer conexão de internet com qualidade por meio de serviços diferenciados que supram as necessidades diárias dos nossos clientes.</p>
+                                </div>
+                                
+                                <!-- Visão -->
+                                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                                    <div class="w-14 h-14 mx-auto bg-blue-100 text-[#003366] rounded-full flex items-center justify-center text-2xl mb-4">
+                                        <i class="fa-solid fa-chart-line"></i>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-[#003366] mb-2">Visão</h3>
+                                    <p class="text-sm text-gray-600">Ser reconhecido como o melhor provedor local em conexão e atendimento.</p>
+                                </div>
+
+                                <!-- Valores -->
+                                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                                    <div class="w-14 h-14 mx-auto bg-blue-100 text-[#003366] rounded-full flex items-center justify-center text-2xl mb-4">
+                                        <i class="fa-regular fa-gem"></i>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-[#003366] mb-2">Valores</h3>
+                                    <ul class="text-sm text-gray-600 text-left space-y-2 list-none pl-4">
+                                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Humanização</li>
+                                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Transparência</li>
+                                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Igualdade social</li>
+                                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Confiança</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 3. Estrutura de Setores -->
+                        <section class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <i class="fa-solid fa-sitemap text-blue-600"></i> Estrutura de Setores e Integração
+                            </h2>
+                            <p class="mb-6 text-gray-600">A RL NET é formada por setores integrados. Veja como o técnico interage com cada um:</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Card Setor -->
+                                <div class="border border-gray-200 rounded-xl p-5 hover:bg-gray-50 transition shadow-sm">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="bg-[#003366] text-white p-2 rounded-lg"><i class="fa-solid fa-briefcase"></i></div>
+                                        <h3 class="font-bold text-lg text-[#003366]">Comercial</h3>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-3"><strong>Função:</strong> Venda de produtos.</p>
+                                    <div class="text-xs bg-blue-50 p-2 rounded text-blue-800 border border-blue-100">
+                                        <i class="fa-solid fa-link mr-1"></i> Recebe as O.S documentadas que antes passam pelo agendamento.
+                                    </div>
+                                </div>
+
+                                <div class="border border-gray-200 rounded-xl p-5 hover:bg-gray-50 transition shadow-sm">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="bg-[#003366] text-white p-2 rounded-lg"><i class="fa-solid fa-dollar-sign"></i></div>
+                                        <h3 class="font-bold text-lg text-[#003366]">Financeiro</h3>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-3"><strong>Função:</strong> Solicitações financeiras.</p>
+                                    <div class="text-xs bg-blue-50 p-2 rounded text-blue-800 border border-blue-100">
+                                        <i class="fa-solid fa-link mr-1"></i> Recebe O.S de reativações e reversões.
+                                    </div>
+                                </div>
+
+                                <div class="border border-gray-200 rounded-xl p-5 hover:bg-gray-50 transition shadow-sm">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="bg-[#003366] text-white p-2 rounded-lg"><i class="fa-solid fa-headset"></i></div>
+                                        <h3 class="font-bold text-lg text-[#003366]">SAC / Suporte</h3>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-3"><strong>Função:</strong> Atendimento e diagnósticos.</p>
+                                    <div class="text-xs bg-blue-50 p-2 rounded text-blue-800 border border-blue-100">
+                                        <i class="fa-solid fa-link mr-1"></i> Gera reversões e visitas técnicas filtradas.
+                                    </div>
+                                </div>
+
+                                <div class="border border-gray-200 rounded-xl p-5 hover:bg-gray-50 transition shadow-sm">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="bg-[#003366] text-white p-2 rounded-lg"><i class="fa-solid fa-calendar-check"></i></div>
+                                        <h3 class="font-bold text-lg text-[#003366]">Agendamento</h3>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-3"><strong>Função:</strong> Organiza a rotina diária.</p>
+                                    <div class="text-xs bg-blue-50 p-2 rounded text-blue-800 border border-blue-100">
+                                        <i class="fa-solid fa-link mr-1"></i> Contato via WhatsApp sobre rotas e horários.
+                                    </div>
+                                </div>
+
+                                <div class="border border-gray-200 rounded-xl p-5 hover:bg-gray-50 transition shadow-sm md:col-span-2 border-l-4 border-l-[#003366]">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="bg-[#003366] text-white p-2 rounded-lg"><i class="fa-solid fa-clipboard-check"></i></div>
+                                        <h3 class="font-bold text-lg text-[#003366]">Controle de Qualidade (CQI) & Apoio</h3>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-3"><strong>Função:</strong> Analisa padrões, fornece suporte técnico em tempo real e feedback.</p>
+                                    <div class="text-xs bg-blue-50 p-2 rounded text-blue-800 border border-blue-100">
+                                        <i class="fa-solid fa-link mr-1"></i> Interação via fotos, WhatsApp e instruções técnicas.
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 4. O Papel do Técnico -->
+                        <section class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <i class="fa-solid fa-user-gear text-blue-600"></i> O Papel do Técnico RL NET
+                            </h2>
+                            <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                                <p class="mb-4 text-gray-700">
+                                    O técnico é o rosto da RL NET em campo. É ele quem representa a empresa diante do cliente. 
+                                    Seu papel vai além da técnica — envolve <strong>postura, organização e empatia</strong>.
+                                </p>
+                                
+                                <ul class="space-y-3 mb-6">
+                                    <li class="flex items-start gap-3">
+                                        <i class="fa-solid fa-check-circle text-green-600 mt-1"></i>
+                                        <span>Trabalhar com segurança, respeitando normas e usando EPIs.</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <i class="fa-solid fa-check-circle text-green-600 mt-1"></i>
+                                        <span>Executar o serviço com qualidade e acabamento profissional.</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <i class="fa-solid fa-check-circle text-green-600 mt-1"></i>
+                                        <span>Manter organização e limpeza no ambiente de trabalho.</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <i class="fa-solid fa-check-circle text-green-600 mt-1"></i>
+                                        <span>Comunicar-se bem com o cliente, explicando o funcionamento do serviço.</span>
+                                    </li>
+                                </ul>
+
+                                <div class="bg-yellow-50 p-4 border-l-4 border-[#FFD700] rounded-r-lg">
+                                    <p class="font-bold text-yellow-800 flex items-center gap-2 mb-1">
+                                        <i class="fa-regular fa-lightbulb"></i> Importante
+                                    </p>
+                                    <p class="text-yellow-900 text-sm">Uma boa instalação ou reparo começa antes do primeiro corte de fibra — começa com sua postura e seu comprometimento.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                       <section class="mb-16 border-b pb-12">
+    <div class="flex items-center gap-3 mb-6">
+        <span class="bg-[#003366] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">5</span>
+        <h2 class="text-2xl font-bold text-[#003366]">Compromisso com a Qualidade (CQI)</h2>
+    </div>
+    <p class="text-gray-600 mb-6">
+        A RL NET mantém um sistema de Controle de Qualidade Interno que avalia o desempenho baseado em:
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-4">
+        
+        <div class="bg-white border rounded-xl p-4 text-center shadow-sm hover:shadow-md transition">
+            <i class="fa-solid fa-smile text-blue-500 text-3xl mb-3"></i>
+            <p class="font-bold text-[#003366]">Atendimento</p>
+        </div>
+
+        <div class="bg-white border rounded-xl p-4 text-center shadow-sm hover:shadow-md transition">
+            <i class="fa-solid fa-tools text-blue-500 text-3xl mb-3"></i>
+            <p class="font-bold text-[#003366]">Acabamentos</p>
+        </div>
+
+        <div class="bg-white border rounded-xl p-4 text-center shadow-sm hover:shadow-md transition">
+            <i class="fa-solid fa-network-wired text-blue-500 text-3xl mb-3"></i>
+            <p class="font-bold text-[#003366]">Testes</p>
+        </div>
+
+        <div class="bg-white border rounded-xl p-4 text-center shadow-sm hover:shadow-md transition">
+            <i class="fa-solid fa-bezier-curve text-blue-500 text-3xl mb-3"></i>
+            <p class="font-bold text-[#003366]">Cabeamento</p>
+        </div>
+
+        <div class="bg-white border rounded-xl p-4 text-center shadow-sm hover:shadow-md transition">
+            <i class="fa-solid fa-camera text-blue-500 text-3xl mb-3"></i>
+            <p class="font-bold text-[#003366]">Documentação</p>
+        </div>
+
+    </div>
+
+    <p class="text-sm text-gray-500 italic border-l-2 border-gray-300 pl-4">
+        💡 Dica: Envie sempre fotos nítidas, utilize etiquetas e siga o padrão visual. Isso protege você e reforça sua credibilidade.
+    </p>
+</section>
+
+                        <!-- 6. Conduta e Postura (Tabela Comparativa) -->
+                        <section class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 text-center">Conduta e Postura Profissional</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <!-- Esperadas -->
+                                <div class="bg-green-50/50 border border-green-200 rounded-xl p-6">
+                                    <h3 class="text-green-800 font-bold mb-4 flex items-center gap-2 text-lg border-b border-green-200 pb-2">
+                                        <i class="fa-solid fa-thumbs-up"></i> Condutas Esperadas
+                                    </h3>
+                                    <ul class="space-y-3">
+                                        <li class="flex items-center gap-2 text-green-900 text-sm"><i class="fa-solid fa-check text-green-600"></i> Chegar pontualmente e avisar atrasos.</li>
+                                        <li class="flex items-center gap-2 text-green-900 text-sm"><i class="fa-solid fa-check text-green-600"></i> Manter uniforme completo e limpo.</li>
+                                        <li class="flex items-center gap-2 text-green-900 text-sm"><i class="fa-solid fa-check text-green-600"></i> Cumprimentar o cliente com educação.</li>
+                                        <li class="flex items-center gap-2 text-green-900 text-sm"><i class="fa-solid fa-check text-green-600"></i> Deixar o local limpo.</li>
+                                    </ul>
+                                </div>
+
+                                <!-- Proibidas -->
+                                <div class="bg-red-50/50 border border-red-200 rounded-xl p-6">
+                                    <h3 class="text-red-800 font-bold mb-4 flex items-center gap-2 text-lg border-b border-red-200 pb-2">
+                                        <i class="fa-solid fa-thumbs-down"></i> Condutas Proibidas
+                                    </h3>
+                                    <ul class="space-y-3">
+                                        <li class="flex items-center gap-2 text-red-900 text-sm"><i class="fa-solid fa-xmark text-red-600"></i> Chegar atrasado sem aviso.</li>
+                                        <li class="flex items-center gap-2 text-red-900 text-sm"><i class="fa-solid fa-xmark text-red-600"></i> Usar roupas fora do padrão.</li>
+                                        <li class="flex items-center gap-2 text-red-900 text-sm"><i class="fa-solid fa-xmark text-red-600"></i> Gírias, rudeza ou deboche.</li>
+                                        <li class="flex items-center gap-2 text-red-900 text-sm"><i class="fa-solid fa-xmark text-red-600"></i> Deixar sujeira ou restos de cabo.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 7. Jornada do Técnico (Timeline) -->
+                        <section class="mb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-8">Sua Jornada na RL NET</h2>
+                            <div class="relative border-l-4 border-blue-200 ml-4 space-y-10 pl-8">
+                                <!-- Passo 1 -->
+                                <div class="relative">
+                                    <span class="absolute -left-[42px] top-1 bg-blue-600 w-6 h-6 rounded-full border-4 border-white shadow"></span>
+                                    <h3 class="font-bold text-lg text-gray-800">1. Treinamento Teórico</h3>
+                                    <p class="text-gray-600 text-sm">Estudo deste manual e de POPs internos.</p>
+                                </div>
+                                <!-- Passo 2 -->
+                                <div class="relative">
+                                    <span class="absolute -left-[42px] top-1 bg-blue-600 w-6 h-6 rounded-full border-4 border-white shadow"></span>
+                                    <h3 class="font-bold text-lg text-gray-800">2. Avaliação Teórica</h3>
+                                    <p class="text-gray-600 text-sm">Prova para certificação dos conhecimentos absorvidos.</p>
+                                </div>
+                                <!-- Passo 3 -->
+                                <div class="relative">
+                                    <span class="absolute -left-[42px] top-1 bg-blue-600 w-6 h-6 rounded-full border-4 border-white shadow"></span>
+                                    <h3 class="font-bold text-lg text-gray-800">3. Treinamento Prático</h3>
+                                    <p class="text-gray-600 text-sm">Acompanhamento em campo com técnico sênior.</p>
+                                </div>
+                                <!-- Passo 4 -->
+                                <div class="relative">
+                                    <span class="absolute -left-[42px] top-1 bg-blue-600 w-6 h-6 rounded-full border-4 border-white shadow"></span>
+                                    <h3 class="font-bold text-lg text-gray-800">4. Avaliação Técnica/Comportamental</h3>
+                                    <p class="text-gray-600 text-sm">Análise de desempenho, postura e domínio das rotinas.</p>
+                                </div>
+                                <!-- Passo 5 -->
+                                <div class="relative">
+                                    <span class="absolute -left-[42px] top-1 bg-green-500 w-6 h-6 rounded-full border-4 border-white shadow"></span>
+                                    <h3 class="font-bold text-lg text-green-700">5. Atuação Autônoma</h3>
+                                    <p class="text-gray-600 text-sm">Liberação para atendimentos independentes.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Resumo Final -->
+                        <div class="bg-[#003366] text-white p-8 rounded-xl text-center shadow-lg mt-12">
+                          <div class="inline-block bg-amber-500 p-4 rounded-full mb-6 shadow-lg animate-bounce">
+            <i class="fa-solid fa-trophy text-3xl text-white"></i>
+        </div>
+                            <i class="fa-solid fa-quote-left text-3xl opacity-30 mb-4 block"></i>
+                          
+                            <h3 class="text-2xl font-bold mb-3">Ser Técnico RL NET</h3>
+                            <p class="text-lg font-light italic opacity-90 mb-4 max-w-2xl mx-auto">
+                                "O sucesso da RL NET é construído por mãos técnicas, mentes dedicadas e atitudes profissionais. Seja parte dessa história com orgulho e excelência."
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="layout.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 08 - Ferramentas e Instrumentos | RL NET</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        
+        /* Padrão de fundo "Blueprint" (Papel Milimetrado Técnico) */
+        .tools-pattern {
+            background-color: #f8fafc;
+            background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* Cores Temáticas: Slate (Industrial) e Cyan (Tech) */
+        .text-tool-rl { color: #475569; } /* Slate-600 */
+        .bg-tool-rl { background-color: #475569; }
+        .border-tool-rl { border-color: #475569; }
+        
+        /* Efeito metálico sutil nos cards */
+        .metallic-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="md:pl-64 flex flex-col min-h-screen transition-all duration-300">
+        <div id="app-layout" class="flex flex-col min-h-screen">
+            
+            <main class="flex-1 p-4 md:p-8 tools-pattern">
+                
+                <!-- CARD PRINCIPAL DO MÓDULO -->
+                <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-tool-rl">
+                    
+                    <div class="p-6 md:p-10">
+                        
+                        <!-- ================================================================================= -->
+                        <!-- CABEÇALHO (HERO) -->
+                        <!-- ================================================================================= -->
+                        <div class="flex flex-col md:flex-row items-center gap-6 mb-8 border-b pb-8">
+                            <!-- Ícone/Número do Módulo -->
+                            <div class="w-20 h-20 rounded-full bg-tool-rl flex items-center justify-center text-white text-3xl font-bold shadow-lg shrink-0 border-4 border-white ring-2 ring-slate-300">
+                                08
+                            </div>
+                            <div class="text-center md:text-left flex-1">
+                                
+                                <h1 class="text-3xl md:text-4xl font-black text-[#003366] mb-2 uppercase">Ferramentas & Instrumentos</h1>
+                                <p class="text-gray-600 text-lg font-medium">Conheça, Cuide e Utilize seu Arsenal de Trabalho.</p>
+                                <div class="flex flex-wrap justify-center md:justify-start gap-2 mt-4">
+
+    <div class="flex flex-wrap justify-center md:justify-start gap-2 mt-4">
+
+    <span class="bg-gray-50 text-gray-700 px-3 py-1 rounded-full text-xs font-bold border border-gray-200 flex items-center">
+        <i class="fa-solid fa-network-wired mr-2"></i> Ferramentas de Fibra Óptica
+    </span>
+
+    <span class="bg-gray-50 text-gray-700 px-3 py-1 rounded-full text-xs font-bold border border-gray-200 flex items-center">
+        <i class="fa-solid fa-gauge-high mr-2"></i> Equipamentos de Medição
+    </span>
+
+    <span class="bg-gray-50 text-gray-700 px-3 py-1 rounded-full text-xs font-bold border border-gray-200 flex items-center">
+        <i class="fa-solid fa-screwdriver-wrench mr-2"></i> Ferramentas de Instalação
+    </span>
+
+    <span class="bg-gray-50 text-gray-700 px-3 py-1 rounded-full text-xs font-bold border border-gray-200 flex items-center">
+        <i class="fa-solid fa-link mr-2"></i> Materiais de Fixação
+    </span>
+
+    <span class="bg-gray-50 text-gray-700 px-3 py-1 rounded-full text-xs font-bold border border-gray-200 flex items-center">
+        <i class="fa-solid fa-helmet-safety mr-2"></i> EPIs
+    </span>
+
+    <span class="bg-gray-50 text-gray-700 px-3 py-1 rounded-full text-xs font-bold border border-gray-200 flex items-center">
+        <i class="fa-solid fa-triangle-exclamation mr-2"></i> EPCs
+    </span>
+
+    <span class="bg-gray-50 text-gray-700 px-3 py-1 rounded-full text-xs font-bold border border-gray-200 flex items-center">
+        <i class="fa-solid fa-microchip mr-2"></i> Ferramentas Eletrônicas
+    </span>
+
+    <span class="bg-gray-50 text-gray-700 px-3 py-1 rounded-full text-xs font-bold border border-gray-200 flex items-center">
+        <i class="fa-solid fa-tower-cell mr-2"></i> Trabalho em Altura
+    </span>
+
+    <span class="bg-gray-50 text-gray-700 px-3 py-1 rounded-full text-xs font-bold border border-gray-200 flex items-center">
+        <i class="fa-solid fa-laptop-code mr-2"></i> Ferramentas T.I
+    </span>
+
+</div>
+
+</div>
+                            </div>
+                        </div>
+
+                        <!-- ================================================================================= -->
+                        <!-- INTRODUÇÃO -->
+                        <!-- ================================================================================= -->
+                        <section id="intro" class="mb-12">
+                            <div class="bg-gradient-to-r from-slate-700 to-slate-900 text-white p-8 rounded-xl shadow-lg relative overflow-hidden">
+                                <div class="relative z-10">
+                                    <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                                        <i class="fa-solid fa-wrench"></i> A Extensão da Sua Mão
+                                    </h3>
+                                    <p class="text-slate-200 leading-relaxed font-light">
+                                        Um bom técnico é definido pelo estado de suas ferramentas. Ferramenta suja ou descalibrada gera retrabalho. Ferramenta organizada gera velocidade e lucro.
+                                    </p>
+                                </div>
+                                <i class="fa-solid fa-gears absolute -right-6 -bottom-6 text-9xl text-white opacity-10 rotate-12"></i>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+<!-- TÓPICO 1: OBJETIVO DO MÓDULO -->
+<!-- ================================================================================= -->
+<section id="section1" class="mb-12 border-b border-slate-200 pb-12">
+    
+    <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+        <span class="bg-tool-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">1</span>
+        Objetivo do Módulo
+    </h2>
+
+    <div class="bg-white border-l-4 border-slate-500 rounded-r-xl shadow-sm p-6 mb-8">
+        <p class="text-gray-700 text-lg leading-relaxed">
+            Padronizar a utilização, conservação e substituição de ferramentas utilizadas pelos técnicos de instalação e reparo FTTH. A ferramenta não faz o técnico, mas um bom técnico cuida da sua ferramenta.
+        </p>
+    </div>
+
+    <!-- Grid dos 4 Pilares -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Pilar 1: Segurança -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 hover:shadow-md transition group">
+            <div class="flex items-start gap-4">
+                <div class="bg-yellow-100 p-3 rounded-lg text-yellow-700 group-hover:bg-yellow-500 group-hover:text-white transition">
+                    <i class="fa-solid fa-shield-halved text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-lg mb-1">Segurança Operacional</h4>
+                    <p class="text-sm text-gray-600">
+                        Ferramenta certa evita acidentes. Improvisar (usar chave de fenda como alavanca ou estilete em vez de decapador) é a porta de entrada para lesões.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pilar 2: Qualidade -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 hover:shadow-md transition group">
+            <div class="flex items-start gap-4">
+                <div class="bg-blue-100 p-3 rounded-lg text-blue-700 group-hover:bg-blue-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-medal text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-lg mb-1">Qualidade & Desempenho</h4>
+                    <p class="text-sm text-gray-600">
+                        Um corte preciso no drop ou uma limpeza correta no conector garantem que o sinal chegue perfeito, sem atenuação ou retorno.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pilar 3: Redução de Desperdícios -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 hover:shadow-md transition group">
+            <div class="flex items-start gap-4">
+                <div class="bg-green-100 p-3 rounded-lg text-green-700 group-hover:bg-green-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-recycle text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-lg mb-1">Redução de Avarias</h4>
+                    <p class="text-sm text-gray-600">
+                        Cuidar do equipamento evita custos de reposição. Perder uma clivadora por queda ou quebrar brocas por mau uso sai caro para todos.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pilar 4: Confiabilidade -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 hover:shadow-md transition group">
+            <div class="flex items-start gap-4">
+                <div class="bg-purple-100 p-3 rounded-lg text-purple-700 group-hover:bg-purple-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-check-double text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-lg mb-1">Confiabilidade Técnica</h4>
+                    <p class="text-sm text-gray-600">
+                        Resultados em que podemos confiar. Se o Power Meter está calibrado, a medida é real. Se a fusão foi bem feita, o link é estável.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+                      <!-- ================================================================================= -->
+<!-- TÓPICO 2: LISTA OFICIAL DE FERRAMENTAS (INTRODUÇÃO) -->
+<!-- ================================================================================= -->
+<section id="section2" class="mb-12">
+    
+    <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+        <span class="bg-tool-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">2</span>
+        Lista Oficial de Ferramentas RL NET
+    </h2>
+
+    <!-- Banner de Introdução da Lista -->
+    <div class="bg-gradient-to-br from-slate-100 to-white rounded-xl p-8 border border-slate-200 text-center relative overflow-hidden shadow-sm mb-8">
+        
+        <!-- Elemento Decorativo (Marca d'água) -->
+        <i class="fa-solid fa-clipboard-check absolute -right-6 -bottom-6 text-[120px] text-slate-200 opacity-50 transform rotate-12 pointer-events-none"></i>
+        
+        <div class="relative z-10">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-200 text-slate-600 mb-4 shadow-inner">
+                <i class="fa-solid fa-briefcase text-3xl"></i>
+            </div>
+            
+            <h3 class="text-xl md:text-2xl font-bold text-slate-800 mb-3">
+                Inventário Obrigatório de Campo
+            </h3>
+            
+            <p class="text-slate-600 text-lg max-w-3xl mx-auto leading-relaxed">
+                Abaixo estão listadas as ferramentas indispensáveis para todo técnico, tanto de <strong class="text-[#003366]">Instalação</strong> quanto de <strong class="text-[#003366]">Reparo</strong>.
+            </p>
+
+            <div class="mt-6 inline-block bg-red-50 text-red-700 px-4 py-2 rounded-lg border border-red-100 text-sm font-bold animate-pulse">
+                <i class="fa-solid fa-triangle-exclamation mr-2"></i> Certifique-se sempre de ter o ferramental completo e em pleno funcionamento.
+            </div>
+        </div>
+    </div>
+
+    <!-- O conteúdo das subseções (2.1, 2.2...) será inserido abaixo deste bloco -->
+    <div id="ferramentas-list-container" class="space-y-8">
+        <!-- Placeholder para as listas -->
+    </div>
+
+</section>
+                      <!-- ================================================================================= -->
+<!-- SUBSEÇÃO 2.1: FERRAMENTAS DE FIBRA ÓPTICA -->
+<!-- ================================================================================= -->
+<div class="mb-12">
+    
+    <h3 class="font-bold text-[#003366] text-lg mb-6 flex items-center gap-2 border-b border-slate-200 pb-2">
+        <i class="fa-solid fa-bezier-curve text-slate-500"></i> 2.1. Ferramentas de Fibra Óptica
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Item 1: Cortador de Drop -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-lg transition group border-l-4 border-l-slate-400">
+            <div class="flex items-start gap-4">
+                <div class="bg-slate-100 p-3 rounded-lg text-slate-600 group-hover:bg-slate-600 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-scissors text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Cortador de Drop</h4>
+                    <p class="text-xs text-gray-500 mb-2 font-mono bg-gray-100 inline-block px-1 rounded">Drop Cutter</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        Para realizar corte limpo e preciso no cabo drop flat (sem esmagar o núcleo).
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 2: Cleaver -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-lg transition group border-l-4 border-l-blue-400">
+            <div class="flex items-start gap-4">
+                <div class="bg-blue-50 p-3 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition shrink-0">
+                    <i class="fa-regular fa-gem text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Cortadora de Precisão</h4>
+                    <p class="text-xs text-blue-800 mb-2 font-mono bg-blue-50 inline-block px-1 rounded">Cleaver</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        
+                        Responsável pelo corte 90º perfeito do filamento de vidro antes da conectorização.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 3: Decapadora -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-lg transition group border-l-4 border-l-yellow-400">
+            <div class="flex items-start gap-4">
+                <div class="bg-yellow-50 p-3 rounded-lg text-yellow-600 group-hover:bg-yellow-500 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-grip-lines text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Decapadora 3 em 1</h4>
+                    <p class="text-xs text-yellow-800 mb-2 font-mono bg-yellow-50 inline-block px-1 rounded">Stripper</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        Remove a capa externa do drop e o acrilato (casca colorida) da fibra com segurança.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 4: Caneta de Limpeza -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-lg transition group border-l-4 border-l-green-400">
+            <div class="flex items-start gap-4">
+                <div class="bg-green-50 p-3 rounded-lg text-green-600 group-hover:bg-green-500 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-pen-fancy text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Caneta de Limpeza</h4>
+                    <p class="text-xs text-green-800 mb-2 font-mono bg-green-50 inline-block px-1 rounded">1.25mm / 2.5mm</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        Essencial para limpeza interna de adaptadores (CTO/ONU) sem precisar desmontar.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 5: Kit Limpeza -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-lg transition group border-l-4 border-l-purple-400">
+            <div class="flex items-start gap-4">
+                <div class="bg-purple-50 p-3 rounded-lg text-purple-600 group-hover:bg-purple-500 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-pump-soap text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Kit Higienização</h4>
+                    <p class="text-xs text-purple-800 mb-2 font-mono bg-purple-50 inline-block px-1 rounded">Álcool Iso + Lenços</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        Álcool Isopropílico 99% e lenços sem fiapos para limpar conectores e fibra nua.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 6: Bolsa de Proteção -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-lg transition group border-l-4 border-l-orange-400">
+            <div class="flex items-start gap-4">
+                <div class="bg-orange-50 p-3 rounded-lg text-orange-600 group-hover:bg-orange-500 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-suitcase text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Bolsa de Fibra</h4>
+                    <p class="text-xs text-orange-800 mb-2 font-mono bg-orange-50 inline-block px-1 rounded">Organização</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        Mantém a integridade das ferramentas de precisão e evita perda de materiais pequenos.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+                      <!-- ================================================================================= -->
+<!-- SUBSEÇÃO 2.2: EQUIPAMENTOS DE MEDIÇÃO -->
+<!-- ================================================================================= -->
+<div class="mb-12">
+    
+    <h3 class="font-bold text-[#003366] text-lg mb-6 flex items-center gap-2 border-b border-slate-200 pb-2">
+        <i class="fa-solid fa-gauge-high text-slate-500"></i> 2.2. Equipamentos de Medição
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Item 1: Power Meter (Destaque Principal) -->
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-blue-500 relative overflow-hidden">
+            <div class="absolute top-0 right-0 bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-1 rounded-bl">Obrigatório</div>
+            
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center text-blue-600 mb-4 group-hover:bg-blue-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-tachometer-alt text-2xl"></i>
+                </div>
+                
+                <h4 class="font-bold text-gray-800 text-lg mb-1">Power Meter</h4>
+                <p class="text-xs text-blue-600 font-mono bg-blue-50 px-2 py-0.5 rounded mb-3">Medidor de Potência</p>
+                
+                <p class="text-sm text-gray-600 mb-4">
+                    Usado para verificar o nível de sinal óptico (RX) que chega na ponta do cabo.
+                </p>
+                
+                <div class="bg-slate-50 w-full p-2 rounded border border-slate-100 text-xs text-left">
+                    <strong class="text-slate-700 block mb-1"><i class="fa-solid fa-crosshairs mr-1"></i> Uso Tático:</strong>
+                    Confirmar se o sinal está dentro do "Budget" (Faixa Recomendada) da RL NET.
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 2: Caneta VFL (Laser) -->
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-red-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-red-50 w-16 h-16 rounded-full flex items-center justify-center text-red-600 mb-4 group-hover:bg-red-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-bullseye text-2xl"></i>
+                </div>
+                
+                <h4 class="font-bold text-gray-800 text-lg mb-1">Fonte de Luz VFL</h4>
+                <p class="text-xs text-red-600 font-mono bg-red-50 px-2 py-0.5 rounded mb-3">Laser Locator</p>
+                
+                <p class="text-sm text-gray-600 mb-4">
+                    Emite um laser vermelho visível para testar continuidade e achar falhas próximas.
+                </p>
+                
+                <div class="bg-slate-50 w-full p-2 rounded border border-slate-100 text-xs text-left">
+                    <strong class="text-slate-700 block mb-1"><i class="fa-solid fa-lightbulb mr-1"></i> Uso Tático:</strong>
+                    Localizar fibra quebrada dentro da CTO ou identificar conector com perda (ele "brilha").
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 3: OTDR (Avançado) -->
+        <div class="bg-slate-50 border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-slate-500 opacity-90">
+            <div class="absolute top-0 right-0 bg-slate-200 text-slate-700 text-[10px] font-bold px-2 py-1 rounded-bl">Equipe Avançada</div>
+            
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center text-slate-600 mb-4 shadow-sm group-hover:bg-slate-600 group-hover:text-white transition">
+                    <i class="fa-solid fa-chart-line text-2xl"></i>
+                </div>
+                
+                <h4 class="font-bold text-gray-800 text-lg mb-1">OTDR Básico</h4>
+                <p class="text-xs text-slate-600 font-mono bg-white px-2 py-0.5 rounded mb-3 border border-slate-100">Refletômetro</p>
+                
+                <p class="text-sm text-gray-600 mb-4">
+                    Raio-X da fibra. Mede a distância exata de eventos e rompimentos longos.
+                </p>
+                
+                <div class="bg-white w-full p-2 rounded border border-slate-200 text-xs text-left">
+                    <strong class="text-slate-700 block mb-1"><i class="fa-solid fa-map-pin mr-1"></i> Uso Tático:</strong>
+                    Localizar rompimentos na rede externa (postes) a quilômetros de distância.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+                   <!-- ================================================================================= -->
+<!-- SUBSEÇÃO 2.3: FERRAMENTAS DE INSTALAÇÃO E ACABAMENTO -->
+<!-- ================================================================================= -->
+<div class="mb-12">
+    
+    <h3 class="font-bold text-[#003366] text-lg mb-6 flex items-center gap-2 border-b border-slate-200 pb-2">
+        <i class="fa-solid fa-hammer text-slate-500"></i> 2.3. Ferramentas de Instalação
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <!-- Item 1: Furadeira -->
+        <div class="bg-white border rounded-lg p-4 hover:border-slate-400 transition flex items-center gap-4">
+            <div class="bg-slate-100 p-3 rounded text-slate-700">
+                <i class="fa-solid fa-screwdriver text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Furadeira/Parafusadeira</h4>
+                <p class="text-xs text-gray-500">Com impacto. Baterias carregadas.</p>
+            </div>
+        </div>
+
+        <!-- Item 2: Kit Brocas -->
+        <div class="bg-white border rounded-lg p-4 hover:border-slate-400 transition flex items-center gap-4">
+            <div class="bg-slate-100 p-3 rounded text-slate-700">
+                <i class="fa-solid fa-spinner text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Kit de Brocas</h4>
+                <p class="text-xs text-gray-500">Concreto (6/8/10mm), Madeira e Aço.</p>
+            </div>
+        </div>
+
+        <!-- Item 3: Chaves Manuais -->
+        <div class="bg-white border rounded-lg p-4 hover:border-orange-400 transition flex items-center gap-4 border-l-4 border-l-orange-400">
+            <div class="bg-orange-50 p-3 rounded text-orange-600">
+                <i class="fa-solid fa-screwdriver-wrench text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Chaves Manuais</h4>
+                <p class="text-xs text-gray-500">Fenda e Phillips (vários tamanhos).</p>
+            </div>
+        </div>
+
+        <!-- Item 4: Alicates -->
+        <div class="bg-white border rounded-lg p-4 hover:border-orange-400 transition flex items-center gap-4 border-l-4 border-l-orange-400">
+            <div class="bg-orange-50 p-3 rounded text-orange-600">
+                <i class="fa-solid fa-scissors text-xl transform rotate-90"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Alicates</h4>
+                <p class="text-xs text-gray-500">Universal (força) e Corte (precisão).</p>
+            </div>
+        </div>
+
+        <!-- Item 5: Chave de Boca -->
+        <div class="bg-white border rounded-lg p-4 hover:border-orange-400 transition flex items-center gap-4 border-l-4 border-l-orange-400">
+            <div class="bg-orange-50 p-3 rounded text-orange-600">
+                <i class="fa-solid fa-wrench text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Chave de Boca 10/11</h4>
+                <p class="text-xs text-gray-500">Essencial para parafusos de ancoragem.</p>
+            </div>
+        </div>
+
+        <!-- Item 6: Martelo -->
+        <div class="bg-white border rounded-lg p-4 hover:border-orange-400 transition flex items-center gap-4 border-l-4 border-l-orange-400">
+            <div class="bg-orange-50 p-3 rounded text-orange-600">
+                <i class="fa-solid fa-gavel text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Martelo</h4>
+                <p class="text-xs text-gray-500">Fixação de grampos miguelão.</p>
+            </div>
+        </div>
+
+        <!-- Item 7: Medição -->
+        <div class="bg-white border rounded-lg p-4 hover:border-blue-400 transition flex items-center gap-4 border-l-4 border-l-blue-400">
+            <div class="bg-blue-50 p-3 rounded text-blue-600">
+                <i class="fa-solid fa-ruler-combined text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Trena (3m/5m)</h4>
+                <p class="text-xs text-gray-500">Medição de cabo e distâncias.</p>
+            </div>
+        </div>
+
+        <!-- Item 8: Nível e Prumo -->
+        <div class="bg-white border rounded-lg p-4 hover:border-blue-400 transition flex items-center gap-4 border-l-4 border-l-blue-400">
+            <div class="bg-blue-50 p-3 rounded text-blue-600">
+                <i class="fa-solid fa-scale-balanced text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Nível e Prumo</h4>
+                <p class="text-xs text-gray-500">Alinhamento de caixas e quadros.</p>
+            </div>
+        </div>
+
+        <!-- Item 9: Testador RJ45 -->
+        <div class="bg-white border rounded-lg p-4 hover:border-green-400 transition flex items-center gap-4 border-l-4 border-l-green-400">
+            <div class="bg-green-50 p-3 rounded text-green-600">
+                <i class="fa-solid fa-laptop-code text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Testador de Cabo</h4>
+                <p class="text-xs text-gray-500">Teste de continuidade RJ45 (UTP).</p>
+            </div>
+        </div>
+
+    </div>
+</div>   
+<!-- ================================================================================= -->
+<!-- SUBSEÇÃO 2.4: ITENS DE FIXAÇÃO E SUPORTE -->
+<!-- ================================================================================= -->
+<div class="mb-12">
+    
+    <h3 class="font-bold text-[#003366] text-lg mb-6 flex items-center gap-2 border-b border-slate-200 pb-2">
+        <i class="fa-solid fa-paperclip text-slate-500"></i> 2.4. Itens de Fixação e Suporte
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <!-- Item 1: Abraçadeiras UV -->
+        <div class="bg-white border rounded-lg p-4 hover:border-slate-400 transition flex items-center gap-4 group">
+            <div class="bg-gray-800 p-3 rounded text-white group-hover:bg-black transition">
+                <i class="fa-solid fa-infinity text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Abraçadeiras UV</h4>
+                <p class="text-xs text-gray-500">"Enforca-gato" ou lacre de nilon.</p>
+            </div>
+        </div>
+
+        <!-- Item 2: Buchas e Parafusos -->
+        <div class="bg-white border rounded-lg p-4 hover:border-slate-400 transition flex items-center gap-4">
+            <div class="bg-slate-100 p-3 rounded text-slate-600">
+                <i class="fa-solid fa-screwdriver text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Buchas e Parafusos</h4>
+                <p class="text-xs text-gray-500">Conforme solicitação específica.</p>
+            </div>
+        </div>
+
+        <!-- Item 3: Grampos Tipo T -->
+        <div class="bg-white border rounded-lg p-4 hover:border-slate-400 transition flex items-center gap-4">
+            <div class="bg-slate-100 p-3 rounded text-slate-600">
+                <i class="fa-solid fa-t text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Alças Preformadas</h4>
+                <p class="text-xs text-gray-500">Para ancoragem da fibra.</p>
+            </div>
+        </div>
+
+        <!-- Item 4: Clip de Parede -->
+        <div class="bg-white border rounded-lg p-4 hover:border-slate-400 transition flex items-center gap-4">
+            <div class="bg-slate-100 p-3 rounded text-slate-600">
+                <i class="fa-solid fa-stapler text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Grampo Fixa-Fio</h4>
+                <p class="text-xs text-gray-500">Fixação estética do drop (Miguelão).</p>
+            </div>
+        </div>
+
+        <!-- Item 5: Fitas de Vedação -->
+        <div class="bg-white border rounded-lg p-4 hover:border-slate-400 transition flex items-center gap-4">
+            <div class="bg-slate-100 p-3 rounded text-slate-600">
+                <i class="fa-solid fa-tape text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Fitas de Vedação</h4>
+                <p class="text-xs text-gray-500">Isolante e Autofusão para externos.</p>
+            </div>
+        </div>
+
+        <!-- Item 6: Organizadores -->
+        <div class="bg-white border rounded-lg p-4 hover:border-slate-400 transition flex items-center gap-4">
+            <div class="bg-slate-100 p-3 rounded text-slate-600">
+                <i class="fa-solid fa-boxes-stacked text-xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-sm">Organizadores</h4>
+                <p class="text-xs text-gray-500">Arames, espirais e suportes para acabamento.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+                      <!-- ================================================================================= -->
+<!-- SUBSEÇÃO 2.5: EPIs (EQUIPAMENTOS DE PROTEÇÃO INDIVIDUAL) -->
+<!-- ================================================================================= -->
+<div class="mb-12">
+    
+    <h3 class="font-bold text-[#003366] text-lg mb-6 flex items-center gap-2 border-b border-slate-200 pb-2">
+        <i class="fa-solid fa-helmet-safety text-yellow-600"></i> 2.5. EPIs Obrigatórios
+    </h3>
+
+    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6 rounded-r-lg flex items-center gap-3">
+        <i class="fa-solid fa-triangle-exclamation text-yellow-600 text-xl"></i>
+        <p class="text-sm text-yellow-800 font-bold">
+            O uso destes itens é inegociável. A falta de qualquer EPI impede o início da atividade.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <!-- Item 1: Capacete -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-md transition text-center group border-t-4 border-t-yellow-400">
+            <div class="w-12 h-12 mx-auto bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 mb-3 group-hover:bg-yellow-500 group-hover:text-white transition">
+                <i class="fa-solid fa-hard-hat text-xl"></i>
+            </div>
+            <h4 class="font-bold text-gray-800 text-sm">Capacete com Jugular</h4>
+            <p class="text-xs text-gray-500 mt-1">Uso obrigatório em áreas externas e trabalho em altura.</p>
+        </div>
+
+        <!-- Item 2: Cinto Paraquedista -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-md transition text-center group border-t-4 border-t-blue-400">
+            <div class="w-12 h-12 mx-auto bg-blue-50 rounded-full flex items-center justify-center text-blue-600 mb-3 group-hover:bg-blue-600 group-hover:text-white transition">
+                <i class="fa-solid fa-person-falling-burst text-xl"></i>
+            </div>
+            <h4 class="font-bold text-gray-800 text-sm">Cinto Paraquedista</h4>
+            <p class="text-xs text-gray-500 mt-1">Com talabarte duplo para 100% de conexão.</p>
+        </div>
+
+        <!-- Item 3: Óculos -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-md transition text-center group border-t-4 border-t-slate-400">
+            <div class="w-12 h-12 mx-auto bg-slate-100 rounded-full flex items-center justify-center text-slate-600 mb-3 group-hover:bg-slate-600 group-hover:text-white transition">
+                <i class="fa-solid fa-glasses text-xl"></i>
+            </div>
+            <h4 class="font-bold text-gray-800 text-sm">Óculos de Proteção</h4>
+            <p class="text-xs text-gray-500 mt-1">Contra partículas de fibra (vidro) e poeira.</p>
+        </div>
+
+        <!-- Item 4: Luvas -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-md transition text-center group border-t-4 border-t-slate-400">
+            <div class="w-12 h-12 mx-auto bg-slate-100 rounded-full flex items-center justify-center text-slate-600 mb-3 group-hover:bg-slate-600 group-hover:text-white transition">
+                <i class="fa-solid fa-hands-holding-circle text-xl"></i>
+            </div>
+            <h4 class="font-bold text-gray-800 text-sm">Luvas Anticorte</h4>
+            <p class="text-xs text-gray-500 mt-1">Proteção mecânica para as mãos.</p>
+        </div>
+
+        <!-- Item 5: Botas -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-md transition text-center group border-t-4 border-t-slate-800">
+            <div class="w-12 h-12 mx-auto bg-gray-200 rounded-full flex items-center justify-center text-gray-700 mb-3 group-hover:bg-gray-800 group-hover:text-white transition">
+                <i class="fa-solid fa-shoe-prints text-xl"></i>
+            </div>
+            <h4 class="font-bold text-gray-800 text-sm">Botas de Segurança</h4>
+            <p class="text-xs text-gray-500 mt-1">Com biqueira e solado isolante elétrico.</p>
+        </div>
+
+        <!-- Item 6: Colete -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-md transition text-center group border-t-4 border-t-orange-400">
+            <div class="w-12 h-12 mx-auto bg-orange-100 rounded-full flex items-center justify-center text-orange-600 mb-3 group-hover:bg-orange-500 group-hover:text-white transition">
+                <i class="fa-solid fa-vest text-xl"></i>
+            </div>
+            <h4 class="font-bold text-gray-800 text-sm">Colete Refletivo</h4>
+            <p class="text-xs text-gray-500 mt-1">Alta visibilidade em vias públicas.</p>
+        </div>
+
+        <!-- Item 7: Protetor Solar -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-md transition text-center group border-t-4 border-t-yellow-400">
+            <div class="w-12 h-12 mx-auto bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 mb-3 group-hover:bg-yellow-500 group-hover:text-white transition">
+                <i class="fa-solid fa-sun text-xl"></i>
+            </div>
+                    <h4 class="font-bold text-gray-800 text-sm">Protetor Solar</h4>
+                    <p class="text-xs text-gray-500 mt-1">Saúde ocupacional. [Image of sunscreen bottle] Aplicar a cada 2 horas em exposição direta.</p>
+                </div>
+            </div>
+        </div>
+                         <!-- ================================================================================= -->
+<!-- SEÇÃO 8.3: FERRAMENTAS ELÉTRICAS E ELETRÔNICAS -->
+<!-- ================================================================================= -->
+<div class="mb-12">
+    
+    <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+        <span class="bg-tool-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">3</span>
+        Ferramentas Elétricas e Eletrônicas
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Item 1: Multímetro -->
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-yellow-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-yellow-50 w-16 h-16 rounded-full flex items-center justify-center text-yellow-600 mb-4 group-hover:bg-yellow-500 group-hover:text-white transition">
+                    <i class="fa-solid fa-bolt text-2xl"></i>
+                </div>
+                
+                <h4 class="font-bold text-gray-800 text-lg mb-1">Multímetro Digital</h4>
+                <p class="text-xs text-yellow-600 font-mono bg-yellow-50 px-2 py-0.5 rounded mb-3">Tensão e Continuidade</p>
+                
+                <p class="text-sm text-gray-600 mb-4">
+                                        Indispensável para testar fontes de alimentação (12V), tomadas do cliente (110/220V) e aterramento.
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 2: Detector de Tensão -->
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-red-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-red-50 w-16 h-16 rounded-full flex items-center justify-center text-red-600 mb-4 group-hover:bg-red-500 group-hover:text-white transition">
+                    <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+                </div>
+                
+                <h4 class="font-bold text-gray-800 text-lg mb-1">Detector de Tensão</h4>
+                <p class="text-xs text-red-600 font-mono bg-red-50 px-2 py-0.5 rounded mb-3">Segurança NR-10</p>
+                
+                <p class="text-sm text-gray-600 mb-4">
+                                       Verifica risco de choque elétrico em carcaças metálicas, cercas e cordoalhas energizadas antes do toque.
+                </p>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+                                        
+                      <!-- ================================================================================= -->
+<!-- SEÇÃO 4: EQUIPAMENTOS PARA TRABALHO EM POSTE -->
+<!-- ================================================================================= -->
+<div class="mb-12">
+    
+    <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+        <span class="bg-tool-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">4</span>
+        Equipamentos para Trabalho em Poste
+    </h2>
+
+    <!-- Alerta de Restrição -->
+    <div class="bg-orange-50 border-l-4 border-orange-500 p-4 mb-8 rounded-r-lg flex items-center gap-4 shadow-sm">
+        <div class="bg-orange-100 p-2 rounded-full text-orange-600">
+            <i class="fa-solid fa-user-lock text-xl"></i>
+        </div>
+        <div>
+            <h4 class="font-bold text-orange-800 text-sm uppercase">Restrição de Uso</h4>
+            <p class="text-sm text-orange-900">
+                O uso destes equipamentos é exclusivo para técnicos com certificação <strong>NR-35 (Trabalho em Altura)</strong> válida e treinamento prático.
+            </p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Item 1: Escada -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-lg transition flex items-center gap-4 group">
+            <div class="bg-slate-100 p-4 rounded-lg text-slate-700 group-hover:bg-slate-700 group-hover:text-white transition">
+                <i class="fa-solid fa-stairs text-2xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800">Escada de Fibra</h4>
+                <p class="text-xs text-gray-500 mb-1">Extensível com Pés Antiderrapantes.</p>
+                <span class="text-[10px] bg-green-100 text-green-800 px-2 py-0.5 rounded border border-green-200">Isolada Eletricamente</span>
+            </div>
+        </div>
+
+        <!-- Item 2: Cinto e Talabarte -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-lg transition flex items-center gap-4 group">
+            <div class="bg-slate-100 p-4 rounded-lg text-slate-700 group-hover:bg-blue-600 group-hover:text-white transition">
+                <i class="fa-solid fa-link text-2xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800">Cinto & Talabarte</h4>
+                <p class="text-xs text-gray-500 mb-1">Kit Paraquedista + Talabarte de Posicionamento.</p>
+                <span class="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded border border-blue-200">Conectado e Revisado</span>
+            </div>
+        </div>
+
+        <!-- Item 3: Ancoragem -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-lg transition flex items-center gap-4 group">
+            <div class="bg-slate-100 p-4 rounded-lg text-slate-700 group-hover:bg-slate-600 group-hover:text-white transition">
+                <i class="fa-solid fa-anchor text-2xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800">Kit de Ancoragem</h4>
+                <p class="text-xs text-gray-500 mb-1"> Cintas DE Aço, Isoladores e Alça Preformada.</p>
+                <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-200">Fixação no Poste</span>
+            </div>
+        </div>
+
+        <!-- Item 4: Cordas -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-lg transition flex items-center gap-4 group">
+            <div class="bg-slate-100 p-4 rounded-lg text-slate-700 group-hover:bg-slate-600 group-hover:text-white transition">
+                <i class="fa-solid fa-minimize text-2xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800">Cordas e Mosquetões</h4>
+                <p class="text-xs text-gray-500 mb-1">Certificados para içamento de materiais.</p>
+                <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-200">Linha de Vida</span>
+            </div>
+        </div>
+
+        <!-- Item 5: Sinalização (Full Width) -->
+        <div class="bg-white border rounded-xl p-4 hover:shadow-lg transition flex items-center gap-4 md:col-span-2 group border-l-4 border-l-yellow-400">
+            <div class="bg-yellow-50 p-4 rounded-lg text-yellow-600 group-hover:bg-yellow-500 group-hover:text-white transition">
+                <i class="fa-solid fa-traffic-cone text-2xl"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-800">Sinalização de Área (EPC)</h4>
+                <p class="text-xs text-gray-500 mb-1"> Cones e Fitas zebradas.</p>
+                <p class="text-xs text-slate-500">Obrigatório isolar a base do poste antes de subir para proteger pedestres.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+                      <!-- ================================================================================= -->
+<!-- ================================================================================= -->
+<!-- SEÇÃO 8.6: CUIDADOS E MANUTENÇÃO PREVENTIVA -->
+<!-- ================================================================================= -->
+<div class="mb-16">
+    
+    <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+        <span class="bg-tool-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">5</span>
+        Cuidados e Manutenção Preventiva
+    </h2>
+
+    <p class="text-gray-600 mb-8 leading-relaxed">
+        Ferramenta parada por defeito é prejuízo. Crie uma rotina de manutenção para garantir que seu kit dure anos.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Item 1: Limpeza Semanal -->
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-cyan-500">
+            <div class="flex items-start gap-4">
+                <div class="bg-cyan-50 p-3 rounded-lg text-cyan-600 group-hover:bg-cyan-500 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-calendar-week text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Limpeza Semanal</h4>
+                    <p class="text-xs text-cyan-700 font-bold mb-2 uppercase tracking-wide">1x por Semana</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        Limpar ferramentas de fibra (Cleaver e Decapador) com álcool isopropílico para remover restos de gel e poeira acumulada.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 2: Lâmina do Cleaver -->
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-orange-500">
+            <div class="flex items-start gap-4">
+                <div class="bg-orange-50 p-3 rounded-lg text-orange-600 group-hover:bg-orange-500 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-eye text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Lâmina do Cleaver</h4>
+                    <p class="text-xs text-orange-700 font-bold mb-2 uppercase tracking-wide">Inspeção Visual</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        Verificar se a lâmina está "mordendo" ou se perdeu o fio. Se necessário, rotacionar a lâmina para o próximo ponto de corte.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 3: Precisão Decapadora -->
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-indigo-500">
+            <div class="flex items-start gap-4">
+                <div class="bg-indigo-50 p-3 rounded-lg text-indigo-600 group-hover:bg-indigo-500 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-crosshairs text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Alinhamento Decapadora</h4>
+                    <p class="text-xs text-indigo-700 font-bold mb-2 uppercase tracking-wide">Teste Prático</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        Se a ferramenta estiver "mascando" a fibra ou exigindo muita força, o parafuso de ajuste precisa ser calibrado.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 4: Canetas de Limpeza -->
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-green-500">
+            <div class="flex items-start gap-4">
+                <div class="bg-green-50 p-3 rounded-lg text-green-600 group-hover:bg-green-500 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-rotate text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Troca de Insumos</h4>
+                    <p class="text-xs text-green-700 font-bold mb-2 uppercase tracking-wide">Sob Demanda</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        Trocar canetas de limpeza (One-Click) quando a fita acabar. Não tente reutilizar, pois apenas espalhará sujeira.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 5: Power Meter -->
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-purple-500">
+            <div class="flex items-start gap-4">
+                <div class="bg-purple-50 p-3 rounded-lg text-purple-600 group-hover:bg-purple-500 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-scale-balanced text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Calibragem Power Meter</h4>
+                    <p class="text-xs text-purple-700 font-bold mb-2 uppercase tracking-wide">Mensal</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        Conferir medição com um equipamento padrão ouro da supervisão. Diferenças > 1dB exigem manutenção.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 6: Prevenção Ferrugem -->
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-slate-500">
+            <div class="flex items-start gap-4">
+                <div class="bg-slate-100 p-3 rounded-lg text-slate-600 group-hover:bg-slate-500 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-shield-halved text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Ferrugem Zero</h4>
+                    <p class="text-xs text-slate-600 font-bold mb-2 uppercase tracking-wide">Pós-Chuva</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        Secar furadeira e brocas imediatamente após uso em chuva. Aplicar WD-40 nas brocas para evitar oxidação.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 7: Organização (Full Width) -->
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-blue-600 md:col-span-2 lg:col-span-3">
+            <div class="flex items-center gap-6">
+                <div class="bg-blue-50 p-4 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition shrink-0 hidden md:block">
+                    <i class="fa-solid fa-suitcase text-3xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-lg mb-2">Acomodação Correta (Bolsas)</h4>
+                    <p class="text-sm text-gray-600">
+                        Ferramentas de precisão (Fibra) em um compartimento, ferramentas pesadas (Martelo/Furadeira) em outro.
+                        <strong>Nunca misture!</strong> O peso da furadeira pode esmagar o Cleaver ou quebrar o display do Power Meter no transporte.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+                      <section id="section6" class="mb-16">
+    
+    <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+        <span class="bg-tool-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">6</span>
+        Cuidados com o Veículo da Frota
+    </h2>
+
+    <div class="bg-slate-50 border-l-4 border-slate-600 p-6 mb-8 rounded-r-xl shadow-sm">
+        <div class="flex flex-col md:flex-row gap-4 items-center">
+            <div class="bg-white p-3 rounded-full text-slate-700 shadow-sm shrink-0">
+                <i class="fa-solid fa-truck-field text-2xl"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-slate-800 text-lg">A "Ferramenta" Sobre Rodas</h3>
+                <p class="text-gray-600 text-sm leading-relaxed mt-1">
+                    O veículo da empresa não é apenas um transporte; é o seu **almoxarifado móvel** e sua **base operativa**. Um carro desorganizado resulta em perda de ferramentas, lentidão no atendimento e má impressão para o cliente RL NET.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-red-500">
+            <div class="flex items-start gap-4">
+                <div class="bg-red-50 p-3 rounded-lg text-red-600 group-hover:bg-red-500 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-people-arrows text-xl"></i> </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Amarração de Escadas</h4>
+                    <p class="text-xs text-red-600 font-bold mb-2 uppercase tracking-wide">Segurança Crítica</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        A escada deve estar **sempre** travada no rack. O uso da "coronha" (trava de borracha) e cadeado é obrigatório para evitar que a escada se solte em curvas ou frenagens.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-blue-500">
+            <div class="flex items-start gap-4">
+                <div class="bg-blue-50 p-3 rounded-lg text-blue-600 group-hover:bg-blue-500 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-boxes-packing text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Layout do Porta-Malas</h4>
+                    <p class="text-xs text-blue-600 font-bold mb-2 uppercase tracking-wide">Produtividade</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        Mantenha itens de acesso rápido (EPIs, Cones, Drop) próximos à porta. Caixas de ferramentas pesadas devem ficar no fundo para estabilidade do veículo.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-yellow-500">
+            <div class="flex items-start gap-4">
+                <div class="bg-yellow-50 p-3 rounded-lg text-yellow-600 group-hover:bg-yellow-500 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-oil-can text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Checklist Diário (Mecânica)</h4>
+                    <p class="text-xs text-yellow-600 font-bold mb-2 uppercase tracking-wide">Antes da Saída</p>
+                    <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                        <li>Calibragem dos pneus (incluindo estepe).</li>
+                        <li>Nível de água e óleo.</li>
+                        <li>Luzes de sinalização e freio.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white border rounded-xl p-5 hover:shadow-lg transition group border-t-4 border-t-green-500">
+            <div class="flex items-start gap-4">
+                <div class="bg-green-50 p-3 rounded-lg text-green-600 group-hover:bg-green-500 group-hover:text-white transition shrink-0">
+                    <i class="fa-solid fa-soap text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1">Higiene e Imagem</h4>
+                    <p class="text-xs text-green-600 font-bold mb-2 uppercase tracking-wide">Padrão RL NET</p>
+                    <p class="text-sm text-gray-600 leading-snug">
+                        Lixo acumulado (restos de fio, fitas, garrafas) dentro da viatura é inaceitável. O cliente repara na organização do carro estacionado na frente da casa dele.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-6 bg-slate-800 text-slate-300 rounded-lg p-4 flex items-center gap-4 border border-slate-600">
+        <i class="fa-solid fa-user-shield text-2xl text-yellow-500"></i>
+        <div class="text-sm">
+            <strong class="text-white block mb-1">Segurança Patrimonial:</strong>
+            Nunca deixe o veículo aberto enquanto estiver na casa do cliente ou em cima do poste. O furto de equipamentos  é rápido e causa prejuízo altíssimo. Tranque sempre!
+        </div>
+    </div>
+
+</section>
+                               <!-- ================================================================================= -->
+<!-- RESUMO FINAL DO MÓDULO -->
+<!-- ================================================================================= -->
+<div class="bg-[#003366] text-white rounded-xl shadow-lg mt-12 overflow-hidden relative print:hidden">
+    
+    <!-- Elemento Decorativo de Fundo -->
+    <div class="absolute top-0 left-0 opacity-10 transform -translate-x-1/4 -translate-y-1/4">
+        <i class="fa-solid fa-gears text-[150px]"></i>
+    </div>
+    
+    <div class="p-8 md:p-12 relative z-10 text-center">
+        
+        <div class="bg-[#003366] text-white p-8 rounded-xl text-center shadow-lg mt-12">
+                          <div class="inline-block bg-amber-500 p-4 rounded-full mb-6 shadow-lg animate-bounce">
+            <i class="fa-solid fa-trophy text-3xl text-white"></i>
+        </div>
+
+        <h3 class="text-2xl md:text-3xl font-black mb-4 uppercase tracking-wide">
+            Arsenal Dominado!
+        </h3>
+        
+        <p class="text-blue-100 text-lg md:text-xl mb-8 max-w-3xl mx-auto font-light leading-relaxed">
+            "Você agora detém o conhecimento sobre suas ferramentas. Mas lembre-se: este é um mundo que muda constantemente. O técnico de Alto Nível não se define pelo que tem na maleta hoje, mas pela sua capacidade de <strong class="text-cyan-400 font-bold">se adequar às novas tecnologias</strong> que virão amanhã."
+        </p>
+
+        <!-- Tags de Competências Adquiridas -->
+        <div class="flex flex-wrap justify-center gap-3 mb-8">
+            <span class="bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold border border-white/20 flex items-center gap-2 hover:bg-slate-500 hover:border-slate-500 transition-all cursor-default">
+                <i class="fa-solid fa-check text-green-400"></i> Manutenção Preventiva
+            </span>
+            <span class="bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold border border-white/20 flex items-center gap-2 hover:bg-slate-500 hover:border-slate-500 transition-all cursor-default">
+                <i class="fa-solid fa-check text-green-400"></i> Segurança (NRs)
+            </span>
+            <span class="bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold border border-white/20 flex items-center gap-2 hover:bg-slate-500 hover:border-slate-500 transition-all cursor-default">
+                <i class="fa-solid fa-check text-green-400"></i> Organização Tática
+            </span>
+            <span class="bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold border border-white/20 flex items-center gap-2 hover:bg-slate-500 hover:border-slate-500 transition-all cursor-default">
+                <i class="fa-solid fa-check text-green-400"></i> Precisão na Fibra
+            </span>
+            <span class="bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold border border-white/20 flex items-center gap-2 hover:bg-cyan-500 hover:border-cyan-500 transition-all cursor-default">
+                <i class="fa-solid fa-check text-cyan-300"></i> Adaptabilidade
+            </span>
+        </div>
+
+    </div>
+    
+    <!-- Barra Inferior -->
+    <div class="bg-gradient-to-r from-slate-600 via-cyan-500 to-slate-600 h-2 w-full"></div>
+</div>
+
+    </div>
+</div>
+ 
+             
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="layout.js"></script>
+</body>
+</html>

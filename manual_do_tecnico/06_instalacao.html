@@ -1,0 +1,2114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 07 - Rotina de Instalação | RL NET</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        
+        /* Padrão de fundo sutil para este módulo (Estilo Mapa/Rota) */
+        .route-pattern {
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        /* Animação de Checklist */
+        .check-anim {
+            animation: checkPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        @keyframes checkPop {
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Destaque para itens críticos */
+        .critical-item {
+            border-left: 4px solid #ef4444;
+            background: linear-gradient(90deg, #fef2f2 0%, #fff 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="md:pl-64 flex flex-col min-h-screen transition-all duration-300">
+        <div id="app-layout" class="flex flex-col min-h-screen">
+            
+            <main class="flex-1 p-4 md:p-8 route-pattern">
+                <!-- Card Principal -->
+                <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-emerald-600">
+                    
+                    <div class="p-6 md:p-10">
+                        <!-- Cabeçalho do Módulo -->
+                        <div class="flex flex-col md:flex-row items-center gap-6 mb-10 border-b pb-8">
+                            <div class="w-20 h-20 rounded-full bg-emerald-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg shrink-0 border-4 border-white ring-2 ring-emerald-200">
+                                07
+                            </div>
+                            <div class="text-center md:text-left">
+                                <h1 class="text-3xl md:text-4xl font-black text-[#003366] mb-2 uppercase">Rotina de Instalação de Excelência</h1>
+                                <p class="text-gray-600 text-lg font-medium">Do Planejamento na Base ao "Sinal Verde" no Cliente</p>
+                              <div class="flex flex-wrap justify-center md:justify-start gap-2 mt-4">
+
+    <span class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 flex items-center">
+        <i class="fa-solid fa-clipboard-list mr-2"></i> Planejamento
+    </span>
+
+    <span class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 flex items-center">
+        <i class="fa-solid fa-handshake mr-2"></i> Acordo Verbal
+    </span>
+
+    <span class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 flex items-center">
+        <i class="fa-solid fa-binoculars mr-2"></i> Análise Prévia
+    </span>
+
+    <span class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 flex items-center">
+        <i class="fa-solid fa-shield-halved mr-2"></i> Segurança
+    </span>
+
+    <span class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 flex items-center">
+        <i class="fa-solid fa-share-nodes mr-2"></i> Lançamento
+    </span>
+
+    <span class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 flex items-center">
+        <i class="fa-solid fa-anchor mr-2"></i> Ancoragem
+    </span>
+
+    <span class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 flex items-center">
+        <i class="fa-solid fa-plug-circle-bolt mr-2"></i> Conectorização
+    </span>
+
+    <span class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 flex items-center">
+        <i class="fa-solid fa-brush mr-2"></i> Acabamentos
+    </span>
+
+    <span class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 flex items-center">
+        <i class="fa-solid fa-vial-circle-check mr-2"></i> Testes
+    </span>
+
+    <span class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 flex items-center">
+        <i class="fa-solid fa-person-chalkboard mr-2"></i> Orientação
+    </span>
+
+    <span class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 flex items-center">
+        <i class="fa-solid fa-file-export mr-2"></i> Documentação
+    </span>
+	<span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold border border-emerald-200 flex items-center">
+    <i class="fa-solid fa-route mr-2"></i> Método I.D.E.A.L.
+</span>
+
+</div>
+                            </div>
+                        </div>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 1: CHECKLIST ANTES DE SAIR DA BASE -->
+                        <!-- ================================================================================= -->
+                        <section id="section1" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-emerald-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">1</span>
+                                Preparação de Elite: O Jogo Ganha na Base
+                            </h2>
+                            
+                            <!-- Introdução Impactante -->
+                            <div class="mb-10 bg-gradient-to-r from-emerald-900 to-[#003366] text-white p-8 rounded-xl shadow-lg relative overflow-hidden">
+                                <div class="relative z-10">
+                                    <h3 class="text-xl font-bold mb-3">O mito do "Pego lá na hora"</h3>
+                                    <p class="text-emerald-100 leading-relaxed mb-0">
+                                        Um técnico amador chega na base, pega a chave do carro e sai. No meio da instalação, descobre que faltou conector ou que a <strong>pilha do Power Meter está zerada</strong>.
+                                        <br><br>
+                                        O <strong>Técnico RL NET</strong> sabe que a instalação começa muito antes de ligar o carro. 30 minutos de preparação na base economizam 3 horas de retorno e frustração na rua.
+                                    </p>
+                                </div>
+                                <i class="fa-solid fa-clipboard-check absolute -right-6 -bottom-6 text-9xl text-white opacity-5 rotate-12"></i>
+                            </div>
+
+                            <!-- 1.1 ANÁLISE DA O.S. -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    1.1 Inteligência Prévia: Decifrando a Ordem de Serviço (O.S.)
+                                </h3>
+                                <p class="text-gray-600 mb-6 text-sm">
+                                    A O.S. não é apenas um endereço. Ela é o mapa da missão. Antes de sair, verifique os dados cruciais:
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <!-- Card: Plano e Benefícios -->
+                                    <div class="bg-white border rounded-xl p-5 shadow-sm hover:shadow-md transition">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="bg-blue-100 p-2 rounded text-blue-600"><i class="fa-solid fa-gauge-high"></i></div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Plano e Benefícios</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-2">
+                                            Qual a velocidade contratada? O cliente tem direito a Wi-Fi Mesh ou Apps de Streaming?
+                                        </p>
+                                        <div class="bg-blue-50 p-2 rounded border border-blue-100 text-xs text-blue-800 font-bold">
+                                            <i class="fa-solid fa-info-circle mr-1"></i> OBJETIVO: Saber exatamente o que entregar para não frustrar a expectativa do cliente.
+                                        </div>
+                                    </div>
+
+                                    <!-- Card: Horário Restrito -->
+                                    <div class="bg-white border rounded-xl p-5 shadow-sm hover:shadow-md transition">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="bg-purple-100 p-2 rounded text-purple-600"><i class="fa-solid fa-clock"></i></div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Horário e Restrições</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-2">
+                                            É condomínio com horário limitado? O cliente pediu para ir somente à tarde?
+                                        </p>
+                                        <div class="bg-purple-50 p-2 rounded border border-purple-100 text-xs text-purple-800 font-bold">
+                                            <i class="fa-solid fa-user-clock mr-1"></i> AÇÃO: Evitar "dar viagem perdida" e chegar na porta do cliente em horário proibido.
+                                        </div>
+                                    </div>
+
+                                    <!-- Card: Endereço e Rota -->
+                                    <div class="bg-white border rounded-xl p-5 shadow-sm hover:shadow-md transition">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="bg-orange-100 p-2 rounded text-orange-600"><i class="fa-solid fa-map-location-dot"></i></div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Endereço e Rota</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-2">
+                                            Onde fica? Qual a melhor rota para economizar tempo e combustível?
+                                        </p>
+                                        <div class="bg-orange-50 p-2 rounded border border-orange-100 text-xs text-orange-800 font-bold">
+                                            <i class="fa-solid fa-route mr-1"></i> DICA: Verifique se o endereço no Google Maps bate com a descrição da O.S.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 1.2 O ARSENAL (MATERIAIS) -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    1.2 O Arsenal: Checklist de Materiais (Padrão RL NET)
+                                </h3>
+                                
+                                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        
+                                        <!-- Consumíveis (O que gasta) -->
+                                        <div>
+                                            <h4 class="text-sm font-black text-gray-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                                <i class="fa-solid fa-box-open"></i> Consumíveis Essenciais
+                                            </h4>
+                                            <ul class="space-y-3">
+                                                <li class="flex items-center gap-2 bg-white p-3 rounded shadow-sm border-l-4 border-emerald-500">
+                                                    <i class="fa-solid fa-check text-emerald-600"></i>
+                                                    <span class="text-sm font-bold text-gray-700">Conector SC/APC (Verde)</span>
+                                                </li>
+                                                <li class="flex items-center gap-2 bg-white p-3 rounded shadow-sm border-l-4 border-blue-500">
+                                                    <i class="fa-solid fa-check text-blue-600"></i>
+                                                    <span class="text-sm font-bold text-gray-700">Conector SC/UPC (Azul)</span>
+                                                </li>
+                                                <li class="flex items-center gap-2 bg-white p-3 rounded shadow-sm border-l-4 border-gray-500">
+                                                    <i class="fa-solid fa-check text-gray-600"></i>
+                                                    <span class="text-sm font-bold text-gray-700">Fixadores (Prego/Bucha/Anel)</span>
+                                                </li>
+                                                <li class="flex items-center gap-2 bg-white p-3 rounded shadow-sm border-l-4 border-yellow-500">
+                                                    <i class="fa-solid fa-check text-yellow-600"></i>
+                                                    <span class="text-sm font-bold text-gray-700">Fita Isolante / Auto-fusão</span>
+                                                </li>
+                                                <li class="flex items-center gap-2 bg-white p-3 rounded shadow-sm border-l-4 border-black">
+                                                    <i class="fa-solid fa-check text-black"></i>
+                                                    <span class="text-sm font-bold text-gray-700">Cabo Drop (Verificar Bobina)</span>
+                                                </li>
+                                                <li class="flex items-center gap-2 bg-white p-3 rounded shadow-sm border-l-4 border-orange-500">
+                                                    <i class="fa-solid fa-check text-orange-600"></i>
+                                                    <span class="text-sm font-bold text-gray-700">Alças Preformadas</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <!-- Equipamentos (O que instala) -->
+                                        <div>
+                                            <h4 class="text-sm font-black text-gray-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                                <i class="fa-solid fa-server"></i> Equipamentos (CPE)
+                                            </h4>
+                                            <div class="space-y-4">
+                                                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 relative">
+                                                    <div class="absolute top-2 right-2 text-green-500"><i class="fa-solid fa-wifi"></i></div>
+                                                    <h5 class="font-bold text-[#003366] text-sm mb-2">ONU / Roteador</h5>
+                                                    <p class="text-xs text-gray-500 mb-3">Recebido pelo Almoxarifado. Verifique se está completo na caixa.</p>
+                                                    
+                                                    <div class="bg-gray-100 p-3 rounded border-l-4 border-red-500">
+                                                        <strong class="text-xs text-red-700 block mb-1 uppercase">Regra das Fontes (Voltagem/Amperagem)</strong>
+                                                        <ul class="text-[10px] space-y-1 text-gray-700">
+                                                            <li class="flex justify-between"><span>Roteador Comum:</span> <strong>12V 1.0A</strong></li>
+                                                            <li class="flex justify-between"><span>Roteador Integrado (ONT):</span> <strong>12V 1.5A</strong></li>
+                                                            <li class="flex justify-between"><span>ONU (Bridge):</span> <strong>12V 0.5A</strong></li>
+                                                        </ul>
+                                                        <p class="text-[10px] text-red-600 font-bold mt-2">
+                                                            <i class="fa-solid fa-triangle-exclamation"></i> Nunca troque as fontes! Fonte errada queima o equipamento.
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                               
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 1.3 FERRAMENTAS E RECURSOS OPERACIONAIS -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    1.3 Ferramentas e Recursos Operacionais
+                                </h3>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    
+                                    <!-- Ferramentas de Fibra -->
+                                    <div class="bg-white border p-4 rounded shadow-sm h-full">
+                                        <div class="flex items-center gap-2 mb-3 border-b pb-2">
+                                            <i class="fa-solid fa-screwdriver-wrench text-gray-600"></i>
+                                            <h4 class="font-bold text-gray-800 text-sm">Ferramental</h4>
+                                        </div>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li class="flex items-center justify-between">
+                                                <span>Power Meter</span>
+                                                <span class="text-[10px] bg-green-100 text-green-800 px-1 rounded">Regulado?</span>
+                                            </li>
+                                            <li class="flex items-center justify-between">
+                                                <span>Clivador</span>
+                                                <span class="text-[10px] bg-green-100 text-green-800 px-1 rounded">Lâmina OK?</span>
+                                            </li>
+                                            <li class="flex items-center justify-between">
+                                                <span>Caneta Óptica (VFL)</span>
+                                                <span class="text-[10px] bg-green-100 text-green-800 px-1 rounded">Laser Forte?</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Tecnologia e Conectividade -->
+                                    <div class="critical-item p-4 rounded shadow-sm h-full">
+                                        <div class="flex items-center gap-2 mb-3 border-b border-red-200 pb-2">
+                                            <i class="fa-solid fa-laptop-code text-red-600"></i>
+                                            <h4 class="font-bold text-gray-800 text-sm">Tecnologia (TI)</h4>
+                                        </div>
+                                        <ul class="text-xs text-gray-600 space-y-3">
+                                            <li class="flex items-center gap-2">
+                                                <i class="fa-solid fa-laptop text-gray-500"></i>
+                                                <div>
+                                                    <strong>Notebook</strong>
+                                                    <span class="text-[10px] bg-green-100 text-green-800 px-1 rounded">Operante e com bateria?</span>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-center gap-2">
+                                                <i class="fa-solid fa-mobile-screen text-gray-500"></i>
+                                                <div>
+                                                    <strong>Celular</strong>
+                                                    <span class="text-[10px] bg-green-100 text-green-800 px-1 rounded">Bateria e Dados Móveis OK?</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Viatura -->
+                                    <div class="bg-white border p-4 rounded shadow-sm h-full">
+                                        <div class="flex items-center gap-2 mb-3 border-b pb-2">
+                                            <i class="fa-solid fa-truck-pickup text-blue-600"></i>
+                                            <h4 class="font-bold text-gray-800 text-sm">Viatura</h4>
+                                        </div>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-gas-pump text-gray-400"></i> Combustível suficiente?</li>
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation text-gray-400"></i> Pneus calibrados?</li>
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-helmet-safety text-gray-400"></i> Escada fixada corretamente?</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- MENSAGEM FINAL DA SEÇÃO -->
+                            <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex items-start gap-4">
+                                <div class="bg-emerald-100 p-2 rounded-full text-emerald-600 shrink-0">
+                                    <i class="fa-solid fa-check-double text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-emerald-800 text-sm">Pronto para a Missão!</h4>
+                                    <p class="text-xs text-emerald-700 mt-1">
+                                        Há ferramentas e materiais além da lista, mas você pegou a essência da coisa: você não sai  para "tentar" instalar. Você sai para <strong>executar com perfeição!</strong> A confiança do cliente começa quando ele vê um técnico organizado e com o equipamento certo.
+                                    </p>
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 2: CHEGADA NO CLIENTE -->
+                        <!-- ================================================================================= -->
+                        <section id="section2" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-emerald-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">2</span>
+                                Chegada no Cliente: Postura e Planejamento In Loco
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                A instalação não começa quando você fura a parede, ela começa no "Bom dia". 
+                                O cliente está abrindo a intimidade da casa dele para você. Siga este protocolo para passar segurança e profissionalismo.
+                            </p>
+
+                            <!-- 2.1 A ABORDAGEM -->
+                            <div class="mb-10 bg-white border-l-4 border-blue-500 shadow-sm rounded-r-lg p-6">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-id-card-clip text-blue-500"></i> 2.1 Apresentação e Confirmação
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div>
+                                        <p class="text-sm text-gray-600 mb-3">
+                                            Não grite "Ô DE CASA!". Toque a campainha. Ao ser atendido, siga o script:
+                                        </p>
+                                        <div class="bg-gray-100 p-3 rounded font-mono text-xs text-gray-700 italic border-l-2 border-gray-400">
+                                            "Bom dia, Sr(a) [Nome do Cliente]! Sou o [Seu Nome], técnico da RL NET. Estou aqui para realizar a instalação da sua internet de [Velocidade] Mega. Podemos entrar?"
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <ul class="text-sm space-y-2 text-gray-700">
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Uniforme completo e limpo.</li>
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Crachá visível.</li>
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Confirmar dados da O.S. (Plano/Titular).</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2.2 ANÁLISE DO LOCAL (ROTEADOR) -->
+                            <div class="mb-10">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    2.2 Onde vai o Roteador? (A Decisão Mais Importante)
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-4">
+                                    O cliente vai querer esconder o roteador dentro do rack, atrás da TV ou no chão. 
+                                    <strong>Seu dever é educar.</strong> Se o roteador ficar mal posicionado, o Wi-Fi será ruim e a culpa será sua.
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <!-- Local Ideal -->
+                                    <div class="bg-green-50 border border-green-200 p-4 rounded-lg">
+                                        <h4 class="font-bold text-green-800 text-sm mb-2"><i class="fa-solid fa-thumbs-up mr-1"></i> Onde Instalar</h4>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li>• Local central da casa.</li>
+                                            <li>• Ponto alto (mínimo 1,5m do chão).</li>
+                                            <li>• Visada livre para cômodos principais.</li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Local Proibido -->
+                                    <div class="bg-red-50 border border-red-200 p-4 rounded-lg">
+                                        <h4 class="font-bold text-red-800 text-sm mb-2"><i class="fa-solid fa-thumbs-down mr-1"></i> Onde JAMAIS Instalar</h4>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li>• Dentro de móveis (gavetas/racks).</li>
+                                            <li>• Atrás de TVs ou Espelhos (metal bloqueia sinal).</li>
+                                            <li>• Cozinha (interferência de Microondas).</li>
+                                            <li>• Chão ou teto de gesso fechado.</li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Argumento Técnico -->
+                                    <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                                        <h4 class="font-bold text-blue-800 text-sm mb-2"><i class="fa-solid fa-comment-dots mr-1"></i> Argumento para o Cliente</h4>
+                                        <p class="text-xs text-gray-600 italic">
+                                            "O Wi-Fi é como a luz de uma vela. Se colocarmos dentro da gaveta, a sala fica escura. Precisamos colocar no alto para iluminar a casa toda."
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2.3 EXPLICAÇÃO E ACORDO -->
+                            <div class="mb-10">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    2.3 O Acordo Verbal (Evite Surpresas)
+                                </h3>
+                                <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                                    <p class="text-sm text-gray-700 mb-4">
+                                        Antes de pegar a furadeira, explique <strong>exatamente</strong> o que vai acontecer. O cliente precisa autorizar os furos e o trajeto do cabo.
+                                    </p>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div class="flex items-start gap-3">
+                                            <div class="bg-white p-2 rounded shadow-sm text-emerald-600 font-bold">1</div>
+                                            <p class="text-xs text-gray-600 mt-1">"Vou trazer o cabo do poste até aqui. Ele vai passar por aquele furo na parede da sala."</p>
+                                        </div>
+                                        <div class="flex items-start gap-3">
+                                            <div class="bg-white p-2 rounded shadow-sm text-emerald-600 font-bold">2</div>
+                                            <p class="text-xs text-gray-600 mt-1">"Vou precisar fixar o cabo com grampos no rodapé. Tudo bem?"</p>
+                                        </div>
+                                        <div class="flex items-start gap-3">
+                                            <div class="bg-white p-2 rounded shadow-sm text-emerald-600 font-bold">3</div>
+                                            <p class="text-xs text-gray-600 mt-1">"Vou fazer um pequeno furo aqui para passar a fibra. Pode fazer sujeira, mas eu limpo depois."</p>
+                                        </div>
+                                        <div class="flex items-start gap-3">
+                                            <div class="bg-white p-2 rounded shadow-sm text-emerald-600 font-bold">4</div>
+                                            <p class="text-xs text-gray-600 mt-1">"O Sr. concorda com esse local para o roteador?"</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2.4 SCAN DE SEGURANÇA (NR10/NR35) -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    2.4 Scan de Segurança: Garantia de Vida
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-6">
+                                    Só inicie se for seguro. Se identificar risco grave, pare e avise a supervisão. Sua vida vale mais que uma instalação.
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    
+                                    <!-- Externo (Poste/Fachada) -->
+                                    <div class="bg-white border rounded-lg p-5 shadow-sm">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 border-b pb-2 flex items-center gap-2">
+                                            <i class="fa-solid fa-tree text-green-600"></i> Ambiente Externo
+                                        </h4>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation text-yellow-500"></i> <strong>NR10:</strong> O poste está podre? Há cabos de energia desencapados próximos ao local de ancoragem?</li>
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-cloud-rain text-blue-400"></i> <strong>NR35:</strong> Está chovendo ou ventando forte? Se sim, proibido subir na escada.</li>
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-car text-gray-500"></i> O local da escada interfere no trânsito? Precisa de cones?</li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Interno (Casa/Telhado) -->
+                                    <div class="bg-white border rounded-lg p-5 shadow-sm">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 border-b pb-2 flex items-center gap-2">
+                                            <i class="fa-solid fa-house text-blue-600"></i> Ambiente Interno
+                                        </h4>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-dog text-orange-500"></i> <strong>Animais:</strong> Há cães soltos? Peça para prender antes de entrar.</li>
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-layer-group text-purple-500"></i> <strong>Telhado:</strong> Se precisar subir no forro, as telhas estão secas? A estrutura aguenta seu peso?</li>
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-bolt text-red-500"></i> <strong>Elétrica:</strong> A tomada do roteador está firme e segura? Não instale em "gambiarras".</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 3: ANÁLISE DA ROTA E CTO (CONTEÚDO NOVO) -->
+                        <!-- ================================================================================= -->
+                        <section id="section3" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-emerald-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">3</span>
+                                Análise da Rota e CTO: O Caminho da Luz
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Antes de desenrolar o cabo, você precisa definir o caminho. Uma rota mal planejada hoje é um chamado de suporte amanhã. 
+                                Vamos aprender a escolher a <strong>CTO Certa</strong> e o <strong>Caminho Seguro</strong>.
+                            </p>
+
+                            <!-- 3.1 BUSCANDO A CTO -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    3.1 Caça à CTO: Não é só chegar e plugar
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <!-- Apoio Operacional (Mapa) -->
+                                    <div class="bg-white border rounded-xl p-5 shadow-sm">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                            <i class="fa-solid fa-headset text-blue-500"></i> 1. O Mapa das CTOs
+                                        </h4>
+                                        <p class="text-xs text-gray-600 mb-3">
+                                            Caso você não tenha acesso ao app de mapas (KMZ). Você deve solicitar o <strong>print do mapa</strong> da região ao Apoio Operacional via chat/telefone.
+                                        </p>
+                                        <div class="bg-yellow-50 border border-yellow-200 p-3 rounded text-yellow-800 text-xs font-bold">
+                                            REGRA DE OURO: O cliente não tem CTO ou porta pré-definida. É você, técnico, quem decide qual a melhor CTO disponível no momento da instalação, baseando-se no mapa e na vistoria física.
+                                        </div>
+                                    </div>
+
+                                    <!-- Verificação Física -->
+                                    <div class="bg-white border rounded-xl p-5 shadow-sm">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                            <i class="fa-solid fa-binoculars text-orange-500"></i> 2. Inspeção Visual (No Poste)
+                                        </h4>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> <strong>Portas Livres:</strong> Olhe se realmente há portas vazias.</li>
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> <strong>Estado da Caixa:</strong> A CTO está fechada? Tem marimbondos? Está pendurada pelo cabo?</li>
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> <strong>Sinal (Power Meter):</strong> Meça o sinal direto na porta da CTO antes de lançar o cabo. Se estiver ruim na CTO, nem comece.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 3.2 A ROTA PERFEITA -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    3.2 Traçando a Rota: O Caminho Mais Limpo
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-6">
+                                    O caminho mais curto nem sempre é o melhor. Você deve evitar obstáculos que cortam a fibra. Escolha o "lado da sombra" (menos cabos de energia) quando possível e evite postes sobrecarregados.
+                                </p>
+
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    <!-- Inimigo 1: Árvores -->
+                                    <div class="bg-red-50 p-4 rounded-lg border border-red-100 text-center">
+                                        <i class="fa-solid fa-tree text-3xl text-green-700 mb-2"></i>
+                                        <h4 class="font-bold text-red-800 text-sm mb-1">Árvores</h4>
+                                        <p class="text-xs text-gray-600">
+                                            Galhos crescem e rompem a fibra com o vento. <strong>Nunca passe o cabo por dentro da copa de árvores.</strong> Se não tiver opção, tire a dúvida com o supervisor antes de lançar.
+                                        </p>
+                                    </div>
+
+                                    <!-- Inimigo 2: Cruzamentos -->
+                                    <div class="bg-red-50 p-4 rounded-lg border border-red-100 text-center">
+                                        <i class="fa-solid fa-road text-3xl text-gray-600 mb-2"></i>
+                                        <h4 class="font-bold text-red-800 text-sm mb-1">Cruzamentos de Rua</h4>
+                                        <p class="text-xs text-gray-600">
+                                            O terror do provedor. Caminhões altos arrebentam cabos baixos. <strong>Evite cruzar a rua</strong> se possível. Se tiver que cruzar, garanta a altura mínima de 5,5m e nunca faça sozinho sem antes confirmar com o supervisor.
+                                        </p>
+                                    </div>
+
+                                    <!-- Inimigo 3: Rede Elétrica -->
+                                    <div class="bg-red-50 p-4 rounded-lg border border-red-100 text-center">
+                                        <i class="fa-solid fa-bolt text-3xl text-yellow-500 mb-2"></i>
+                                        <h4 class="font-bold text-red-800 text-sm mb-1">Rede Elétrica</h4>
+                                        <p class="text-xs text-gray-600">
+                                            Mantenha distância de 60cm da rede de baixa tensão. <strong>Jamais passe o drop por cima ou entre os fios de energia.</strong> Risco de vida e indução. Se estiver fora do padrão, informe o supervisor e aguarde orientação.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DICA DE OURO: A CRUZETA -->
+                            <div class="bg-emerald-50 border-l-4 border-emerald-500 p-6 rounded-r-xl shadow-sm">
+                                <h3 class="font-bold text-emerald-800 text-lg mb-2 flex items-center gap-2">
+                                    <i class="fa-solid fa-star"></i> Padrão RL NET: A Regra da Cruzeta
+                                </h3>
+                                <p class="text-gray-700 text-sm mb-0">
+                                    Ao passar o cabo pelo poste, <strong>nunca cruze em diagonal</strong> (cortando caminho). Sempre faça ângulos de 90 graus (esquadro), acompanhando a rede existente. Isso evita que seu cabo seja "enforcado" por outros ou atrapalhe manutenções futuras. Estética é qualidade!
+                                </p>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 4: LANÇAMENTO E ANCORAGEM (CONTEÚDO NOVO) -->
+                        <!-- ================================================================================= -->
+                        <section id="section4" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-emerald-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">4</span>
+                                Lançamento e Ancoragem: A Arte de Esticar
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                A teoria acabou. Agora você está com o drop na mão e a escada no ombro. 
+                                Vamos ver como lançar o cabo sem danificá-lo, como prender no poste (ancoragem) e como fazer o acabamento que protege o cliente da água (pingadeira).
+                            </p>
+
+                            <!-- 4.1 O LANÇAMENTO -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    4.1 O Lançamento: Sem Arrastar!
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                                    <div>
+                                        <p class="text-sm text-gray-600 mb-4">
+                                            A fibra óptica é resistente para quem sabe manuseá-la, se não, ela é delicada. Use sempre bases lisas para puxar o cabo, apoios e suspensões, nunca arraste o drop em materiais cortantes ou outros cabos (isso queima os drops e danifica).
+                                        </p>
+                                        <div class="bg-white border rounded-lg p-4 shadow-sm">
+                                            <h4 class="font-bold text-gray-800 text-sm mb-2"><i class="fa-solid fa-person-running text-blue-500"></i> Boas Práticas de Lançamento</h4>
+                                            <ul class="text-xs text-gray-600 space-y-3">
+                                                <li class="flex items-start gap-2">
+                                                    <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                                                    <div>
+                                                        <strong>Use sempre o cavalate:</strong> O cavalete gira fazendo com que o drop saia de forma linear. Se você desenrola o cabo porcima, ele sai torcida e a chance de dano é alta.
+                                                    </div>
+                                                </li>
+                                                <li class="flex items-start gap-2">
+                                                    <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                                                    <div>
+                                                        <strong>Cuidado com a Tração:</strong> Não dê trancos. Se o cabo prender em um galho, volte e solte. Se puxar com força, a fibra estica (efeito elástico) e atenua.
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Erro Comum Visual -->
+                                    <div class="bg-red-50 p-6 rounded-xl border border-dashed border-red-300 text-center">
+                                        <i class="fa-solid fa-ban text-4xl text-red-500 mb-2"></i>
+                                        <h4 class="font-bold text-red-800 text-sm mb-1">ERRO GRAVE: Abrasão</h4>
+                                        <p class="text-xs text-gray-600">
+                                            Nunca deixe o cabo "barrigando" no asfalto enquanto lança entre dois postes distantes. Carros podem passar por cima. Mantenha o cabo tensionado ou lance por etapas.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 4.2 ANCORAGEM NO POSTE -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    4.2 Ancoragem no Poste: Encabeçamento vs Passagem
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-6">
+                                    Você não amarra o cabo no poste com nó cego. Você usa hardware específico. Existem dois tipos de fixação:
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <!-- Encabeçamento -->
+                                    <div class="bg-white border-2 border-blue-100 rounded-xl p-5 hover:border-blue-300 transition shadow-sm">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <h4 class="font-bold text-blue-800 flex items-center gap-2">
+                                                <i class="fa-solid fa-anchor"></i> 1. Encabeçamento
+                                            </h4>
+                                            <span class="bg-blue-100 text-blue-800 text-[10px] px-2 py-1 rounded font-bold">Fim de Curso ou Curva</span>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-4 h-10">
+                                            Usado no primeiro e último poste, ou quando a rota faz uma curva brusca (> 90º). O cabo é <strong>travado</strong> para aguentar a tensão.
+                                        </p>
+                                        <div class="bg-gray-50 p-3 rounded text-xs space-y-2 border">
+                                            <p><strong>Material:</strong> Cinta + Isolador + Alça dupla.</p>
+                                            <p><strong>Como fazer:</strong> A alça preformada "abraça" o drop (a famosa alça em dupla). Mantenha o cabo no centro do aspiral da alça.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Passagem -->
+                                    <div class="bg-white border-2 border-orange-100 rounded-xl p-5 hover:border-orange-300 transition shadow-sm">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <h4 class="font-bold text-orange-800 flex items-center gap-2">
+                                                <i class="fa-solid fa-arrow-right-long"></i> 2. Passagem
+                                            </h4>
+                                            <span class="bg-orange-100 text-orange-800 text-[10px] px-2 py-1 rounded font-bold">Linha Reta</span>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-4 h-10">
+                                            Usado nos postes intermediários onde o cabo passa reto. O cabo apenas <strong>apoia</strong>, deslizando livremente.
+                                        </p>
+                                        <div class="bg-gray-50 p-3 rounded text-xs space-y-2 border">
+                                            <p><strong>Material:</strong> Cinta + Isolador + Alça simples.</p>
+                                            <p><strong>Como fazer:</strong> O objetivo é sustentar o peso, não travar. Use a alça em sua forma simples (uma "perna" para cada lado) fazendo um X no cabo e deixando uma barriga de folga para evitar danos.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-6 bg-yellow-50 border border-yellow-200 p-4 rounded-lg flex gap-4 items-center">
+                                    <i class="fa-solid fa-guitar text-yellow-600 text-2xl"></i>
+                                    <div>
+                                        <h5 class="font-bold text-yellow-800 text-sm">O Teste do "Violão" (Tensionamento)</h5>
+                                        <p class="text-xs text-gray-700">
+                                            Não estique o cabo até ele virar uma corda de violão (muito tenso rompe a fibra com o frio/vento).
+                                            Também não deixe barrigando (muito frouxo engata em caminhão).
+                                            <br><strong>O Ponto Doce:</strong> Deve ter uma leve curvatura natural (catenária), mas visualmente reto.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 4.3 PROTEÇÃO E ACABAMENTO -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    4.3 Proteção e Acabamento: O Toque Profissional
+                                </h3>
+
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                    
+                                    <!-- Sobra Técnica -->
+                                    <div class="bg-white border rounded-xl p-6 shadow-sm">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                            <i class="fa-solid fa-life-ring text-purple-500"></i> Reserva Técnica (Sobras)
+                                        </h4>
+                                        <p class="text-xs text-gray-600 mb-3">
+                                            Se o conector da CTO queimar ou o cabo for cortado na ponta, você precisa de cabo extra para refazer sem trocar o lance todo.
+                                        </p>
+                                        <div class="bg-purple-50 p-3 rounded border border-purple-100">
+                                            <strong class="text-purple-800 text-xs block mb-1">Padrão RL NET:</strong>
+                                            <ul class="text-xs text-gray-700 space-y-1">
+                                                <li>• Deixar <strong>1 a 2 metros</strong> de sobra.</li>
+                                                <li>• No poste da CTO enrole em círculo e deixe na esolta do A.S e prenda sempre com arame de espinar (nunca com fita isolante ou lacre nilon.</li>
+                                                <li>• Na casa do cliente, enrole em círculo e prenda com fita isolante, organizador ou lacre nilon e esconda atrás do móvel.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <!-- Pingadeira -->
+                                    <div class="bg-white border rounded-xl p-6 shadow-sm">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                            <i class="fa-solid fa-droplet text-blue-500"></i> Pingadeira (Drip Loop)
+                                        </h4>
+                                        <p class="text-xs text-gray-600 mb-3">
+                                            A água da chuva corre pelo fio. Se o fio entrar direto na parede inclinado para baixo, a água entra na casa e queima a ONU.
+                                        </p>
+                                        <div class="bg-blue-50 p-3 rounded border border-blue-100 flex gap-4 items-center">
+                                            <div class="text-3xl font-bold text-blue-200">U</div>
+                                            <div>
+                                                <strong class="text-blue-800 text-xs block mb-1">A Curva em "U":</strong>
+                                                <p class="text-xs text-gray-700">
+                                                    Antes do furo na parede, faça uma barriga no cabo para baixo. A água escorre, chega na parte baixa do "U" e <strong>pinga no chão</strong>, salvando o equipamento.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 5: CONECTORIZAÇÃO E IDENTIFICAÇÃO NA CTO -->
+                        <!-- ================================================================================= -->
+                        <section id="section5" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-emerald-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">5</span>
+                                Conectorização e Identificação: A Assinatura do Técnico
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Você chegou na CTO. O trabalho pesado de lançamento acabou. Agora entra o trabalho de cirurgião.
+                                Um conector mal feito causa atenuação e quedas. Um cabo sem identificação causa cortes acidentais no futuro. Faça bem feito para fazer uma vez só.
+                            </p>
+
+                            <!-- 5.1 CONECTORIZAÇÃO DE CAMPO -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    5.1 Conectorização: A Arte da Luz
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <!-- Passo a Passo Resumido -->
+                                    <div class="bg-white border rounded-xl p-6 shadow-sm">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                            <i class="fa-solid fa-screwdriver-wrench text-blue-500"></i> O Ritual do Fast Connector
+                                        </h4>
+                                        <ul class="text-xs text-gray-600 space-y-4">
+                                            <li class="flex items-start gap-2">
+                                                <div class="bg-blue-100 text-blue-800 font-bold w-5 h-5 flex items-center justify-center rounded-full shrink-0">1</div>
+                                                <div>
+                                                    <strong>Decapagem (Strip):</strong> Remova a capa preta externa e o acrilato (casca colorida) da fibra. Use o gabarito. Não "morda" a fibra com o alicate.
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <div class="bg-blue-100 text-blue-800 font-bold w-5 h-5 flex items-center justify-center rounded-full shrink-0">2</div>
+                                                <div>
+                                                    <strong>Limpeza (Clean):</strong> Limpe a fibra nua com lenço e álcool isopropílico. <span class="text-red-500 font-bold">Nunca sopre a fibra!</span> Saliva mata o sinal.
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <div class="bg-blue-100 text-blue-800 font-bold w-5 h-5 flex items-center justify-center rounded-full shrink-0">3</div>
+                                                <div>
+                                                    <strong>Clivagem (Cleave):</strong> O corte deve ser perfeito (90º). Se o clivador estiver cego ou sujo, a luz "bate e volta". Essa é a etapa mais crítica.
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <div class="bg-blue-100 text-blue-800 font-bold w-5 h-5 flex items-center justify-center rounded-full shrink-0">4</div>
+                                                <div>
+                                                    <strong>Conexão:</strong> Insira suavemente até sentir uma leve curvatura ("barriguinha"). Trave o conector.
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Dicas de Ouro -->
+                                    <div class="space-y-4">
+                                        <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-lg">
+                                            <h4 class="font-bold text-emerald-800 text-sm mb-2"><i class="fa-solid fa-plug"></i> Qual Conector Usar?</h4>
+                                            <p class="text-xs text-gray-700">
+                                                Olhe para a CTO. Se a porta for <strong>VERDE</strong>, use conector <strong>SC/APC (Verde)</strong>. Se for <strong>AZUL</strong>, use <strong>SC/UPC (Azul)</strong>.
+                                                <br><span class="font-bold text-red-600 mt-1 block">Misturar Verde com Azul causa perda de -3dB a -10dB!</span>
+                                            </p>
+                                        </div>
+
+                                        <div class="bg-red-50 border border-red-200 p-4 rounded-lg">
+                                            <h4 class="font-bold text-red-800 text-sm mb-2"><i class="fa-solid fa-triangle-exclamation"></i> O Vilão Silencioso</h4>
+                                            <p class="text-xs text-gray-700">
+                                                A fibra estava limpa, mas você tocou na ponta do conector com o dedo? <strong>Sujou.</strong> A gordura do dedo bloqueia a luz. Limpe sempre antes de plugar na CTO.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 5.2 IDENTIFICAÇÃO (ETIQUETADORA) -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    5.2 Identificação: Quem é quem?
+                                </h3>
+                                
+                                <div class="bg-white border rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-8 items-center">
+                                    <div class="flex-1">
+                                        <p class="text-sm text-gray-600 mb-4">
+                                            Imagine que outro técnico precisa desconectar um cliente inadimplente na mesma CTO. Se o seu cabo não tiver nome, ele pode desligar o cliente errado (o seu!). 
+                                            Na RL NET, identificação não é opcional.
+                                        </p>
+                                        
+                                        <div class="bg-gray-100 p-4 rounded-lg border border-gray-300 mb-4">
+                                            <h4 class="font-bold text-gray-800 text-sm mb-2 flex items-center gap-2">
+                                                <i class="fa-solid fa-print"></i> A Ferramenta: Rotuladora (Etiquetadora)
+                                            </h4>
+                                            <p class="text-xs text-gray-600 mb-2">
+                                                Todo técnico RL NET possui uma etiquetadora portátil. Esqueça fita crepe ou caneta permanente (apagam com o sol/chuva). Use a <strong>etiqueta plástica laminada</strong>.
+                                            </p>
+                                            
+                                            <div class="bg-white p-2 rounded border border-gray-200 mt-2">
+                                                <strong class="text-xs text-gray-500 block mb-1">Padrão de Texto RL NET:</strong>
+                                                <div class="font-mono text-sm font-bold text-black bg-yellow-100 px-3 py-1 rounded inline-block shadow-sm transform -rotate-1">
+                                                    ID [ID DO CADASTRO DO CLIENTE]
+                                                </div>
+                                                <p class="text-[10px] text-gray-400 mt-1 italic">Ex: ID 1234</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="w-full md:w-1/3 bg-blue-50 p-4 rounded-lg border border-blue-100 text-center">
+                                        <i class="fa-solid fa-tag text-blue-500 text-4xl mb-2"></i>
+                                        <h4 class="font-bold text-blue-800 text-sm mb-2">Onde Colocar?</h4>
+                                        <ul class="text-xs text-left text-gray-700 space-y-2">
+                                            <li><i class="fa-solid fa-check text-green-500"></i> <strong>Na CTO:</strong> Prenda a etiqueta no cabo drop, no meio do vão entre o acoplador e a ranhura de encaixe.</li>
+                                            <li><i class="fa-solid fa-check text-green-500"></i> <strong>Como?:</strong> Apenas um lado, etiqueta mais curta possível e de frente para o técnico, facilitando a visualização.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 5.3 ACABAMENTO NA CTO -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    5.3 Acabamento Final: Sem Espaguete
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-6">
+                                    Uma CTO organizada é sinal de respeito com os colegas e com a rede.
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="border p-4 rounded-lg hover:shadow-md transition bg-white">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-2 text-green-700"><i class="fa-regular fa-thumbs-up"></i> O Jeito Certo</h4>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li>• Cabo desce por trás de todos os outros e entra pela porta de acesso correta da caixa.</li>
+                                            <li>• Drop fixado na ranhura correspondente à porta conectada, sem remover a borracha.</li>
+                                            <li>• Caixa fechada e travada corretamente (evita entrada de água/insetos).</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="border p-4 rounded-lg hover:shadow-md transition bg-red-50">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-2 text-red-700"><i class="fa-regular fa-thumbs-down"></i> O Jeito Errado</h4>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li>• "Varal": Cabo esticado direto da caixa para o poste sem ancoragem.</li>
+                                            <li>• Tampa da CTO aberta ou mal encaixada.</li>
+                                            <li>• Restos de fibra cortada jogados no chão (recolha seu lixo!).</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 6: ACABAMENTOS NA RESIDÊNCIA -->
+                        <!-- ================================================================================= -->
+                        <section id="section6" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-emerald-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">6</span>
+                                Conectorização e Acabamentos Internos: O Padrão "Casa de Rico"
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                A parte externa garante o sinal, a parte interna garante a satisfação. O cliente não vê a CTO, mas ele vê o fio na sala dele todo dia. 
+                                Siga o padrão RL NET para uma instalação limpa, segura e invisível.
+                            </p>
+
+                            <!-- 6.1 CONECTORIZAÇÃO INTERNA -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    6.1 Conectorização na ONU (Sem Roseta)
+                                </h3>
+                                
+                                <div class="bg-white border rounded-xl p-6 shadow-sm">
+                                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                                        <div class="flex-1">
+                                            <p class="text-sm text-gray-600 mb-3">
+                                                No padrão RL NET, <strong>não utilizamos roseta (PTO)</strong>. O cabo Drop entra direto na casa e conecta na ONU. Isso reduz pontos de falha (menos emendas = menos perda).
+                                            </p>
+                                            <div class="bg-yellow-50 border border-yellow-200 p-3 rounded text-yellow-800 text-xs font-bold mb-4">
+                                                <i class="fa-solid fa-triangle-exclamation mr-1"></i> CUIDADO: O cabo Drop Flat Preto é rígido. Ao manusear dentro de casa, cuidado para não derrubar vasos ou arranhar móveis.
+                                            </div>
+                                            <ul class="text-xs text-gray-600 space-y-2">
+                                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Use o conector compatível com a ONU (Geralmente Verde/APC).</li>
+                                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Verifique se a trava do conector fez o "click".</li>
+                                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> <strong>Segurança:</strong> Nunca olhe para a ponta da fibra. O laser é invisível e queima a retina.</li>
+                                            </ul>
+                                        </div>
+                                        <div class="w-full md:w-1/3 text-center bg-gray-50 p-4 rounded border border-gray-200">
+                                            <i class="fa-solid fa-link text-4xl text-gray-400 mb-2"></i>
+                                            <p class="text-xs font-bold text-gray-700">Conexão Direta</p>
+                                            <p class="text-[10px] text-gray-500">Drop → Conector → ONU</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 6.2 FIXAÇÃO E ROTA -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    6.2 Fixação e Estética: O Caminho Invisível
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-6">
+                                    O fio não deve ser um varal na sala do cliente. Ele deve acompanhar a arquitetura da casa.
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <!-- Onde passar -->
+                                    <div class="bg-white border rounded-lg p-5 shadow-sm">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 text-blue-700"><i class="fa-solid fa-route"></i> Regras de Rota</h4>
+                                        <ul class="text-xs text-gray-600 space-y-3">
+                                            <li><strong>Rodapés e Cantos:</strong> Sempre cole o cabo no topo do rodapé ou no canto da parede/teto.</li>
+                                            <li><strong>Ângulos de 90º:</strong> Nunca atravesse uma parede em diagonal. Faça o caminho "quadrado" acompanhando os cantos.</li>
+                                            <li><strong>Furos:</strong> Sempre de dentro para fora (para não estourar o reboco interno). Incline levemente para baixo (evita água).</li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Como fixar -->
+                                    <div class="bg-white border rounded-lg p-5 shadow-sm">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 text-orange-700"><i class="fa-solid fa-hammer"></i> Uso do Grampo (Fixa-fio)</h4>
+                                        <ul class="text-xs text-gray-600 space-y-3">
+                                            <li><strong>Espaçamento:</strong> Um grampo a cada <strong>30cm ou 40cm</strong>. Se ficar muito longe, o fio "embarriga".</li>
+                                            <li><strong>Martelo:</strong> Cuidado para não esmagar a fibra. O grampo deve apenas segurar, não estrangular.</li>
+                                            <li><strong>Tapa-Furos:</strong> Obrigatório. Após passar o cabo, vede o furo com silicone ou massa tapa-furo. Evita entrada de formigas e água da chuva.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 6.3 SOBRAS TÉCNICAS -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    6.3 Sobras Técnicas Discretas
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    <!-- Onde deixar -->
+                                    <div class="col-span-2 bg-white border rounded-xl p-6 shadow-sm">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3">Reserva Técnica Interna</h4>
+                                        <p class="text-xs text-gray-600 mb-3">
+                                            Deixe cerca de <strong>1 a 2 metro</strong> de cabo sobrando atrás da ONU. 
+                                            <br><strong>Motivo:</strong> Se o cliente mudar o móvel de lugar para limpar ou se o conector quebrar, você tem margem para refazer sem ter que passar todo o cabo novamente.
+                                        </p>
+                                        <div class="bg-gray-100 p-3 rounded text-xs text-gray-700 border border-gray-300">
+                                            <strong>Como organizar:</strong> Enrole o cabo em um círculo suave (diâmetro de um prato de sobremesa) e prenda com fita isolante ou lacre nilon e esconda atrás do móvel (remova o mensageiro da fibra para diminuir o volume da sobra).
+                                        </div>
+                                    </div>
+
+                                    <!-- O que NÃO fazer -->
+                                    <div class="bg-red-50 border border-red-200 p-6 rounded-xl text-center">
+                                        <i class="fa-solid fa-ban text-3xl text-red-500 mb-2"></i>
+                                        <h4 class="font-bold text-red-800 text-sm mb-2">Erro Comum</h4>
+                                        <p class="text-xs text-gray-600">
+                                            Não deixe o cabo esticado "violão" dentro de casa. Se alguém tropeçar ou puxar a ONU, o conector quebra na hora. A sobra técnica é o "amortecedor" da instalação.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 7: CHECKLIST DE VALIDAÇÃO -->
+                        <!-- ================================================================================= -->
+                        <section id="section7" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-emerald-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">7</span>
+                                Check List de Validação: A Prova Real
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Antes de dar o "ok" no aplicativo e ir embora, você precisa ter certeza absoluta de que a instalação está perfeita. 
+                                Não confie na sorte. Confie no Power Meter e nos seus olhos.
+                            </p>
+
+                            <!-- 7.1 MEDIÇÃO DE POTÊNCIA -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    7.1 A Prova Real: Medindo a Potência (Power Meter)
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <!-- Tabela de Sinais -->
+                                    <div class="bg-white border rounded-xl p-6 shadow-sm">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                            <i class="fa-solid fa-gauge-high text-blue-500"></i> Padrão de Potência RL NET
+                                        </h4>
+                                        <p class="text-xs text-gray-600 mb-4">
+                                            A luz precisa chegar com a força certa. Nem fraca demais (cai a internet), nem forte demais (satura/queima).
+                                        </p>
+                                        
+                                        <div class="space-y-2 text-xs">
+                                            <div class="flex items-center justify-between bg-green-50 p-2 rounded border border-green-200">
+                                                <span class="font-bold text-green-800">Excelência (Meta)</span>
+                                                <span class="font-mono font-bold text-green-700">-15.00 a -22.00 dBm</span>
+                                            </div>
+                                            <div class="flex items-center justify-between bg-yellow-50 p-2 rounded border border-yellow-200">
+                                                <span class="font-bold text-yellow-800">Aceitável (Limite)</span>
+                                                <span class="font-mono font-bold text-yellow-700">-22.01 a -25.00 dBm</span>
+                                            </div>
+                                            <div class="flex items-center justify-between bg-red-50 p-2 rounded border border-red-200">
+                                                <span class="font-bold text-red-800">Reprovado (Refazer)</span>
+                                                <span class="font-mono font-bold text-red-700">Pior que -25.01 dBm</span>
+                                            </div>
+                                            <div class="flex items-center justify-between bg-purple-50 p-2 rounded border border-purple-200">
+                                                <span class="font-bold text-purple-800">Saturação (Perigo)</span>
+                                                <span class="font-mono font-bold text-purple-700">Melhor que -8.00 dBm</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Cálculo de Perda -->
+                                    <div class="bg-gray-50 border rounded-xl p-6 shadow-sm">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                            <i class="fa-solid fa-calculator text-orange-500"></i> Onde perdi sinal?
+                                        </h4>
+                                        <p class="text-xs text-gray-600 mb-3">
+                                            Se na CTO tinha sinal X e na casa do cliente chegou Y, a diferença é a perda no cabo/conector.
+                                        </p>
+                                        
+                                        <div class="bg-white p-3 rounded border border-gray-200 mb-3">
+                                            <strong class="text-xs text-blue-600 block mb-1">Cenário Ideal:</strong>
+                                            <p class="text-[10px] text-gray-500 font-mono">CTO: -18 dBm | ONU: -19 dBm</p>
+                                            <p class="text-xs text-green-600 font-bold mt-1">Perda: 1 dB (Excelente Conector)</p>
+                                        </div>
+
+                                        <div class="bg-white p-3 rounded border border-red-200 border-l-4 border-l-red-500">
+                                            <strong class="text-xs text-red-600 block mb-1">Cenário Ruim (Refazer):</strong>
+                                            <p class="text-[10px] text-gray-500 font-mono">CTO: -18 dBm | ONU: -26 dBm</p>
+                                            <p class="text-xs text-red-600 font-bold mt-1">Perda: 8 dB (Conector ruim ou fibra quebrada)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 7.2 INSPEÇÃO VISUAL -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    7.2 Vistoria Visual: O Olhar de Águia
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-6">
+                                    O Power Meter pode até dar um sinal bom, mas se o cabo estiver mal ancorado, ele vai cair na primeira ventania. 
+                                    Faça o caminho inverso (da ONU até a Rua) checando ponto a ponto.
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="border rounded-lg p-4 bg-white hover:shadow-md transition">
+                                        <h4 class="font-bold text-sm text-gray-800 mb-2 flex items-center gap-2">
+                                            <i class="fa-solid fa-house-chimney text-emerald-600"></i> Na Casa do Cliente
+                                        </h4>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li class="flex items-center gap-2"><input type="checkbox" class="accent-emerald-600"> A ONU está firme e com os leds verdes?</li>
+                                            <li class="flex items-center gap-2"><input type="checkbox" class="accent-emerald-600"> O cabo atrás da ONU tem a sobra técnica em círculo?</li>
+                                            <li class="flex items-center gap-2"><input type="checkbox" class="accent-emerald-600"> O furo na parede foi vedado?</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="border rounded-lg p-4 bg-white hover:shadow-md transition">
+                                        <h4 class="font-bold text-sm text-gray-800 mb-2 flex items-center gap-2">
+                                            <i class="fa-solid fa-road text-blue-600"></i> No Trajeto Externo
+                                        </h4>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li class="flex items-center gap-2"><input type="checkbox" class="accent-emerald-600"> A pingadeira (loop) foi feita antes de entrar na casa?</li>
+                                            <li class="flex items-center gap-2"><input type="checkbox" class="accent-emerald-600"> O cabo está esticado corretamente (sem barriga, sem violão)?</li>
+                                            <li class="flex items-center gap-2"><input type="checkbox" class="accent-emerald-600"> As ancoragens no poste não estão esmagando o cabo?</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 bg-emerald-50 p-4 rounded-lg border border-emerald-200 text-center">
+                                    <p class="text-sm font-bold text-emerald-800">
+                                        <i class="fa-solid fa-check-double mr-2"></i> Se tudo estiver OK, parabéns! Você completou a infraestrutura com o padrão RL NET.
+                                    </p>
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 8: CONFIGURAÇÃO E PROVISIONAMENTO -->
+                        <!-- ================================================================================= -->
+                        <section id="section8" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-emerald-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">8</span>
+                                Configuração e Provisionamento: O Cérebro da Operação
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                A infraestrutura física está pronta e validada. Agora precisamos conectar o cliente digitalmente à RL NET. 
+                                Siga a ordem exata para evitar retrabalho e garantir que o cliente tenha acesso total (IPv4/IPv6).
+                            </p>
+
+                            <!-- 8.1 PROVISIONAMENTO (IXC) -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    8.1 Provisionamento da ONU/ONT (IXC)
+                                </h3>
+                                
+                                <div class="bg-white border rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-8 items-center">
+                                    <div class="flex-1">
+                                        <p class="text-sm text-gray-600 mb-3">
+                                            A ONU não funciona só de plugar. Ela precisa ser autorizada na OLT da RL NET. Como o técnico de campo geralmente não tem acesso direto ao sistema de gestão (IXC), essa etapa é feita em dupla.
+                                        </p>
+                                        
+                                        <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg mt-4">
+                                            <h4 class="font-bold text-blue-800 text-sm mb-2"><i class="fa-solid fa-headset"></i> Provisionamento de ONU/ONT</h4>
+                                            <ol class="text-xs text-gray-700 space-y-2 list-decimal list-inside">
+                                                <li><strong>Fotos Necessárias:</strong> Tire fotos do MAC ONU/ONT, MAC Roteador, Potência CTO, Potência Cliente e Ordem de Serviço.</li>
+                                                <li><strong>Solicitação:</strong> Envie a foto para o Apoio Operacional via chat/WhatsApp e solicite o provisionamento.</li>
+                                                <li><strong>Validação:</strong> Aguarde o Apoio confirmar: <em>"ONU Provisionada e com sinal OK na OLT, VLAN X"</em>.</li>
+                                                <li><strong>Luz PON:</strong> Verifique se a luz PON parou de piscar e ficou <strong>acesa fixa</strong>. (Se piscar, não autenticou).</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+
+                                    <div class="w-full md:w-1/3 bg-gray-50 p-4 rounded-lg border border-gray-200 text-center">
+                                        <i class="fa-solid fa-barcode text-4xl text-gray-400 mb-2"></i>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-2">MAC Address</h4>
+                                        <p class="text-xs text-gray-500 font-mono bg-white p-1 rounded border">A4:3E:5B:12:XX:XX</p>
+                                        <p class="text-[10px] text-gray-400 mt-2">Identidade única do equipamento, necessário para autorizar no sistema.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 8.2 CONFIGURAÇÃO DO ROTEADOR -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    8.2 Configuração do Roteador: O "Quarteto Fantástico"
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-6">
+                                    Acesse a interface web do roteador (geralmente 192.168.1.1 ou .0.1) e configure estes 4 pilares obrigatórios.
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    
+                                    <!-- 1. PPPoE -->
+                                    <div class="bg-white p-5 rounded-lg border hover:shadow-md transition relative overflow-hidden">
+                                        <div class="absolute top-0 right-0 bg-blue-100 text-blue-600 text-[10px] px-2 py-1 font-bold rounded-bl">PASSO 1</div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                            <i class="fa-solid fa-key text-blue-500"></i> Autenticação PPPoE
+                                        </h4>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li><strong>Usuário:</strong> Conforme Ordem de Serviço (geralmente <code>cliente@rlnet</code>).</li>
+                                            <li><strong>Senha:</strong> Conforme O.S. (letras minúsculas).</li>
+                                            <li><strong>Serviço:</strong> Selecione "Internet" (se houver, VOIP e TR0x também).</li>
+                                            <li><strong>VLAN:</strong> Verifique se o equipamento exige ID de VLAN (consulte o Apoio).</li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- 2. Wi-Fi (SSID) -->
+                                    <div class="bg-white p-5 rounded-lg border hover:shadow-md transition relative overflow-hidden">
+                                        <div class="absolute top-0 right-0 bg-green-100 text-green-600 text-[10px] px-2 py-1 font-bold rounded-bl">PASSO 2</div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                            <i class="fa-solid fa-wifi text-green-500"></i> Nome e Senha Wi-Fi
+                                        </h4>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li><strong>Personalização:</strong> Pergunte ao cliente o nome desejado. Evite nomes ofensivos.</li>
+                                            <li><strong>Dual Band:</strong> Configure o 2.4G e o 5G com o <strong>mesmo nome e senha</strong> apenas diferencia o 5G adicionando "_5G" ao final do nome.</li>
+                                            <li><strong>Senha:</strong> Mínimo 8 caracteres com Letra maiúscula, mínuscula, símbolo e números (regra da Anatel).</li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- 3. Canais e Largura -->
+                                    <div class="bg-white p-5 rounded-lg border hover:shadow-md transition relative overflow-hidden">
+                                        <div class="absolute top-0 right-0 bg-purple-100 text-purple-600 text-[10px] px-2 py-1 font-bold rounded-bl">PASSO 3</div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                            <i class="fa-solid fa-sliders text-purple-500"></i> Sintonia Fina (RF)
+                                        </h4>
+                                        <div class="grid grid-cols-2 gap-2 text-xs">
+                                            <div class="bg-gray-50 p-2 rounded">
+                                                <strong class="block text-gray-700">2.4 GHz (Alcance)</strong>
+                                                <span class="block text-gray-500">Largura: <strong>20 MHz</strong></span>
+                                                <span class="block text-gray-500">Canais: 1, 6 ou 11</span>
+                                            </div>
+                                            <div class="bg-gray-50 p-2 rounded">
+                                                <strong class="block text-gray-700">5 GHz (Velocidade)</strong>
+                                                <span class="block text-gray-500">Largura: <strong>80, 160 ou 320 MHz</strong></span>
+                                                <span class="block text-gray-500">Canal: 36, 48 ou 157</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 4. IPv6 e Remoto -->
+                                    <div class="bg-white p-5 rounded-lg border hover:shadow-md transition relative overflow-hidden">
+                                        <div class="absolute top-0 right-0 bg-orange-100 text-orange-600 text-[10px] px-2 py-1 font-bold rounded-bl">PASSO 4</div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                            <i class="fa-solid fa-globe text-orange-500"></i> IPv6 e Gerência
+                                        </h4>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li><strong>IPv6:</strong> Habilite o IPv6 . Teste em <em>test-ipv6.com</em>.</li>
+                                            <li><strong>Acesso Remoto:</strong> Ative o gerenciamento web via WAN (Porta 8080). Isso permite que o suporte resolva problemas futuros sem enviar técnico.</li>
+                                        
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 9: TESTES FINAIS E VALIDAÇÃO -->
+                        <!-- ================================================================================= -->
+                        <section id="section9" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-emerald-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">9</span>
+                                Testes Finais e Validação: A Garantia da Qualidade
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Você configurou tudo. O cliente está ansioso. Mas a missão só acaba quando validamos a entrega. 
+                                Siga este protocolo rigoroso para não deixar dúvidas sobre a qualidade do seu serviço.
+                            </p>
+
+                            <!-- 9.1 TESTE CABEADO (REF) -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    9.1 Teste via Cabo de Rede (A Referência Oficial)
+                                </h3>
+                                
+                                <div class="bg-white border rounded-xl p-6 shadow-sm mb-6">
+                                    <div class="flex items-start gap-4">
+                                        <div class="bg-blue-100 p-3 rounded-full text-blue-600 hidden md:block">
+                                            <i class="fa-solid fa-laptop-medical text-2xl"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 class="font-bold text-gray-800 text-sm mb-2">Protocolo de Velocidade RL NET</h4>
+                                            <p class="text-xs text-gray-600 mb-3">
+                                                O Wi-Fi sofre interferência (paredes, microondas, vizinhos). <strong>O único teste que vale juridicamente é via Cabo de Rede (Cat5e/Cat6) em porta Gigabit.</strong>
+                                            </p>
+                                            
+                                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <!-- Onde Testar -->
+                                                <div>
+                                                    <strong class="text-xs text-gray-700 block mb-2 uppercase tracking-wide">Ferramenta Oficial</strong>
+                                                    <div class="flex items-center gap-2 mb-2">
+                                                        <i class="fa-solid fa-globe text-blue-500"></i>
+                                                        <span class="text-sm font-bold text-gray-800">Minha Conexão</span>
+                                                    </div>
+                                                    <p class="text-xs text-gray-500 mb-2">Selecione preferencialmente o servidor da <strong>RL NET</strong> ou outro local com alta capacidade.</p>
+                                                    <div class="bg-green-100 text-green-800 px-3 py-1 rounded text-xs font-bold inline-block border border-green-200">
+                                                        Meta: > 700 Mbps (Planos Gigabit)
+                                                    </div>
+                                                </div>
+
+                                                <!-- Onde o Cliente Testa -->
+                                                <div>
+                                                    <strong class="text-xs text-gray-700 block mb-2 uppercase tracking-wide">Para o Cliente Ver</strong>
+                                                    <ul class="space-y-2">
+                                                        <li class="flex items-center gap-2 text-xs text-gray-600">
+                                                            <i class="fa-solid fa-check text-green-500"></i> <strong>Fast.com</strong> (Netflix): Visual limpo e fácil.
+                                                        </li>
+                                                        <li class="flex items-center gap-2 text-xs text-gray-600">
+                                                            <i class="fa-solid fa-check text-green-500"></i> <strong>Speedtest</strong> (Ookla): Padrão de mercado.
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] text-red-500 italic">
+                                        * Atenção: Se o notebook do técnico ou do cliente tiver placa de rede "Fast Ethernet" (10/100), o teste nunca passará de 95 Mbps. Verifique a placa antes de testar.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- 9.2 IPv6 e REMOTO -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    9.2 Validação de Serviços Avançados
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-6">
+                                    Velocidade não é tudo. Abertura de sites e suporte remoto dependem disso aqui:
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="bg-white p-4 rounded-lg border shadow-sm hover:border-emerald-300 transition">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <h4 class="font-bold text-gray-800 text-sm">Teste IPv6</h4>
+                                            <i class="fa-solid fa-globe text-emerald-500"></i>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-2">Acesse o site <code>test-ipv6.com</code>.</p>
+                                        <div class="bg-emerald-50 text-emerald-800 p-2 rounded text-xs font-bold text-center">
+                                            Resultado Esperado: 10/10
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white p-4 rounded-lg border shadow-sm hover:border-blue-300 transition">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <h4 class="font-bold text-gray-800 text-sm">Confirmação Remota</h4>
+                                            <i class="fa-solid fa-headset text-blue-500"></i>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-2">Pergunte ao Apoio Operacional:</p>
+                                        <div class="bg-blue-50 text-blue-800 p-2 rounded text-xs font-mono text-center">
+                                            "Consegue acessar o roteador remotamente?"
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 9.3 MAPA DE CALOR WIFI -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    9.3 Engenharia Wi-Fi: Mapeamento de Calor (WiFiman)
+                                </h3>
+                                
+                                <div class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
+                                    <i class="fa-solid fa-wifi absolute right-[-20px] bottom-[-20px] text-[150px] opacity-10"></i>
+                                    
+                                    <div class="relative z-10 flex flex-col md:flex-row gap-8 items-center">
+                                        <div class="flex-1">
+                                            <h4 class="font-bold text-xl mb-2 flex items-center gap-2">
+                                                <i class="fa-solid fa-mobile-screen-button"></i> App WiFiman
+                                            </h4>
+                                            <p class="text-sm text-gray-300 mb-4">
+                                                O Wi-Fi é invisível, mas o app WiFiman permite "ver" o sinal. Não adivinhe onde o sinal está ruim, <strong>meça</strong>.
+                                            </p>
+                                            
+                                            <div class="space-y-3">
+                                                <div class="flex items-start gap-3">
+                                                    <div class="bg-blue-600 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0">1</div>
+                                                    <div>
+                                                        <strong class="text-sm block text-blue-200">Mapa de Calor:</strong>
+                                                        <p class="text-xs text-gray-400">Ande pela casa com o app aberto. Mostre ao cliente onde estão as "zonas mortas" (sinal vermelho/amarelo).</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-start gap-3">
+                                                    <div class="bg-purple-600 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0">2</div>
+                                                    <div>
+                                                        <strong class="text-sm block text-purple-200">Ajuste de Canais:</strong>
+                                                        <p class="text-xs text-gray-400">Verifique se o canal escolhido está congestionado pelos vizinhos. Se estiver, troque no roteador para um canal livre.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="w-full md:w-1/3 bg-white/10 p-4 rounded-lg border border-white/20 text-center backdrop-blur-sm">
+                                            <h5 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Checklist de Saída</h5>
+                                            <ul class="text-xs text-left space-y-2 text-white">
+                                                <li><i class="fa-regular fa-square-check mr-1 text-green-400"></i> Velocidade Batida?</li>
+                                                <li><i class="fa-regular fa-square-check mr-1 text-green-400"></i> Acesso Remoto OK?</li>
+                                                <li><i class="fa-regular fa-square-check mr-1 text-green-400"></i> Cliente conectado no Wi-Fi?</li>
+                                                <li><i class="fa-regular fa-square-check mr-1 text-green-400"></i> Cliente feliz?</li>
+                                            </ul>
+                                            <div class="mt-4 pt-4 border-t border-white/10">
+                                                <span class="text-emerald-400 font-bold text-sm">SINAL VERDE!</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 10: INSTALAÇÃO DE APPS BENEFÍCIOS -->
+                        <!-- ================================================================================= -->
+                        <section id="section10" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-emerald-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">10</span>
+                                Instalação de APPs e Benefícios: O Valor Além da Conexão
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                A internet é apenas a "estrada". Os aplicativos são os "carros" que o cliente quer dirigir. 
+                                Instalar os apps contratados (SVA) aumenta o valor percebido, fideliza o cliente e reduz chamados de suporte financeiro. 
+                                <strong>Não vá embora sem configurar!</strong>
+                            </p>
+
+                            <!-- 10.1 CENTRAL DO ASSINANTE -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    10.1 Central do Assinante RL NET
+                                </h3>
+                                
+                                <div class="bg-white border rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-8 items-center">
+                                    <div class="flex-1">
+                                        <p class="text-sm text-gray-600 mb-4">
+                                            Este é o "banco" e o "suporte" no bolso do cliente. 90% das ligações para o call center (pedir boleto ou desbloquear confiança) podem ser evitadas com este app.
+                                        </p>
+                                        
+                                        <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                                            <h4 class="font-bold text-blue-800 text-sm mb-2 flex items-center gap-2"><i class="fa-solid fa-mobile-screen-button"></i> Instalação Guiada</h4>
+                                            <ol class="text-xs text-gray-700 space-y-3 list-decimal list-inside">
+                                                <li>Oriente o cliente a entra no site <strong>"Central do Assinante RL NET"</strong> no navegador.</li>
+                                                <li><strong>Login:</strong> CPF (apenas números) ou e-mail do cliente.</li>
+                                                <li><strong>Senha:</strong> padrão "rlnet12345678".</li>
+                                                <li><strong>Tour Rápido:</strong> Mostre onde clicar para:
+                                                    <ul class="pl-6 mt-1 space-y-1 list-disc text-gray-600">
+                                                        <li>Baixar 2ª via do Boleto (Pix copia e cola).</li>
+                                                        <li>Realizar "Desbloqueio de Confiança" (se cortar a net).</li>
+                                                        <li>Conferir informações de cadastro e atualizar.</li>
+                                                    </ul>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                    </div>
+
+                                    <div class="w-full md:w-1/3 bg-gray-50 p-6 rounded-lg border border-gray-200 text-center">
+                                        <div class="bg-blue-600 text-white w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-3 shadow-md">
+                                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                                        </div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-2">Central do Assinante</h4>
+                                        <p class="text-[10px] text-gray-500">
+                                            "Sr. Cliente, com este app o senhor nunca mais precisa pegar fila ou ligar para pedir boleto. Está tudo aqui."
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 10.2 STREAMING E ENTRETENIMENTO -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    10.2 Apps de Entretenimento (Watch, Paramount+, TV)
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-6">
+                                    Se o plano inclui TV ou Filmes, o cliente quer ver funcionando <strong>agora</strong>. 
+                                    Muitas vezes, a "internet lenta" é na verdade o cliente tentando abrir o app errado ou sem login.
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    
+                                    <!-- Watch Brasil / Paramount+ -->
+                                    <div class="bg-white p-5 rounded-lg border hover:shadow-md transition">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="bg-purple-100 p-2 rounded text-purple-600"><i class="fa-solid fa-film"></i></div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Streaming (Watch/Paramount)</h4>
+                                        </div>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li><strong>Acesso:</strong> No plano básico, você solicita e o Apoio Operacional envia o e-mail de cadastro ao cliente. No plano premium o cliente já possui um e-mail e acesso sob concessão do suporte ao cliente (geralmente a informação consta no IXC).</li>
+                                            <li><strong>Ativação na TV:</strong> Baixe o app no dispostivo e logue com e-mail e senha ou QR Code (com auxílio do Apoio).</li>
+                                            <li><span class="text-green-600 font-bold">Dica:</span> Deixe um filme rodando para testar a conexão na prática.</li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- RL NET TV -->
+                                    <div class="bg-white p-5 rounded-lg border hover:shadow-md transition">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="bg-orange-100 p-2 rounded text-orange-600"><i class="fa-solid fa-tv"></i></div>
+                                            <h4 class="font-bold text-gray-800 text-sm">RL NET TV</h4>
+                                        </div>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li><strong>Instalação:</strong> Baixe o aplicativo no dispositivo.</li>
+                                            <li><strong>Credenciais:</strong> Mesmas credenciais da central do assinante.</li>
+                                            <li><strong>Teste:</strong> Troque de canais para ver se trava (buffer).</li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- RL Clube -->
+                                    <div class="bg-white p-5 rounded-lg border hover:shadow-md transition">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="bg-green-100 p-2 rounded text-green-600"><i class="fa-solid fa-percent"></i></div>
+                                            <h4 class="font-bold text-gray-800 text-sm">RL Clube de Vantagens</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-2">
+                                            Descontos em farmácias, cinema, lojas e muitos outros estabelecimentos.
+                                        </p>
+                                        <ul class="text-xs text-gray-600 space-y-2">
+                                            <li>Baixe e busque o cadastro do cliente com o Apoio Operacional.</li>
+                                            <li>Mostre ao cliente uma loja parceira local para ele ver valor imediato.</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- 10.3 EDUCAÇÃO FINAL -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    10.3 O "Show" Final
+                                </h3>
+                                
+                                <div class="bg-gradient-to-r from-emerald-50 to-white border border-emerald-100 p-6 rounded-xl">
+                                    <div class="flex items-start gap-4">
+                                        <i class="fa-solid fa-chalkboard-user text-3xl text-emerald-600"></i>
+                                        <div>
+                                            <h4 class="font-bold text-emerald-800 text-sm mb-2">Treinamento do Cliente</h4>
+                                            <p class="text-sm text-gray-700 mb-3">
+                                                Não adianta instalar se o cliente não souber usar. Gaste 5 minutos ensinando:
+                                            </p>
+                                            <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-gray-600">
+                                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Como abrir o app da RL NET para pegar boleto.</li>
+                                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Como acessar a Netflix/Watch na TV.</li>
+                                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Qual rede Wi-Fi usar (5G para velocidade, 2.4G para longe).</li>
+                                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Onde ligar se a internet cair (Suporte).</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 11: ORIENTAÇÕES GERAIS E ENTREGA TÉCNICA -->
+                        <!-- ================================================================================= -->
+                        <section id="section11" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-emerald-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">11</span>
+                                Orientações Gerais e Entrega Técnica: O "Grand Finale"
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                A instalação física acabou, mas o serviço de excelência não. Você só vai embora quando o cliente se sentir seguro e confortável com o novo produto.
+                                Siga este roteiro de despedida para garantir 5 estrelas na avaliação.
+                            </p>
+
+                            <!-- 11.1 MANUAL DE SOBREVIVÊNCIA DO WI-FI -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    11.1 Manual de Sobrevivência do Wi-Fi
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-4">
+                                    O cliente acha que Wi-Fi é mágica. Explique a realidade de forma simples para evitar chamados de "internet lenta" quando ele estiver no quintal.
+                                </p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- A Regra do 5G vs 2.4G -->
+                                    <div class="bg-white border rounded-lg p-5 shadow-sm">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 text-purple-700 flex items-center gap-2">
+                                            <i class="fa-solid fa-wifi"></i> 5G vs 2.4G
+                                        </h4>
+                                        <ul class="text-xs text-gray-600 space-y-3">
+                                            <li class="flex items-start gap-2">
+                                                <strong class="text-purple-600">Rede 5G:</strong>
+                                                <span>"Sr. Cliente, use esta rede para assistir filmes 4K e jogar. Ela é super rápida, mas o sinal é 'curto'. Funciona bem aqui na sala e no quarto ao lado."</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <strong class="text-blue-600">Rede 2.4G:</strong>
+                                                <span>"Use esta rede quando for para o quintal ou cozinha. Ela vai mais longe e atravessa paredes, mas é um pouco mais lenta."</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Inimigos do Sinal -->
+                                    <div class="bg-white border rounded-lg p-5 shadow-sm">
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3 text-red-700 flex items-center gap-2">
+                                            <i class="fa-solid fa-ban"></i> Os Inimigos do Wi-Fi
+                                        </h4>
+                                        <p class="text-xs text-gray-600 mb-2">Avise o cliente para não colocar o roteador perto de:</p>
+                                        <div class="grid grid-cols-2 gap-2 text-xs">
+                                            <div class="bg-red-50 p-2 rounded text-red-800 border border-red-100 flex items-center gap-1"><i class="fa-solid fa-minimize"></i> Microondas</div>
+                                            <div class="bg-red-50 p-2 rounded text-red-800 border border-red-100 flex items-center gap-1"><i class="fa-regular fa-window-maximize"></i> Espelhos Grandes</div>
+                                            <div class="bg-red-50 p-2 rounded text-red-800 border border-red-100 flex items-center gap-1"><i class="fa-solid fa-fish"></i> Aquários</div>
+                                            <div class="bg-red-50 p-2 rounded text-red-800 border border-red-100 flex items-center gap-1"><i class="fa-solid fa-phone"></i> Tel. Sem Fio</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 11.2 COMO TESTAR VELOCIDADE -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    11.2 Como Medir a Velocidade (Sem Errar)
+                                </h3>
+                                
+                                <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                                    <p class="text-sm text-gray-700 mb-4">
+                                        Se o cliente testar errado, ele vai achar que a RL NET está roubando banda. Ensine o jeito certo:
+                                    </p>
+                                    <div class="flex flex-col md:flex-row gap-6">
+                                        <div class="flex-1 bg-white p-4 rounded shadow-sm">
+                                            <div class="text-green-600 font-bold text-sm mb-2"><i class="fa-solid fa-check-circle"></i> O Jeito Certo</div>
+                                            <ul class="text-xs text-gray-600 space-y-2">
+                                                <li>1. Preferência por Computador com <strong>Cabo de Rede</strong> (Gigabit).</li>
+                                                <li>2. Se for no celular: Fique <strong>ao lado do roteador</strong>.</li>
+                                                <li>3. Conecte obrigatoriamente no <strong>Wi-Fi 5G</strong>.</li>
+                                                <li>4. Feche outros apps (YouTube, Downloads).</li>
+                                                <li>5. Use o site <strong>Minha Conexão</strong> ou <strong>Speedtest</strong>.</li>
+                                            </ul>
+                                        </div>
+                                        <div class="flex-1 bg-red-50 p-4 rounded shadow-sm border border-red-100">
+                                            <div class="text-red-600 font-bold text-sm mb-2"><i class="fa-solid fa-times-circle"></i> O Jeito Errado</div>
+                                            <ul class="text-xs text-gray-600 space-y-2">
+                                                <li>1. Testar no Wi-Fi 2.4G (Nunca passará de 60-80 Mega).</li>
+                                                <li>2. Testar com VPN ou Antivírus pesado ligado.</li>
+                                                <li>3. Testar em celular antigo (que não suporta banda AC/5G).</li>
+                                                <li>4. Testar enquanto a TV está rodando Netflix 4K.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 11.3 CANAIS DE ATENDIMENTO -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    11.3 "Preciso de Ajuda": Canais de Atendimento
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                                                                   
+                                    <!-- WhatsApp -->
+                                    <div class="bg-white p-5 rounded-lg border hover:shadow-md transition">
+                                        <div class="text-4xl text-green-500 mb-3"><i class="fa-brands fa-whatsapp"></i></div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-2">WhatsApp RL NET</h4>
+                                        <p class="text-xs text-gray-600">
+                                            "Pelo mesmo contato que você contratou, você também solicita suporte."
+                                        </p>
+                                    </div>
+
+                                    <!-- App -->
+                                    <div class="bg-white p-5 rounded-lg border hover:shadow-md transition">
+                                        <div class="text-4xl text-blue-500 mb-3"><i class="fa-solid fa-mobile-screen"></i></div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-2">Central do Assinante</h4>
+                                        <p class="text-xs text-gray-600">
+                                            "Se a internet cortar por falta de pagamento, lá tem um botão 'Desbloqueio de Confiança' que libera na hora por 24h."
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 11.4 ENCERRAMENTO (CLEANUP) -->
+                            <div class="bg-gray-800 text-white rounded-xl p-8 shadow-lg mt-8">
+                                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                                    <div class="space-y-4">
+                                        <h3 class="text-2xl font-bold text-emerald-400">Missão Cumprida? Quase lá!</h3>
+                                        <p class="text-gray-300 text-sm max-w-xl">
+                                            Antes de pegar a RAT (papelada), faça a <strong>Varredura Final</strong>:
+                                            <br>• Recolheu todo o lixo (restos de fio, fitas)?
+                                            <br>• Moveu os móveis de volta para o lugar?
+                                            <br>• Agradeceu ao cliente pela preferência?
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 12: PREENCHIMENTO DA RAT (CONTEÚDO NOVO) -->
+                        <!-- ================================================================================= -->
+                        <section id="section12" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-emerald-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">12</span>
+                                Preenchimento da RAT: O Documento Oficial
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                A instalação só termina quando a burocracia é finalizada. A RAT (Relatório de Atendimento Técnico) é a sua proteção e a garantia da RL NET.
+                                Um serviço sem RAT assinada é um serviço que "nunca aconteceu".
+                            </p>
+
+                            <!-- 12.1 A IMPORTÂNCIA DA RAT -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    12.1 Por que preencher corretamente?
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div class="bg-white p-5 rounded-lg border shadow-sm border-blue-100">
+                                        <div class="text-blue-500 text-2xl mb-2"><i class="fa-solid fa-shield-halved"></i></div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-2">Sua Proteção</h4>
+                                        <p class="text-xs text-gray-600">
+                                            Se o cliente reclamar depois que "o técnico riscou a parede" ou "não instalou", a RAT assinada é a prova de que você esteve lá e o cliente aprovou o serviço.
+                                        </p>
+                                    </div>
+
+                                    <div class="bg-white p-5 rounded-lg border shadow-sm border-yellow-100">
+                                        <div class="text-yellow-600 text-2xl mb-2"><i class="fa-solid fa-boxes-packing"></i></div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-2">Seu Estoque</h4>
+                                        <p class="text-xs text-gray-600">
+                                            O que você gasta na rua deve bater com o estoque do almox. A RAT vai relatar exatamente o gasto de material que você teve.
+                                        </p>
+                                    </div>
+
+                                    <div class="bg-white p-5 rounded-lg border shadow-sm border-green-100">
+                                        <div class="text-green-600 text-2xl mb-2"><i class="fa-solid fa-file-contract"></i></div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-2">Faturamento</h4>
+                                        <p class="text-xs text-gray-600">
+                                            Sem a RAT finalizada no App, o financeiro não consegue faturar a ativação. Instalação sem baixa é prejuízo na certa.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 12.2 A ASSINATURA -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    12.2 A Assinatura Sagrada
+                                </h3>
+                                
+                                <div class="bg-gradient-to-r from-blue-50 to-white border border-blue-200 p-6 rounded-xl">
+                                    <div class="flex flex-col md:flex-row items-center gap-6">
+                                        <div class="flex-1">
+                                            <p class="text-sm text-gray-700 mb-4">
+                                                A assinatura no tablet ou celular deve ser mais próxima possível do documento do cliente.
+                                            </p>
+                                            
+                                            <div class="bg-white p-4 rounded shadow-sm border border-gray-200">
+                                                <h4 class="font-bold text-gray-800 text-sm mb-2 text-blue-800">Quem pode assinar?</h4>
+                                                <ul class="text-xs text-gray-600 space-y-2">
+                                                    <li class="flex items-center gap-2">
+                                                        <i class="fa-solid fa-user-check text-green-500"></i>
+                                                        <strong>Titular do Contrato:</strong> Assina conforme o documento.
+                                                    </li>
+                                                    <li class="flex items-center gap-2">
+                                                        <i class="fa-solid fa-user-group text-blue-500"></i>
+                                                        <strong>Responsável Maior de 18 anos:</strong> Se o titular não estiver, quem recebe deve ser maior de idade e fornecer Nome Completo + CPF + Contato e então assinar conforme o documento.
+                                                    </li>
+                                                    <li class="flex items-center gap-2">
+                                                        <i class="fa-solid fa-ban text-red-500"></i>
+                                                        <strong>Proibido:</strong> Menores de idade não podem assinar.
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="w-full md:w-1/3 text-center">
+                                            <div class="bg-white border-2 border-dashed border-gray-300 rounded-lg h-32 flex items-center justify-center mb-2">
+                                                <span class="font-script text-3xl text-blue-900 font-bold transform -rotate-6">Cliente RL NET</span>
+                                            </div>
+                                            <p class="text-[10px] text-gray-400 uppercase tracking-widest">Assinatura Digital</p>
+                                            <button class="mt-3 bg-emerald-600 text-white text-xs font-bold py-2 px-4 rounded shadow hover:bg-emerald-700 transition w-full">
+                                                <i class="fa-solid fa-check mr-2"></i> Assinatura Confirmada
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 13: DOCUMENTAÇÃO DE FOTOS E FECHAMENTO IXC (CONTEÚDO NOVO) -->
+                        <!-- ================================================================================= -->
+                        <section id="section13" class="mb-16">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-emerald-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">13</span>
+                                Documentação Fotográfica e Fechamento no IXC
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                A instalação física acabou, mas se não está no sistema, não existe. 
+                                A documentação fotográfica é a sua "caixa preta": ela prova a qualidade do seu serviço e te defende de reclamações futuras.
+                                Vamos ao passo final para garantir sua comissão e a satisfação do cliente.
+                            </p>
+
+                            <!-- 13.1 O BOOK DA OBRA -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    13.1 O "Book" da Instalação: Checklist de Fotos
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    
+                                    <!-- Foto 1 -->
+                                    <div class="bg-white border rounded-xl p-4 shadow-sm hover:shadow-md transition group">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="bg-gray-100 p-2 rounded-full text-gray-600 group-hover:bg-blue-100 group-hover:text-blue-600 transition">
+                                                <i class="fa-solid fa-camera"></i>
+                                            </div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Panorâmica Externa</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-2">
+                                            Mostre o lançamento, ancoragens e acabamentos em toda a parte externa (seja preciso).
+                                        </p>
+                                        <div class="bg-gray-50 text-[10px] text-gray-500 p-2 rounded border border-gray-200">
+                                            <strong class="text-blue-700">Objetivo:</strong> Provar que lançamento, ancoragens e acabamentos estão no padrão.
+                                        </div>
+                                    </div>
+
+                                    <!-- Foto 2 -->
+                                    <div class="bg-white border rounded-xl p-4 shadow-sm hover:shadow-md transition group">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="bg-gray-100 p-2 rounded-full text-gray-600 group-hover:bg-orange-100 group-hover:text-orange-600 transition">
+                                                <i class="fa-solid fa-camera"></i>
+                                            </div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Panorâmica da CTO</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-2">
+                                            Foto do ID, porta conectada, ranhura utilizada, potência CTO, Caixa aberta e fechada e reserva técnica.
+                                        </p>
+                                        <div class="bg-gray-50 text-[10px] text-gray-500 p-2 rounded border border-gray-200">
+                                            <strong class="text-orange-700">Objetivo:</strong> Provar que todo o manuseio da instalação na CTO ficou dentro do padrão.
+                                        </div>
+                                    </div>
+
+                                    <!-- Foto 3 -->
+                                    <div class="bg-white border rounded-xl p-4 shadow-sm hover:shadow-md transition group">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="bg-gray-100 p-2 rounded-full text-gray-600 group-hover:bg-green-100 group-hover:text-green-600 transition">
+                                                <i class="fa-solid fa-camera"></i>
+                                            </div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Acabamentos Internos</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-2">
+                                            Fotos que mostram o trajeto dos cabos, as sobras técnicas, os equipamentos e os adesivos de garantia.
+                                        </p>
+                                        <div class="bg-gray-50 text-[10px] text-gray-500 p-2 rounded border border-gray-200">
+                                            <strong class="text-green-700">Objetivo:</strong> Registrar o padrão de todo o acabamento interno.
+                                        </div>
+                                    </div>
+
+                                    <!-- Foto 4 -->
+                                    <div class="bg-white border rounded-xl p-4 shadow-sm hover:shadow-md transition group">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="bg-gray-100 p-2 rounded-full text-gray-600 group-hover:bg-purple-100 group-hover:text-purple-600 transition">
+                                                <i class="fa-solid fa-camera"></i>
+                                            </div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Testes e Configurações</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-2">
+                                            Foto da potência, testes de velocidade, ipv6, acesso remoto, ajustes no wi-fi e configurações específicas.
+                                        </p>
+                                        <div class="bg-gray-50 text-[10px] text-gray-500 p-2 rounded border border-gray-200">
+                                            <strong class="text-purple-700">Objetivo:</strong> Validar tecnicamente a qualidade da conexão.
+                                        </div>
+                                    </div>
+
+                                    <!-- Foto 5 -->
+                                    <div class="bg-white border rounded-xl p-4 shadow-sm hover:shadow-md transition group">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="bg-gray-100 p-2 rounded-full text-gray-600 group-hover:bg-blue-100 group-hover:text-blue-600 transition">
+                                                <i class="fa-solid fa-camera"></i>
+                                            </div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Equipamentos</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-2">
+                                            Foto dos equipamentos, leds em funcionamento, lacres garantia colado e as identificações de MAC Adress de todos os equipamentos instalados.
+                                        </p>
+                                        <div class="bg-gray-50 text-[10px] text-gray-500 p-2 rounded border border-gray-200">
+                                            <strong class="text-blue-700">Objetivo:</strong> Anexar o equipamento correto naquela instalação.
+                                        </div>
+                                    </div>
+
+                                    <!-- Foto 6 -->
+                                    <div class="bg-white border rounded-xl p-4 shadow-sm hover:shadow-md transition group">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="bg-gray-100 p-2 rounded-full text-gray-600 group-hover:bg-red-100 group-hover:text-red-600 transition">
+                                                <i class="fa-solid fa-camera"></i>
+                                            </div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Extras e Reforços</h4>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-2">
+                                            Fotos obrigatórias que reforçam a comprovação de serviço como RAT preenchida, fachada da residência, aplicativos instalados e outros detalhes pertinentes.
+                                        </p>
+                                        <div class="bg-gray-50 text-[10px] text-gray-500 p-2 rounded border border-gray-200">
+                                            <strong class="text-red-700">Objetivo:</strong> Comprovação final da documentação.
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- 13.2 FECHAMENTO NO IXC -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 border-l-4 border-emerald-500 pl-3">
+                                    13.2 O Fechamento no IXC: O Clique Final
+                                </h3>
+                                
+                                <div class="bg-white border rounded-xl p-6 shadow-sm">
+                                    <div class="flex flex-col md:flex-row gap-8">
+                                        <div class="flex-1">
+                                            <p class="text-sm text-gray-600 mb-4">
+                                                No sistema IXC (App Técnico), siga o fluxo exato para não gerar pendência no financeiro.
+                                            </p>
+                                            
+                                            <div class="space-y-4 relative pl-6 border-l-2 border-gray-200">
+                                                <div class="relative">
+                                                    <span class="absolute -left-[33px] bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">1</span>
+                                                    <h4 class="text-sm font-bold text-gray-800">Upload de Arquivos</h4>
+                                                    <p class="text-xs text-gray-600">Vá na aba "Arquivos" da O.S. e suba as 6 fotos do checklist. Verifique se carregaram.</p>
+                                                </div>
+                                                <div class="relative">
+                                                    <span class="absolute -left-[33px] bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">2</span>
+                                                    <h4 class="text-sm font-bold text-gray-800">Relato Técnico</h4>
+                                                    <p class="text-xs text-gray-600">No campo de observação, escreva um resumo técnico padrão RL NET e digite o código diagnóstico 27:</p>
+                                                    <div class="bg-gray-100 p-2 rounded mt-1 font-mono text-[10px] text-gray-600 border border-gray-300">
+                                                        "INSTALAÇÃO VALIDADA - FIBRA FINALIZADA. CTO 05, PORTA 03. SINAL -19DBM. TESTE OK, etc..."
+                                                    </div>
+                                                </div>
+                                                <div class="relative">
+                                                    <span class="absolute -left-[33px] bg-emerald-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">3</span>
+                                                    <h4 class="text-sm font-bold text-gray-800">Finalizar Wizard</h4>
+                                                    <p class="text-xs text-gray-600">Clique em "Finalizar" e assine a O.S. O status da O.S. mudará de "Em Execução" para "Finalizado". Agora é só aguardar validação do CQI e a comissão tá na meta!</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="w-full md:w-1/3 bg-gray-50 border border-gray-200 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+                                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-gray-400 mb-3"></i>
+                                            <h5 class="font-bold text-gray-800 text-sm">Sincronização</h5>
+                                            <p class="text-xs text-gray-500 mt-2">
+                                                Certifique-se de que a O.S foi realmente finalizada, a falta de fechamento gera ressalva e perda da comissão.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+
+                        </section>
+						<section id="section14" class="mb-16 border-b pb-12">
+    
+    <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+        <span class="bg-emerald-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">14</span>
+        O Método I.D.E.A.L. de Excelência em Instalação FTTH
+    </h2>
+    
+    <div class="mb-12 bg-gradient-to-r from-emerald-900 to-[#003366] text-white p-8 rounded-xl shadow-lg relative overflow-hidden">
+        <div class="relative z-10">
+            <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-route"></i> A Rota da Instalação Perfeita
+            </h3>
+            <p class="text-emerald-100 leading-relaxed text-lg font-light">
+                Objetivo: assegurar que toda instalação siga um fluxo técnico completo, com diagnóstico prévio, execução limpa, testes de performance e alinhamento claro com o cliente. Seja o técnico IDEAL para o cliente, siga o método!
+            </p>
+        </div>
+        <i class="fa-solid fa-tools absolute -right-6 -bottom-6 text-9xl text-white opacity-5 rotate-12"></i>
+    </div>
+
+    <div class="space-y-10">
+
+        <div class="p-6 bg-white rounded-xl shadow-lg border-l-8 border-blue-500">
+            <div class="flex items-center gap-6 mb-4">
+                <span class="text-5xl font-extrabold text-blue-500 font-mono" style="line-height: 1;">I</span>
+                <h4 class="text-2xl font-black text-[#003366] uppercase tracking-wide">Identificar</h4>
+            </div>
+            <p class="text-gray-700 mb-4 font-medium">Diagnóstico Inicial e Mapeamento do Ambiente</p>
+            <p class="text-sm text-gray-600 mb-4">Antes de começar qualquer ação física, o técnico deve identificar todas as variáveis do ambiente.</p>
+            
+            <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <h5 class="text-sm font-bold text-blue-800 uppercase mb-3 flex items-center gap-2"><i class="fa-solid fa-list-check"></i> Checklist de Identificação:</h5>
+                <ul class="text-sm text-gray-700 space-y-2">
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-blue-500 mt-1 shrink-0"></i> Identificar o ponto de entrada ideal (altura segura, menor curvatura, rota mais limpa).</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-blue-500 mt-1 shrink-0"></i> Verificar se há CTO e qual porta está liberada.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-blue-500 mt-1 shrink-0"></i> Levantar rota interna: trajeto do drop até a ONT.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-blue-500 mt-1 shrink-0"></i> Verificar riscos: infiltração, calhas ruins, paredes muito quebradiças, local muito quente/sem ventilação.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-blue-500 mt-1 shrink-0"></i> Validar se o cliente possui rede interna antiga que possa causar conflitos.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-blue-500 mt-1 shrink-0"></i> Identificar a expectativa do cliente: onde ele quer o roteador e quais ambientes precisam de melhor cobertura.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="p-6 bg-white rounded-xl shadow-lg border-l-8 border-purple-500">
+            <div class="flex items-center gap-6 mb-4">
+                <span class="text-5xl font-extrabold text-purple-500 font-mono" style="line-height: 1;">D</span>
+                <h4 class="text-2xl font-black text-[#003366] uppercase tracking-wide">Dimensionar</h4>
+            </div>
+            <p class="text-gray-700 mb-4 font-medium">Planejamento Técnico da Instalação</p>
+            <p class="text-sm text-gray-600 mb-4">Com as informações levantadas, o técnico deve dimensionar corretamente toda a instalação.</p>
+            
+            <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                <h5 class="text-sm font-bold text-purple-800 uppercase mb-3 flex items-center gap-2"><i class="fa-solid fa-compass-drafting"></i> Dimensionar Inclui:</h5>
+                <ul class="text-sm text-gray-700 space-y-2">
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-purple-500 mt-1 shrink-0"></i> Definir a melhor rota externa (postes, fachadas, muros).</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-purple-500 mt-1 shrink-0"></i> Planejar o uso de preformas, isoladores, grampos, fixações.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-purple-500 mt-1 shrink-0"></i> Calcular o comprimento ideal do drop (sem excesso ou sobras no chão).</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-purple-500 mt-1 shrink-0"></i> Escolher o melhor local para a ONT/roteador considerando: dispersão do sinal, tomada próxima, ventilação, distância de micro-ondas, aquários, espelhos e obstáculos metálicos.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-purple-500 mt-1 shrink-0"></i> Validar se será necessário usar passa-cabos, canaletas ou perfurações.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-purple-500 mt-1 shrink-0"></i> Garantir a menor quantidade possível de curvas na fibra.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="p-6 bg-white rounded-xl shadow-lg border-l-8 border-emerald-500">
+            <div class="flex items-center gap-6 mb-4">
+                <span class="text-5xl font-extrabold text-emerald-500 font-mono" style="line-height: 1;">E</span>
+                <h4 class="text-2xl font-black text-[#003366] uppercase tracking-wide">Executar</h4>
+            </div>
+            <p class="text-gray-700 mb-4 font-medium">Instalação Técnica com Padrão de Qualidade</p>
+            <p class="text-sm text-gray-600 mb-4">Hora de pôr em prática o planejamento, seguindo rigor técnico.</p>
+            
+            <div class="bg-emerald-50 p-4 rounded-lg border border-emerald-200">
+                <h5 class="text-sm font-bold text-emerald-800 uppercase mb-3 flex items-center gap-2"><i class="fa-solid fa-screwdriver-wrench"></i> Execução Padrão:</h5>
+                <ul class="text-sm text-gray-700 space-y-2">
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-emerald-500 mt-1 shrink-0"></i> Montar adequadamente a ancoragem (isolador + alça + tração correta).</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-emerald-500 mt-1 shrink-0"></i> Fazer a descida do drop rente à parede e sem curvas excessivas.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-emerald-500 mt-1 shrink-0"></i> Realizar corte e conectorização com limpeza absoluta, usando álcool isopropílico.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-emerald-500 mt-1 shrink-0"></i> Proteger a fibra contra pontos de atrito ou esmagamento.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-emerald-500 mt-1 shrink-0"></i> Fixar com espaçamento padronizado e acabamento limpo.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-emerald-500 mt-1 shrink-0"></i> Deixar o roteador/ONT instalado de forma organizada e ventilada.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-emerald-500 mt-1 shrink-0"></i> Etiquetar/identificar drop.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-emerald-500 mt-1 shrink-0"></i> Manter área de trabalho limpa durante todo o processo.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="p-6 bg-white rounded-xl shadow-lg border-l-8 border-orange-500">
+            <div class="flex items-center gap-6 mb-4">
+                <span class="text-5xl font-extrabold text-orange-500 font-mono" style="line-height: 1;">A</span>
+                <h4 class="text-2xl font-black text-[#003366] uppercase tracking-wide">Avaliar</h4>
+            </div>
+            <p class="text-gray-700 mb-4 font-medium">Testes e Validação da Qualidade</p>
+            <p class="text-sm text-gray-600 mb-4">Antes de entregar, o técnico precisa certificar que o serviço está dentro dos padrões técnicos.</p>
+            
+            <div class="bg-orange-50 p-4 rounded-lg border border-orange-200 mb-6">
+                <h5 class="text-sm font-bold text-orange-800 uppercase mb-3 flex items-center gap-2"><i class="fa-solid fa-vial-circle-check"></i> Avaliação Inclui Testes:</h5>
+                <ul class="text-sm text-gray-700 space-y-2">
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-orange-500 mt-1 shrink-0"></i> Medição óptica (dBm) e comparação com parâmetros da empresa.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-orange-500 mt-1 shrink-0"></i> Teste de velocidade no cabo.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-orange-500 mt-1 shrink-0"></i> Teste de estabilidade (ping e perda de pacotes).</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-orange-500 mt-1 shrink-0"></i> Verificar se a curva da fibra está adequada (sem microcurvaturas escondidas).</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-orange-500 mt-1 shrink-0"></i> Testes de estabilidade e alcance no Wi-Fi.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-orange-500 mt-1 shrink-0"></i> Validar acesso remoto.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-orange-500 mt-1 shrink-0"></i> Conferir que a navegação está estável em vários dispositivos.</li>
+                </ul>
+            </div>
+
+          
+        </div>
+
+        <div class="p-6 bg-white rounded-xl shadow-lg border-l-8 border-rose-500">
+            <div class="flex items-center gap-6 mb-4">
+                <span class="text-5xl font-extrabold text-rose-500 font-mono" style="line-height: 1;">L</span>
+                <h4 class="text-2xl font-black text-[#003366] uppercase tracking-wide">Lecionar</h4>
+            </div>
+            <p class="text-gray-700 mb-4 font-medium">Entrega + Orientação Final ao Cliente</p>
+            <p class="text-sm text-gray-600 mb-4">O técnico finaliza a instalação fechando o ciclo de atendimento com clareza e educação.</p>
+            
+            <div class="bg-rose-50 p-4 rounded-lg border border-rose-200">
+                <h5 class="text-sm font-bold text-rose-800 uppercase mb-3 flex items-center gap-2"><i class="fa-solid fa-person-chalkboard"></i> Entrega Ideal:</h5>
+                <ul class="text-sm text-gray-700 space-y-2">
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-rose-500 mt-1 shrink-0"></i> Mostrar ao cliente os testes feitos.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-rose-500 mt-1 shrink-0"></i> Ensinar uso básico do roteador/ONT.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-rose-500 mt-1 shrink-0"></i> Explicar limites da rede Wi-Fi e boas práticas (posição recomendada, quantidade de dispositivos, distância e barreiras).</li>
+					<li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-rose-500 mt-1 shrink-0"></i> Explicar sobre o carnê de pagamento e como obter boletos quando precisar.</li>
+					<li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-rose-500 mt-1 shrink-0"></i> Instalar e orientar sobre os aplicativos adicionais.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-rose-500 mt-1 shrink-0"></i> Confirmar se a instalação atendeu as necessidades do cliente.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-rose-500 mt-1 shrink-0"></i> Orientar sobre como acionar suporte, caso necessário.</li>
+                    <li class="flex items-start gap-2"><i class="fa-solid fa-circle-dot text-rose-500 mt-1 shrink-0"></i> Garantir que o ambiente foi deixado limpo e organizado.</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- ================================================================================= -->
+                        <!-- CONCLUSÃO (CARD FINAL) -->
+                        <!-- ================================================================================= -->
+                        <div class="bg-[#003366] text-white p-8 rounded-xl text-center shadow-lg mt-12">
+                          <div class="inline-block bg-amber-500 p-4 rounded-full mb-6 shadow-lg animate-bounce">
+            <i class="fa-solid fa-trophy text-3xl text-white"></i>
+        </div>
+                            <h3 class="text-2xl font-bold mb-4">Você concluiu o Módulo de Instalação!</h3>
+                            <p class="text-rose-100 mb-6 max-w-2xl mx-auto">
+                                Agora você domina todo o processo de instalação. Lembre-se de sempre manter a comunicação com o apoio operacional, informe tudo: deslocamento, execução, pausas, dúvidas, problemas, encerramento ou qualquer outra informação útil. Se o apoio operacional tem conhecimento do seu status atual, o setor pode ajudar a otimizar seu tempo!
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-4 text-sm font-bold">
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Checklists e Preparação</span>
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Atendimento e Comunicação com o Cliente</span>
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Padrão e Boas Práticas</span>
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Análises de Risco e Logística</span>
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Testes e Configurações</span>
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Acabamentos e Estética</span>
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Instalação e Orientação de APPs</span>
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Documentação e Finalização da O.S</span>
+								<span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Método IDEAL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="layout.js"></script>
+
+</body>
+</html>

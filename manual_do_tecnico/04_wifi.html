@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 04 - Tecnologia Wi-Fi | RL NET</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        /* Fundo sutil de ondas para o módulo Wi-Fi */
+        .wifi-pattern {
+            background-image: repeating-radial-gradient(circle at 0 0, transparent 0, #e9d5ff 10px), repeating-linear-gradient(#f3e8ff, #f3e8ff);
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="md:pl-64 flex flex-col min-h-screen transition-all duration-300">
+        <div id="app-layout" class="flex flex-col min-h-screen">
+            
+            <main class="flex-1 p-4 md:p-8">
+                <!-- Card Principal -->
+                <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-[#003366]">
+                    
+                    <div class="p-6 md:p-10">
+                        <!-- Cabeçalho do Módulo -->
+                        <div class="flex flex-col md:flex-row items-center gap-6 mb-10 border-b pb-8">
+                            <div class="w-20 h-20 rounded-full bg-purple-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg shrink-0 border-4 border-white ring-2 ring-purple-100">
+                                04
+                            </div>
+                            <div class="text-center md:text-left">
+                                <h1 class="text-3xl md:text-4xl font-black text-[#003366] mb-2 uppercase">Tecnologia Wi-Fi</h1>
+                                <p class="text-gray-600 text-lg font-medium">Domine o invisível: Frequências, Interferências e Performance</p>
+                              <div class="flex flex-wrap justify-center md:justify-start gap-2 mt-4">
+
+    <span class="bg-pink-50 text-pink-700 px-3 py-1 rounded-full text-xs font-bold border border-pink-200 flex items-center">
+        <i class="fa-solid fa-signal mr-2"></i> 2.4GHz
+    </span>
+
+    <span class="bg-pink-50 text-pink-700 px-3 py-1 rounded-full text-xs font-bold border border-pink-200 flex items-center">
+        <i class="fa-solid fa-square-poll-vertical mr-2"></i> 5GHz
+    </span>
+
+    <span class="bg-pink-50 text-pink-700 px-3 py-1 rounded-full text-xs font-bold border border-pink-200 flex items-center">
+        <i class="fa-solid fa-chart-bar mr-2"></i> Canais
+    </span>
+
+    <span class="bg-pink-50 text-pink-700 px-3 py-1 rounded-full text-xs font-bold border border-pink-200 flex items-center">
+        <i class="fa-solid fa-ruler-horizontal mr-2"></i> Larguras de Banda
+    </span>
+
+    <span class="bg-pink-50 text-pink-700 px-3 py-1 rounded-full text-xs font-bold border border-pink-200 flex items-center">
+        <i class="fa-solid fa-map-marked-alt mr-2"></i> Topologia
+    </span>
+
+    <span class="bg-pink-50 text-pink-700 px-3 py-1 rounded-full text-xs font-bold border border-pink-200 flex items-center">
+        <i class="fa-solid fa-lock mr-2"></i> Segurança
+    </span>
+
+    <span class="bg-pink-50 text-pink-700 px-3 py-1 rounded-full text-xs font-bold border border-pink-200 flex items-center">
+        <i class="fa-solid fa-wave-square mr-2"></i> Interferência
+    </span>
+
+    <span class="bg-pink-50 text-pink-700 px-3 py-1 rounded-full text-xs font-bold border border-pink-200 flex items-center">
+        <i class="fa-solid fa-wifi mr-2"></i> Wi-Fi Man
+    </span>
+    
+    <span class="bg-pink-50 text-pink-700 px-3 py-1 rounded-full text-xs font-bold border border-pink-200 flex items-center">
+        <i class="fa-solid fa-router mr-2"></i> Equipamentos
+    </span>
+
+    <span class="bg-pink-50 text-pink-700 px-3 py-1 rounded-full text-xs font-bold border border-pink-200 flex items-center">
+        <i class="fa-solid fa-cubes-stacked mr-2"></i> Wi-Fi Mesh
+    </span>
+
+</div>
+                            </div>
+                        </div>
+
+                        <!-- ================================================================================= -->
+                        <!-- 1. CONCEITOS BÁSICOS: 2.4GHz vs 5GHz (CONTEÚDO COMPLETO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <i class="fa-solid fa-tower-broadcast text-purple-600"></i> 1. A Batalha das Frequências: 2.4GHz vs 5GHz
+                            </h2>
+                            
+                            <div class="mb-8 bg-purple-50 border-l-4 border-purple-500 p-6 rounded-r-lg shadow-sm">
+                                <p class="text-gray-800 font-medium text-lg mb-2">
+                                    <i class="fa-solid fa-bullhorn text-purple-600 mr-2"></i> O erro nº 1 do cliente (e do técnico)
+                                </p>
+                                <p class="text-sm text-gray-700 leading-relaxed">
+                                    A maioria das reclamações de "internet lenta" na RL NET não é culpa da fibra, mas sim do cliente tentando passar 500 Mega pelo "buraco de agulha" que é o 2.4GHz. Entender a física por trás dessas frequências é a chave para fechar chamados com sucesso.
+                                </p>
+                            </div>
+
+                            <!-- Comparativo Visual (Cards Lado a Lado) -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                                
+                                <!-- 2.4GHz: O Veterano Superlotado -->
+                                <div class="border-2 border-orange-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
+                                    <div class="bg-orange-100 p-4 border-b border-orange-200 flex justify-between items-center">
+                                        <h3 class="font-bold text-orange-800 text-xl">2.4 GHz</h3>
+                                        <i class="fa-solid fa-wifi text-orange-500 text-2xl"></i>
+                                    </div>
+                                    <div class="p-6 bg-white">
+                                        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Características Físicas</p>
+                                        
+                                        <ul class="space-y-4">
+                                            <li class="flex items-start gap-3">
+                                                <div class="bg-green-100 p-1 rounded text-green-700"><i class="fa-solid fa-expand"></i></div>
+                                                <div>
+                                                    <span class="font-bold text-gray-700">Alcance Longo</span>
+                                                    <p class="text-xs text-gray-500">A onda é "comprida", conseguindo contornar objetos e atravessar paredes grossas com facilidade.</p>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start gap-3">
+                                                <div class="bg-red-100 p-1 rounded text-red-700"><i class="fa-solid fa-gauge-simple-high"></i></div>
+                                                <div>
+                                                    <span class="font-bold text-gray-700">Velocidade Baixa</span>
+                                                    <p class="text-xs text-gray-500">Largura de banda estreita. Na prática, <strong>limita-se a 40~60 Mbps</strong> reais, mesmo que o plano seja de 1 Giga.</p>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start gap-3">
+                                                <div class="bg-red-100 p-1 rounded text-red-700"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                                <div>
+                                                    <span class="font-bold text-gray-700">Interferência Extrema</span>
+                                                    <p class="text-xs text-gray-500">Micro-ondas, babás eletrônicas, bluetooth e os roteadores de <strong>todos os vizinhos</strong> usam essa faixa.</p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- 5GHz: A Ferrari Frágil -->
+                                <div class="border-2 border-purple-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
+                                    <div class="bg-purple-100 p-4 border-b border-purple-200 flex justify-between items-center">
+                                        <h3 class="font-bold text-purple-800 text-xl">5 GHz (Wi-Fi 5/6)</h3>
+                                        <i class="fa-solid fa-bolt text-purple-500 text-2xl"></i>
+                                    </div>
+                                    <div class="p-6 bg-white">
+                                        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Características Físicas</p>
+                                        
+                                        <ul class="space-y-4">
+                                            <li class="flex items-start gap-3">
+                                                <div class="bg-red-100 p-1 rounded text-red-700"><i class="fa-solid fa-compress"></i></div>
+                                                <div>
+                                                    <span class="font-bold text-gray-700">Alcance Curto</span>
+                                                    <p class="text-xs text-gray-500">A onda é "curta e frenética". Ela bate na parede e morre. Dificilmente passa de 2 cômodos com qualidade.</p>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start gap-3">
+                                                <div class="bg-green-100 p-1 rounded text-green-700"><i class="fa-solid fa-rocket"></i></div>
+                                                <div>
+                                                    <span class="font-bold text-gray-700">Velocidade Extrema</span>
+                                                    <p class="text-xs text-gray-500">Consegue entregar 300, 500, até 800 Mbps via Wi-Fi (dependendo do aparelho receptor).</p>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start gap-3">
+                                                <div class="bg-green-100 p-1 rounded text-green-700"><i class="fa-solid fa-filter"></i></div>
+                                                <div>
+                                                    <span class="font-bold text-gray-700">Baixa Interferência</span>
+                                                    <p class="text-xs text-gray-500">Possui muito mais canais disponíveis, evitando o "congestionamento" dos vizinhos.</p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Analogia Didática -->
+                            <div class="bg-gray-800 text-white rounded-xl p-8 mb-10 shadow-lg relative overflow-hidden">
+                                <div class="absolute -right-10 -top-10 opacity-10"><i class="fa-solid fa-road text-[150px]"></i></div>
+                                <h3 class="font-bold text-yellow-400 text-lg mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-lightbulb"></i> Analogia da Rodovia (Para explicar ao cliente)
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+                                    <div>
+                                        <h4 class="font-bold text-orange-300 border-b border-orange-500/30 pb-2 mb-2">2.4 GHz = Estrada de Terra</h4>
+                                        <p class="text-sm text-gray-300 leading-relaxed">
+                                            Imagine uma estrada de terra esburacada de pista única. Ela chega em qualquer lugar (sítio longe), mas você não consegue correr. Se tiver um caminhão na frente (vizinho), todo mundo para.
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-purple-300 border-b border-purple-500/30 pb-2 mb-2">5 GHz = Autostrada Alemã</h4>
+                                        <p class="text-sm text-gray-300 leading-relaxed">
+                                            Imagine uma rodovia de 10 pistas, tapete perfeito. Você pode acelerar sua Ferrari a 300km/h. Porém, a rodovia termina logo ali. Ela não chega no sítio.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Aplicação na RL NET -->
+                            <div class="bg-white border rounded-xl p-6 shadow-sm">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4">Aplicação Prática na RL NET</h3>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm text-left border-collapse">
+                                        <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
+                                            <tr>
+                                                <th class="p-3 border-b">Dispositivo / Uso</th>
+                                                <th class="p-3 border-b">Recomendação</th>
+                                                <th class="p-3 border-b">Justificativa</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200">
+                                            <tr>
+                                                <td class="p-3 font-medium">Smart TV 4K / Streaming</td>
+                                                <td class="p-3 text-purple-700 font-bold">5 GHz (ou Cabo)</td>
+                                                <td class="p-3 text-gray-600">Exige alta banda. No 2.4G vai travar o filme.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="p-3 font-medium">Celular (Instagram/TikTok)</td>
+                                                <td class="p-3 text-purple-700 font-bold">5 GHz</td>
+                                                <td class="p-3 text-gray-600">Vídeos carregam instantaneamente.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="p-3 font-medium">Impressora Wi-Fi / Lâmpada Smart</td>
+                                                <td class="p-3 text-orange-600 font-bold">2.4 GHz</td>
+                                                <td class="p-3 text-gray-600">Aparelhos antigos ou IoT (Internet das Coisas) muitas vezes nem enxergam o 5G.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="p-3 font-medium">Celular no Quintal / Fundo</td>
+                                                <td class="p-3 text-orange-600 font-bold">2.4 GHz</td>
+                                                <td class="p-3 text-gray-600">O 5G não vai chegar lá. É melhor navegar lento do que não navegar.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 2. INTERFERÊNCIAS COMUNS (CONTEÚDO COMPLETO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-16 border-b pb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">2</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Interferências: Os Inimigos do Wi-Fi</h2>
+                            </div>
+
+                            <div class="mb-8">
+                                <p class="text-gray-600 leading-relaxed mb-4">
+                                    O Wi-Fi é luz invisível (ondas de rádio). Assim como a luz de uma lanterna não atravessa uma parede de chumbo e reflete num espelho, o Wi-Fi também sofre. 
+                                    Para um técnico da RL NET, existem dois tipos de inimigos: <strong>Barreiras Físicas</strong> (que absorvem ou refletem o sinal) e <strong>Interferência Eletromagnética</strong> (que suja o canal).
+                                </p>
+                            </div>
+
+                            <!-- SUBTÓPICO 2.1: BARREIRAS FÍSICAS E ATENUAÇÃO -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-6 border-l-4 border-purple-500 pl-3">
+                                    2.1 Barreiras Físicas (Atenuação de Sinal)
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                    <!-- Explicação Visual -->
+                                    <div class="bg-purple-50 p-6 rounded-xl border border-purple-100">
+                                        <h4 class="font-bold text-purple-900 mb-2">Como os materiais afetam o sinal?</h4>
+                                        <p class="text-sm text-gray-700 mb-4">
+                                            Cada material "come" uma parte do sinal. Chamamos isso de atenuação, medida em dB (Decibéis).
+                                            Quanto mais denso o material, menos Wi-Fi passa para o outro lado.
+                                        </p>
+                                        <div class="flex items-center gap-2 text-xs font-bold text-gray-500">
+                                            <span class="w-3 h-3 rounded-full bg-green-500"></span> Baixa Perda
+                                            <span class="w-3 h-3 rounded-full bg-yellow-500 ml-2"></span> Média Perda
+                                            <span class="w-3 h-3 rounded-full bg-red-500 ml-2"></span> Bloqueio Total
+                                        </div>
+                                    </div>
+
+                                    <!-- Tabela de Materiais -->
+                                    <div class="bg-white border rounded-xl overflow-hidden shadow-sm">
+                                        <table class="w-full text-sm text-left">
+                                            <thead class="bg-gray-100 text-gray-600 font-bold uppercase text-xs">
+                                                <tr>
+                                                    <th class="p-3">Material</th>
+                                                    <th class="p-3">Impacto</th>
+                                                    <th class="p-3">Situação Comum</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-gray-100">
+                                                <tr class="group hover:bg-green-50">
+                                                    <td class="p-3 font-medium">Drywall / Vidro Claro</td>
+                                                    <td class="p-3 text-green-600 font-bold">Baixo</td>
+                                                    <td class="p-3 text-gray-500 text-xs">Divisórias de escritório.</td>
+                                                </tr>
+                                                <tr class="group hover:bg-yellow-50">
+                                                    <td class="p-3 font-medium">Madeira / Tijolo Oco</td>
+                                                    <td class="p-3 text-yellow-600 font-bold">Médio</td>
+                                                    <td class="p-3 text-gray-500 text-xs">Portas, armários e paredes comuns.</td>
+                                                </tr>
+                                                <tr class="group hover:bg-orange-50">
+                                                    <td class="p-3 font-medium">Concreto / Tijolo Maciço</td>
+                                                    <td class="p-3 text-orange-600 font-bold">Alto</td>
+                                                    <td class="p-3 text-gray-500 text-xs">Lajes, colunas e prédios antigos.</td>
+                                                </tr>
+                                                <tr class="group hover:bg-red-50 bg-red-50/30">
+                                                    <td class="p-3 font-bold text-red-800">Metal / Espelho / Água</td>
+                                                    <td class="p-3 text-red-600 font-black">BLOQUEIO</td>
+                                                    <td class="p-3 text-gray-500 text-xs">Elevadores, espelhos de parede inteira, aquários.</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Cards de Vilões Físicos -->
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div class="bg-white p-4 rounded-lg border text-center shadow-sm">
+                                                                                <i class="fa-solid fa-water text-blue-500 text-3xl mb-2"></i>
+                                        <p class="font-bold text-sm text-gray-700">Aquários</p>
+                                        <p class="text-[10px] text-gray-500">Água absorve o sinal.</p>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg border text-center shadow-sm">
+                                        <i class="fa-solid fa-wand-magic-sparkles text-gray-400 text-3xl mb-2"></i>
+                                        <p class="font-bold text-sm text-gray-700">Espelhos</p>
+                                        <p class="text-[10px] text-gray-500">Camada de prata reflete o sinal de volta.</p>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg border text-center shadow-sm">
+                                        <i class="fa-regular fa-square text-orange-800 text-3xl mb-2"></i>
+                                        <p class="font-bold text-sm text-gray-700">Cerâmica/Azulejo</p>
+                                        <p class="text-[10px] text-gray-500">Cozinhas e banheiros são "cavernas".</p>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg border text-center shadow-sm">
+                                        <i class="fa-solid fa-tv text-gray-800 text-3xl mb-2"></i>
+                                        <p class="font-bold text-sm text-gray-700">Atrás da TV</p>
+                                        <p class="text-[10px] text-gray-500">Placa de metal da TV bloqueia tudo.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SUBTÓPICO 2.2: INTERFERÊNCIA ELETROMAGNÉTICA -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-6 border-l-4 border-purple-500 pl-3">
+                                    2.2 Interferência Eletromagnética (Sujeira no Ar)
+                                </h3>
+                                
+                                <div class="bg-white border rounded-xl p-6 shadow-sm relative overflow-hidden mb-6">
+                                    <div class="absolute -right-4 -bottom-4 text-9xl text-gray-100"><i class="fa-solid fa-plug"></i></div>
+                                    <div class="relative z-10 flex flex-col md:flex-row gap-6">
+                                        <div class="flex-1">
+                                            <h4 class="font-bold text-red-700 mb-2 text-lg">O Vilão Nº 1: Micro-ondas</h4>
+                                            <p class="text-sm text-gray-600 mb-4">
+                                                O forno de micro-ondas opera <strong>exatamente em 2.45 GHz</strong>. É a mesma frequência do Wi-Fi 2.4G. 
+                                                Quando o cliente esquenta um prato de comida, ele gera um "grito" eletromagnético que abafa qualquer sinal de internet na cozinha ou salas próximas.
+                                            </p>
+                                            <div class="bg-yellow-50 p-3 rounded border border-yellow-200 text-xs text-yellow-800">
+                                                <i class="fa-solid fa-lightbulb mr-1"></i> <strong>Dica de Ouro:</strong> Se o cliente reclamar que a net cai na hora do almoço, peça para ligar o micro-ondas e faça um teste de PING. A perda de pacotes será imediata.
+                                            </div>
+                                        </div>
+                                        <div class="w-full md:w-1/3 border-l pl-0 md:pl-6 pt-4 md:pt-0 border-gray-100">
+                                            <h5 class="font-bold text-gray-700 text-sm mb-3">Outros Geradores de Ruído:</h5>
+                                            <ul class="space-y-2 text-sm text-gray-600">
+                                                <li class="flex items-center gap-2"><i class="fa-brands fa-bluetooth text-blue-500"></i> Dispositivos Bluetooth</li>
+                                                <li class="flex items-center gap-2"><i class="fa-solid fa-baby text-pink-400"></i> Babás Eletrônicas</li>
+                                                <li class="flex items-center gap-2"><i class="fa-solid fa-phone text-gray-500"></i> Telefones sem fio antigos</li>
+                                                <li class="flex items-center gap-2"><i class="fa-solid fa-gamepad text-purple-500"></i> Controles de Videogame s/ fio</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SUBTÓPICO 2.3: POLUIÇÃO DE VIZINHOS -->
+                            <div>
+                                <h3 class="font-bold text-[#003366] text-lg mb-6 border-l-4 border-purple-500 pl-3">
+                                    2.3 Poluição de Vizinhos (Co-Channel vs Adjacent)
+                                </h3>
+
+                                <div class="bg-gray-800 text-white rounded-xl p-6 shadow-sm relative overflow-hidden">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div>
+                                            <h4 class="font-bold text-yellow-400 mb-2 flex items-center gap-2"><i class="fa-solid fa-users-slash"></i> O Problema</h4>
+                                            <p class="text-sm text-gray-300 mb-4">
+                                                Em prédios, você pode ver 20, 30 redes Wi-Fi. Todas elas estão brigando pelo mesmo espaço no ar. 
+                                                Isso gera dois tipos de caos:
+                                            </p>
+                                            <ul class="space-y-3 text-sm text-gray-300">
+                                                <li class="bg-white/10 p-2 rounded">
+                                                    <strong class="text-white">Interferência de Co-Canal:</strong> Vários roteadores no mesmo canal (ex: todos no Canal 6). É como várias pessoas educadas tentando falar na mesma sala. Um espera o outro terminar. <strong>Gera lentidão.</strong>
+                                                </li>
+                                                <li class="bg-white/10 p-2 rounded">
+                                                    <strong class="text-red-300">Interferência Adjacente (Pior):</strong> Roteadores em canais sobrepostos (ex: Canal 6 e Canal 7). É como pessoas gritando ao mesmo tempo sem se ouvir. <strong>Gera perda de dados e quedas.</strong>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="flex flex-col justify-center">
+                                            <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                                                <h4 class="font-bold text-green-400 mb-2 text-sm uppercase">Solução Técnica RL NET</h4>
+                                                <p class="text-xs text-gray-300 mb-3">
+                                                    Não temos controle sobre o roteador do vizinho, mas podemos desviar dele.
+                                                </p>
+                                                <ul class="list-disc pl-4 space-y-2 text-xs text-gray-200">
+                                                    <li>Use o app <strong>Wi-Fi Man</strong> para ver onde os vizinhos estão.</li>
+                                                    <li>Sempre fixe em canais não sobrepostos (1, 6, 11) para evitar a interferência adjacente.</li>
+                                                    <li>Migre tudo o que for possível para <strong>5 GHz</strong>, onde há mais "pistas livres".</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 3. CANAIS E LARGURA DE BANDA (CONTEÚDO COMPLETO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-16 border-b pb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">3</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Canais e Largura de Banda (Ajuste Fino)</h2>
+                            </div>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Se o roteador é o motor, o canal é a estrada e a largura de banda é o número de faixas.
+                                Configurar isso errado é como tentar pilotar um F1 numa estrada de terra (muita largura, muita interferência) ou um trator numa autobahn (canal errado, baixa velocidade).
+                            </p>
+
+                            <!-- CONCEITO DE LARGURA DE BANDA -->
+                            <div class="mb-10 bg-white border rounded-xl p-6 shadow-sm">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-ruler-horizontal text-purple-600"></i> O Conceito de Largura de Banda (MHz)
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-6">
+                                    Largura de banda é o "espaço" que o sinal ocupa no ar.
+                                    <br><strong>Regra da Física:</strong> Quanto maior a largura (MHz), maior a velocidade, MAS maior a chance de pegar interferência (sujeira) e menor o alcance.
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                                    <div class="p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                                        <div class="text-2xl font-black text-orange-600 mb-1">20 MHz</div>
+                                        <p class="text-xs font-bold text-gray-700 uppercase mb-2">Foco: Estabilidade</p>
+                                        <p class="text-[10px] text-gray-600">O sinal é "fino" e concentrado. Fura melhor as paredes e sofre menos com ruído.</p>
+                                    </div>
+                                    <div class="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                                        <div class="text-2xl font-black text-purple-600 mb-1">80 MHz</div>
+                                        <p class="text-xs font-bold text-gray-700 uppercase mb-2">Foco: Velocidade</p>
+                                        <p class="text-[10px] text-gray-600">O equilíbrio ideal para o 5GHz. Alta velocidade com estabilidade razoável.</p>
+                                    </div>
+                                    <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                        <div class="text-2xl font-black text-blue-600 mb-1">160/320 MHz</div>
+                                        <p class="text-xs font-bold text-gray-700 uppercase mb-2">Foco: Extremo</p>
+                                        <p class="text-[10px] text-gray-600">Altíssima velocidade (Wi-Fi 6/7), mas qualquer interferência derruba a conexão.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PADRÃO RL NET: 2.4 GHz -->
+                            <div class="mb-10 relative overflow-hidden rounded-xl border-2 border-orange-200">
+                                <div class="bg-orange-100 p-4 border-b border-orange-200 flex items-center justify-between">
+                                    <h3 class="font-bold text-orange-900 flex items-center gap-2">
+                                        <i class="fa-solid fa-triangle-exclamation"></i> Padrão RL NET: 2.4 GHz
+                                    </h3>
+                                    <span class="bg-orange-600 text-white text-xs font-bold px-2 py-1 rounded">Prioridade: ALCANCE</span>
+                                </div>
+                                <div class="p-6 bg-white grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3">Configuração Obrigatória:</h4>
+                                        <ul class="space-y-3 text-sm">
+                                            <li class="flex justify-between border-b pb-2">
+                                                <span class="text-gray-600">Largura de Banda:</span>
+                                                <span class="font-mono font-bold text-orange-700">20 MHz (Sempre)</span>
+                                            </li>
+                                            <li class="flex justify-between border-b pb-2">
+                                                <span class="text-gray-600">Canais:</span>
+                                                <span class="font-mono font-bold text-orange-700">1, 6 ou 11</span>
+                                            </li>
+                                        </ul>
+                                        <div class="mt-4 bg-red-50 p-3 rounded text-xs text-red-800 border border-red-100">
+                                            <strong>Por que não 40 MHz?</strong> Usar 40MHz no 2.4G em áreas urbanas é pedir para ter problemas. O sinal fica muito "largo", pega interferência de todos os vizinhos e a conexão fica instável (caindo e voltando).
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Visual dos Canais -->
+                                    <div class="flex flex-col justify-center items-center">
+                                                                                <p class="text-xs font-bold text-gray-500 mb-2 uppercase text-center">Por que 1, 6 e 11?</p>
+                                        <div class="relative w-full h-24 bg-gray-100 rounded-lg border border-gray-200 flex items-end px-2 overflow-hidden">
+                                            <!-- Canal 1 -->
+                                            <div class="h-16 w-1/4 bg-blue-500/80 rounded-t-full mx-1 flex items-center justify-center text-white font-bold text-xs shadow-lg relative z-10" style="margin-right: -10px;">1</div>
+                                            <!-- Canal 6 -->
+                                            <div class="h-16 w-1/4 bg-green-500/80 rounded-t-full mx-1 flex items-center justify-center text-white font-bold text-xs shadow-lg relative z-20">6</div>
+                                            <!-- Canal 11 -->
+                                            <div class="h-16 w-1/4 bg-purple-500/80 rounded-t-full mx-1 flex items-center justify-center text-white font-bold text-xs shadow-lg relative z-10" style="margin-left: -10px;">11</div>
+                                        </div>
+                                        <p class="text-[10px] text-gray-500 mt-2 text-center italic">
+                                            São os únicos 3 canais que não se sobrepõem. Se você usar o Canal 3, você interfere no 1 e no 6 ao mesmo tempo!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PADRÃO RL NET: 5 GHz -->
+                            <div class="mb-10 relative overflow-hidden rounded-xl border-2 border-purple-200">
+                                <div class="bg-purple-100 p-4 border-b border-purple-200 flex items-center justify-between">
+                                    <h3 class="font-bold text-purple-900 flex items-center gap-2">
+                                        <i class="fa-solid fa-bolt"></i> Padrão RL NET: 5 GHz
+                                    </h3>
+                                    <span class="bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded">Prioridade: VELOCIDADE</span>
+                                </div>
+                                <div class="p-6 bg-white grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-3">Configuração Obrigatória:</h4>
+                                        <ul class="space-y-3 text-sm">
+                                            <li class="flex justify-between border-b pb-2">
+                                                <span class="text-gray-600">Largura de Banda:</span>
+                                                <div class="text-right">
+                                                    <span class="font-mono font-bold text-purple-700 block">80 MHz (Padrão)</span>
+                                                    <span class="text-[10px] text-gray-500">160/320 MHz (Se suportado/Plano alto)</span>
+                                                </div>
+                                            </li>
+                                            <li class="flex justify-between border-b pb-2">
+                                                <span class="text-gray-600">Canais:</span>
+                                                <span class="font-mono font-bold text-purple-700">36, 48 ou 157</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-100 text-sm">
+                                        <p class="mb-2 font-bold text-gray-700"><i class="fa-solid fa-robot mr-1"></i> Por que esses canais?</p>
+                                        <ul class="list-disc pl-4 space-y-2 text-xs text-gray-600">
+                                            <li><strong>36 e 48:</strong> Início do espectro, geralmente compatível com todos os dispositivos, mesmo os importados antigos.</li>
+                                            <li><strong>157:</strong> Faixa de alta frequência (UNII-3). Geralmente permite potência de transmissão mais alta em alguns roteadores, ajudando a atravessar uma parede extra.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Resumo Técnico Rápido -->
+                            <div class="bg-gray-800 text-white p-4 rounded-lg flex flex-col md:flex-row justify-between items-center text-sm font-mono shadow-md">
+                                <span class="text-gray-400 mb-2 md:mb-0">// Resumo da Configuração:</span>
+                                <div class="flex gap-4">
+                                    <span class="text-orange-400">2.4G: 20MHz @ 1/6/11</span>
+                                    <span class="text-gray-500">|</span>
+                                    <span class="text-purple-400">5G: 80MHz+ @ 36/48/157</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 4. PADRÕES WI-FI (CONTEÚDO COMPLETO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-16 border-b pb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">4</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Padrões Wi-Fi: Da Tartaruga ao Jato</h2>
+                            </div>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Você já se perguntou por que um celular novo navega a 800 Mega e um notebook antigo não passa de 40 Mega no mesmo Wi-Fi? A resposta está na "sopa de letrinhas" dos padrões IEEE 802.11. 
+                                Na RL NET, padronizamos o uso do <strong>Wi-Fi 6</strong> para garantir a melhor experiência.
+                            </p>
+
+                            <!-- Timeline da Evolução -->
+                            <div class="mb-10 space-y-6">
+                                
+                                <!-- Wi-Fi 4 (Antigo) -->
+                                <div class="flex flex-col md:flex-row gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200 opacity-70">
+                                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold text-gray-500 shrink-0">
+                                        Wi-Fi 4
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-700 flex items-center gap-2">802.11n <span class="text-[10px] bg-gray-200 px-2 rounded">O Guerreiro Antigo</span></h4>
+                                        <p class="text-xs text-gray-500 mt-1">Lançado em 2009. Opera em 2.4GHz (e 5GHz raro). É o padrão da maioria dos equipamentos domésticos simples (câmeras, lâmpadas). Limita-se a uns 50-80 Mbps reais.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Wi-Fi 5 (Padrão Anterior) -->
+                                <div class="flex flex-col md:flex-row gap-4 bg-purple-50 p-4 rounded-xl border border-purple-100">
+                                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-xl font-bold text-purple-600 shrink-0">
+                                        Wi-Fi 5
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-purple-800 flex items-center gap-2">802.11ac <span class="text-[10px] bg-purple-200 px-2 rounded">A Era da Velocidade</span></h4>
+                                        <p class="text-xs text-gray-600 mt-1">Popularizou o 5GHz. Trouxe velocidades acima de 400 Mbps. O problema? Fica "engarrafado" quando muitos dispositivos conectam ao mesmo tempo.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Wi-Fi 6 (Padrão RL NET) -->
+                                <div class="flex flex-col md:flex-row gap-4 bg-white p-6 rounded-xl border-2 border-purple-500 shadow-md transform scale-[1.02]">
+                                    <div class="w-20 h-20 bg-purple-600 rounded-full flex items-center justify-center text-2xl font-bold text-white shrink-0 shadow-lg">
+                                        Wi-Fi 6
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-[#003366] text-lg flex items-center gap-2">
+                                            802.11ax <span class="text-xs bg-purple-600 text-white px-2 py-0.5 rounded shadow">PADRÃO RL NET</span>
+                                        </h4>
+                                        <p class="text-sm text-gray-700 mt-2 font-medium">Não é só sobre velocidade, é sobre EFICIÊNCIA.</p>
+                                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-3 text-xs text-gray-600">
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Suporta +100 dispositivos sem travar.</li>
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Menor latência (Ping) para jogos.</li>
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Economiza bateria do celular (TWT).</li>
+                                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-500"></i> Velocidades reais acima de 800 Mbps.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- O MISTÉRIO DAS VELOCIDADES -->
+                            <div class="bg-gray-800 text-white rounded-xl p-8 shadow-lg relative overflow-hidden">
+                                <h3 class="font-bold text-yellow-400 text-lg mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-gauge-high"></i> Velocidade Nominal vs. Real (A Pegadinha)
+                                </h3>
+                                <p class="text-sm text-gray-300 mb-6">
+                                    Na caixa do roteador diz "AX1800" (1800 Mbps). Por que o Speedtest no celular do cliente só dá 600 Mega?
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div class="bg-white/10 p-4 rounded-lg border border-white/20">
+                                        <h4 class="font-bold text-white mb-2 text-sm">1. O Roteador é "Soma"</h4>
+                                        <p class="text-xs text-gray-300">
+                                            Os 1800 Mbps da caixa são a soma do 2.4G (574 Mbps) + 5G (1201 Mbps). Nenhum dispositivo usa as duas ao mesmo tempo. O máximo teórico é 1200 Mbps.
+                                        </p>
+                                    </div>
+                                    <div class="bg-white/10 p-4 rounded-lg border border-white/20">
+                                        <h4 class="font-bold text-white mb-2 text-sm">2. O Celular do Cliente</h4>
+                                        <p class="text-xs text-gray-300">
+                                            Para passar de 600 Mega, o celular precisa ter 2 antenas (MIMO 2x2) e suporte a 80MHz ou 160MHz. Celulares intermediários (mesmo novos) geralmente barram em ~400 Mega.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="mt-6 bg-red-600/20 border border-red-500/50 p-3 rounded text-center text-xs text-red-200">
+                                    <strong>Resumo para o Técnico:</strong> Nunca prometa velocidade máxima no Wi-Fi. Prometa no CABO. O Wi-Fi é uma conveniência que depende do aparelho do cliente.
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 5. POSICIONAMENTO DO ROTEADOR (CONTEÚDO ATUALIZADO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-16 border-b pb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">5</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Posicionamento: Onde o Milagre Acontece</h2>
+                            </div>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Você pode ter o melhor roteador do mundo e a melhor fibra da RL NET. Se esconder o equipamento dentro de uma gaveta ou atrás da TV, o cliente vai cancelar.
+                                Posicionamento é <strong>50% da qualidade</strong> do Wi-Fi.
+                            </p>
+
+                            <!-- REGRAS DE OURO -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                                <!-- Regra 1: Altura -->
+                                <div class="bg-white p-6 rounded-xl border-t-4 border-blue-500 shadow-sm hover:shadow-md transition">
+                                    <div class="text-4xl text-blue-200 mb-4"><i class="fa-solid fa-arrow-up-from-ground-water"></i></div>
+                                    <h3 class="font-bold text-gray-800 text-lg mb-2">1. Altura é Tudo</h3>
+                                    <p class="text-sm text-gray-600">
+                                        O Wi-Fi se comporta como a luz de uma lâmpada. No alto, ele ilumina (cobre) o ambiente inteiro. No chão, os móveis fazem sombra.
+                                        <br><strong>Meta:</strong> 1,5m a 2m do chão.
+                                    </p>
+                                </div>
+
+                                <!-- Regra 2: Centralização -->
+                                <div class="bg-white p-6 rounded-xl border-t-4 border-purple-500 shadow-sm hover:shadow-md transition">
+                                    <div class="text-4xl text-purple-200 mb-4"><i class="fa-solid fa-arrows-to-circle"></i></div>
+                                    <h3 class="font-bold text-gray-800 text-lg mb-2">2. O Sol da Casa</h3>
+                                    <p class="text-sm text-gray-600">
+                                        O sinal irradia em 360º. Se você coloca o roteador num canto da casa, metade do sinal vai para o vizinho ou para a rua.
+                                        <br><strong>Meta:</strong> Centro geométrico da residência.
+                                    </p>
+                                </div>
+
+                                <!-- Regra 3: Visada -->
+                                <div class="bg-white p-6 rounded-xl border-t-4 border-green-500 shadow-sm hover:shadow-md transition">
+                                    <div class="text-4xl text-green-200 mb-4"><i class="fa-solid fa-eye"></i></div>
+                                    <h3 class="font-bold text-gray-800 text-lg mb-2">3. "Se eu vejo, ele pega"</h3>
+                                    <p class="text-sm text-gray-600">
+                                        Quanto menos paredes, melhor. Instalar em corredores costuma ser ótimo pois o sinal "escorre" para os quartos pelas portas.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- O FORMATO DO SINAL (ROSQUINHA) -->
+                            <div class="bg-gray-800 text-white rounded-xl p-8 shadow-lg mb-10 relative overflow-hidden">
+                                <h3 class="font-bold text-yellow-400 text-lg mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-wifi"></i> A Física das Antenas: O Efeito "Rosquinha"
+                                </h3>
+                                
+                                <div class="flex flex-col md:flex-row gap-8 items-center">
+                                    <div class="flex-1">
+                                        <p class="text-sm text-gray-300 mb-4">
+                                            Muitos clientes acham que apontar a antena para o quarto melhora o sinal. <strong>Errado!</strong>
+                                            A antena omnidirecional (padrão) emite sinal para as laterais, formando uma "rosquinha" (donut) invisível ao redor dela. Não sai sinal da ponta.
+                                        </p>
+                                        <div class="bg-white/10 p-4 rounded-lg border border-white/20">
+                                            <h4 class="font-bold text-white text-sm mb-2">Como posicionar as antenas?</h4>
+                                            <ul class="space-y-2 text-xs text-gray-300">
+                                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> <strong>Casa Térrea:</strong> Todas verticais (em pé).</li>
+                                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> <strong>Sobrado:</strong> Intercale. Algumas em pé (cobrem o andar), algumas deitadas (jogam sinal para cima/baixo).</li>
+                                                <li class="flex items-center gap-2 text-yellow-400 font-bold bg-white/10 p-2 rounded mt-2">
+                                                    <i class="fa-solid fa-magnifying-glass"></i> IMPORTANTE: Nada disso adianta sem TESTAR. Não confie no olho, confie no medidor. Mude a posição e meça novamente.
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="w-full md:w-1/3 flex justify-center">
+                                        <!-- Visualização Simplificada -->
+                                        <div class="relative w-32 h-32 flex items-center justify-center">
+                                            <div class="absolute w-2 h-16 bg-gray-400 rounded-full z-10"></div> <!-- Antena -->
+                                            <div class="absolute w-32 h-8 bg-purple-500/30 rounded-full border border-purple-400 animate-pulse"></div> <!-- Onda -->
+                                            <div class="absolute w-24 h-6 bg-purple-500/50 rounded-full border border-purple-400"></div> <!-- Onda -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ONDE NÃO INSTALAR (LISTA NEGRA) -->
+                            <div class="bg-red-50 border border-red-200 rounded-xl p-6">
+                                <h3 class="font-bold text-red-800 text-lg mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-ban"></i> Lista Negra: Onde NUNCA instalar
+                                </h3>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div class="bg-white p-3 rounded shadow-sm text-center">
+                                        <i class="fa-solid fa-box-open text-gray-400 text-2xl mb-2"></i>
+                                        <p class="text-xs font-bold text-gray-700">Dentro de Rack/Gaveta</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded shadow-sm text-center">
+                                        <i class="fa-solid fa-tv text-gray-800 text-2xl mb-2"></i>
+                                        <p class="text-xs font-bold text-gray-700">Atrás da TV</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded shadow-sm text-center">
+                                        <i class="fa-solid fa-kitchen-set text-gray-400 text-2xl mb-2"></i>
+                                        <p class="text-xs font-bold text-gray-700">Cozinha</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded shadow-sm text-center">
+                                        <i class="fa-solid fa-sun text-yellow-500 text-2xl mb-2"></i>
+                                        <p class="text-xs font-bold text-gray-700">Janela (Sol Direto)</p>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-red-700 mt-4 text-center italic">
+                                    "Mas o cliente pediu para esconder..." -> Explique: "Wi-Fi escondido é Wi-Fi ruim. O senhor prefere beleza ou velocidade?"
+                                </p>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 6. APP WI-FIMAN (CONTEÚDO VISUAL COMPLETO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-16 border-b pb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">6</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Wi-Fiman: O Raio-X da Rede</h2>
+                            </div>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Você não consegue consertar o que não consegue ver. O Wi-Fi é invisível, mas com o app <strong>Wi-Fiman</strong> (da Ubiquiti), ele se torna visível. 
+                                É a ferramenta obrigatória de todo técnico RL NET para validar o serviço antes de ir embora.
+                            </p>
+
+                            <!-- 6.1 Velocidade e Diagnóstico -->
+                            <div class="grid md:grid-cols-2 gap-8 items-start mb-12 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                                <div class="text-center">
+                                    <img src="wm_velocidade.jpeg" alt="Tela de Velocidade Wi-Fiman" class="rounded-xl shadow-lg border-4 border-gray-800 mx-auto w-64">
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-[#003366] text-xl mb-3 border-b pb-2">Aba Velocidade: O Diagnóstico Completo</h3>
+                                    <p class="text-sm text-gray-600 mb-4">
+                                        Esta é a tela principal. Ela não mostra apenas "quantos megas" estão chegando, mas **onde** está o problema.
+                                    </p>
+                                    <ul class="space-y-3 text-sm">
+                                        <li class="flex items-start gap-2">
+                                            <div class="bg-purple-100 text-purple-700 p-1 rounded font-bold text-xs mt-1">TOPOLOGIA</div>
+                                            <p class="text-gray-700">Observe a linha no topo: <strong>Internet -> Ponto de Acesso -> Seu Celular</strong>. Se o ícone do meio estiver vermelho, o problema é no Wi-Fi interno, não na fibra.</p>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <div class="bg-blue-100 text-blue-700 p-1 rounded font-bold text-xs mt-1">LATÊNCIA (PING)</div>
+                                            <p class="text-gray-700">Veja o ping para o <strong>Gateway</strong> (Roteador) e para a <strong>Internet</strong> (Google/Facebook). <br>Ping alto no Gateway? O Wi-Fi está ruim/congestionado. <br>Ping alto só na Internet? Problema externo.</p>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <div class="bg-green-100 text-green-700 p-1 rounded font-bold text-xs mt-1">PHY (VELOCIDADE FÍSICA)</div>
+                                            <p class="text-gray-700">É a velocidade do link entre o celular e o roteador. Se o PHY for baixo (ex: 72 Mbps), a internet nunca passará disso, mesmo que a fibra seja de 1 Giga.</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- 6.2 Sinal em Tempo Real -->
+                            <div class="grid md:grid-cols-2 gap-8 items-start mb-12 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                                <div class="order-2 md:order-1">
+                                    <h3 class="font-bold text-[#003366] text-xl mb-3 border-b pb-2">Aba Sinal: Estabilidade é Tudo</h3>
+                                    <p class="text-sm text-gray-600 mb-4">
+                                        Clientes reclamam de "quedas"? Use esta tela e ande pela casa.
+                                    </p>
+                                    <ul class="space-y-4 text-sm">
+                                        <li class="bg-gray-50 p-3 rounded">
+                                            <strong class="text-gray-800 block mb-1">O Gráfico de Linha</strong>
+                                            <p class="text-gray-600 text-xs">A linha deve ser reta e estável. Se ela oscila muito (sobe e desce bruscamente) enquanto você está parado, há interferência grave no local.</p>
+                                        </li>
+                                        <li class="bg-gray-50 p-3 rounded">
+                                            <strong class="text-gray-800 block mb-1">Roaming (Troca de AP)</strong>
+                                            <p class="text-gray-600 text-xs">Se a casa tem Mesh, observe aqui se o celular troca do "AP Sala" para o "AP Quarto" suavemente. Se o sinal cair para -85 dBm antes de trocar, o cliente vai sentir a queda.</p>
+                                        </li>
+                                        <li class="bg-green-50 p-3 rounded border border-green-200">
+                                            <strong class="text-green-800 block mb-1">A Regra do -70 dBm</strong>
+                                            <p class="text-green-700 text-xs font-bold">Nunca deixe uma área importante (TV, Escritório) com sinal pior que -70 dBm. É reclamação garantida.</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="text-center order-1 md:order-2">
+                                    <img src="wm_sinal.jpeg" alt="Gráfico de Sinal Wi-Fiman" class="rounded-xl shadow-lg border-4 border-gray-800 mx-auto w-64">
+                                </div>
+                            </div>
+
+                            <!-- 6.3 Varredura e Canais -->
+                            <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 mb-12">
+                                <h3 class="font-bold text-[#003366] text-xl mb-6 text-center">Aba Varredura: Vendo o Invisível</h3>
+                                <div class="grid md:grid-cols-2 gap-8">
+                                    <!-- Parte 1: Lista de Redes -->
+                                    <div class="flex flex-col items-center">
+                                        <img src="wm_varredurasinal.jpeg" alt="Lista de Redes Wi-Fi" class="rounded-xl shadow-lg border-4 border-gray-800 w-64 mb-4">
+                                        <h4 class="font-bold text-gray-700 mb-2">Quem está gritando mais alto?</h4>
+                                        <p class="text-xs text-gray-600 text-center max-w-xs">
+                                            Aqui você vê todas as redes vizinhas. Ordene por sinal (dBm). Se o vizinho tem sinal -50 dBm dentro da casa do cliente, ele está "gritando" muito alto. <br><strong>Ação:</strong> Fuja do canal dele imediatamente.
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- Parte 2: Integridade do Canal -->
+                                    <div class="flex flex-col items-center">
+                                        <img src="wm_varredura_intcanal.jpeg" alt="Integridade dos Canais" class="rounded-xl shadow-lg border-4 border-gray-800 w-64 mb-4">
+                                        <h4 class="font-bold text-gray-700 mb-2">Qual canal escolher?</h4>
+                                        <p class="text-xs text-gray-600 text-center max-w-xs">
+                                            O Wi-Fiman analisa o espectro e te diz: "Canal 6 está congestionado, use o 1 ou 11". <br><strong>Ação:</strong> Procure sempre os canais marcados como <span class="text-green-600 font-bold">Excelente</span>. Evite os <span class="text-yellow-600 font-bold">Amarelos</span> e <span class="text-red-600 font-bold">Vermelhos</span>.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 6.4 Descoberta -->
+                            <div class="grid md:grid-cols-2 gap-8 items-center mb-12 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                                <div class="text-center">
+                                    <img src="wm_descoberta.jpeg" alt="Descoberta de Dispositivos" class="rounded-xl shadow-lg border-4 border-gray-800 mx-auto w-64">
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-[#003366] text-xl mb-3 border-b pb-2">Aba Descoberta: Quem está na rede?</h3>
+                                    <p class="text-sm text-gray-600 mb-4">
+                                        Esta tela lista tudo que está conectado no Wi-Fi e no Cabo.
+                                    </p>
+                                    <ul class="space-y-3 text-sm">
+                                        <li class="flex items-center gap-2">
+                                            <i class="fa-solid fa-user-secret text-red-500"></i>
+                                            <span class="text-gray-700"><strong>Invasores:</strong> O cliente acha que tem vizinho roubando Wi-Fi? Mostre essa lista. Se tiver um "Motorola" e ninguém na casa tem Motorola, troque a senha.</span>
+                                        </li>
+                                        <li class="flex items-center gap-2">
+                                            <i class="fa-solid fa-server text-blue-500"></i>
+                                            <span class="text-gray-700"><strong>Identificar IPs:</strong> Descubra o IP da impressora, do DVR ou do Roteador (Gateway) sem precisar acessar o computador.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- 6.5 Planta Baixa -->
+                            <div class="grid md:grid-cols-2 gap-8 items-center mb-12 bg-purple-50 p-6 rounded-xl border border-purple-200">
+                                <div>
+                                    <h3 class="font-bold text-purple-900 text-xl mb-3 border-b border-purple-200 pb-2">Aba Planta Baixa (Signal Mapper)</h3>
+                                    <p class="text-sm text-gray-700 mb-4">
+                                        A ferramenta definitiva de convencimento. O app usa a câmera (AR) para desenhar as paredes da casa e pinta um mapa de calor em tempo real.
+                                    </p>
+                                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                                        <p class="text-xs text-purple-800 font-bold mb-2">Como usar na venda:</p>
+                                        <p class="text-xs text-gray-600 italic">
+                                            "Senhor, veja este mapa. Está vendo que o quarto do fundo ficou 'preto' (sem sinal)? A física não permite o sinal chegar lá. Precisamos instalar um ponto Mesh aqui no corredor para iluminar essa área preta."
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <img src="wm_plantabaixa.jpeg" alt="Signal Mapper Wi-Fiman" class="rounded-xl shadow-lg border-4 border-gray-800 mx-auto w-64">
+                                </div>
+                            </div>
+
+                            <!-- O FLUXO DE VALIDAÇÃO RL NET -->
+                            <div class="bg-gradient-to-br from-[#003366] to-blue-800 text-white border border-blue-900 rounded-xl p-6 shadow-lg">
+                                <h3 class="font-bold text-white text-lg mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-user-astronaut"></i> Padrão RL NET: O Wi-Fiman é seu Melhor Amigo
+                                </h3>
+                                <p class="text-sm text-blue-100 mb-4 font-light">
+                                    Não confie na sorte, confie nos dados. Use o app para validar cada etapa e proteger sua O.S. de retornos.
+                                </p>
+                                <ol class="space-y-4 text-sm">
+                                    <li class="flex gap-4 items-start bg-white/10 p-3 rounded-lg border border-white/5">
+                                        <span class="bg-white text-[#003366] w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 font-bold">1</span>
+                                        <div>
+                                            <strong class="block text-white mb-1">Checar Velocidade e Ping</strong>
+                                            <p class="text-xs text-blue-200">Garanta que o Ping esteja baixo. Oriente o cliente: <em>"No Wi-Fi pode variar, mas no cabo garantimos 100%."</em></p>
+                                        </div>
+                                    </li>
+                                    <li class="flex gap-4 items-start bg-white/10 p-3 rounded-lg border border-white/5">
+                                        <span class="bg-white text-[#003366] w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 font-bold">2</span>
+                                        <div>
+                                            <strong class="block text-white mb-1">Ver os Melhores Canais</strong>
+                                            <p class="text-xs text-blue-200">Não adivinhe. Use a aba "Varredura" para fugir da poluição dos vizinhos.</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex gap-4 items-start bg-white/10 p-3 rounded-lg border border-white/5">
+                                        <span class="bg-white text-[#003366] w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 font-bold">3</span>
+                                        <div>
+                                            <strong class="block text-white mb-1">Realizar o Mapa de Calor</strong>
+                                            <p class="text-xs text-blue-200">Mostre visualmente onde o sinal morre. Isso vende ponto extra (Mesh) na hora!</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex gap-4 items-start bg-white/10 p-3 rounded-lg border border-white/5">
+                                        <span class="bg-white text-[#003366] w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 font-bold">4</span>
+                                        <div>
+                                            <strong class="block text-white mb-1">Verificar Saturação</strong>
+                                            <p class="text-xs text-blue-200">Olhe a aba "Descoberta". Muitos dispositivos conectados? O roteador atual aguenta?</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex gap-4 items-start bg-green-500/20 p-3 rounded-lg border border-green-500/50">
+                                        <span class="bg-green-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 font-bold"><i class="fa-solid fa-check"></i></span>
+                                        <div>
+                                            <strong class="block text-green-300 mb-1">Coleta para Fechamento IXC</strong>
+                                            <p class="text-xs text-green-100">Tire prints do teste de velocidade e do sinal nos cômodos principais. Anexe ao fechamento da O.S. Essa é a sua prova de que entregou funcionando.</p>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 7. LIMITE DE CONEXÕES E SATURAÇÃO (CONTEÚDO NOVO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-16 border-b pb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">7</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Limite de Conexões: Quando o Roteador "Pede Água"</h2>
+                            </div>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Muitos técnicos acham que "Internet Lenta" é sempre culpa do sinal ou da fibra. Mas existe um vilão silencioso: a <strong>Saturação do Processador</strong>. 
+                                O roteador não é mágico; ele é um computador pequeno. Se você sobrecarrega ele, ele trava, igual a um celular velho tentando rodar um jogo pesado.
+                            </p>
+
+                            <!-- O Roteador é um Computador -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center">
+                                    <h3 class="font-bold text-gray-800 text-lg mb-4 text-center">O que tem dentro da caixinha?</h3>
+                                    <div class="flex justify-around items-end h-32 px-4">
+                                        <!-- CPU Bar -->
+                                        <div class="w-16 bg-gray-100 rounded-t-lg relative group">
+                                            <div class="absolute bottom-0 w-full bg-blue-500 rounded-t-lg transition-all duration-1000 group-hover:bg-red-500" style="height: 40%"></div>
+                                            <span class="absolute -top-6 w-full text-center text-xs font-bold text-gray-500">CPU</span>
+                                        </div>
+                                        <!-- RAM Bar -->
+                                        <div class="w-16 bg-gray-100 rounded-t-lg relative group">
+                                            <div class="absolute bottom-0 w-full bg-green-500 rounded-t-lg transition-all duration-1000 group-hover:bg-red-500" style="height: 60%"></div>
+                                            <span class="absolute -top-6 w-full text-center text-xs font-bold text-gray-500">RAM</span>
+                                        </div>
+                                        <!-- Heat Bar -->
+                                        <div class="w-16 bg-gray-100 rounded-t-lg relative group">
+                                            <div class="absolute bottom-0 w-full bg-orange-400 rounded-t-lg transition-all duration-1000 group-hover:bg-red-600 animate-pulse" style="height: 30%"></div>
+                                            <span class="absolute -top-6 w-full text-center text-xs font-bold text-gray-500">Calor</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 text-center mt-4">
+                                        Cada celular conectado consome um pouquinho de Memória RAM e CPU. Quando acaba, o roteador começa a derrubar quem tenta entrar.
+                                    </p>
+                                </div>
+
+                                <!-- A Analogia do Caixa de Supermercado (MIMO) -->
+                                <div class="bg-yellow-50 p-6 rounded-xl border border-yellow-200">
+                                    <h3 class="font-bold text-yellow-800 text-lg mb-3 flex items-center gap-2">
+                                        <i class="fa-solid fa-cart-shopping"></i> Analogia: A Fila do Supermercado
+                                    </h3>
+                                    <p class="text-sm text-gray-700 mb-4">
+                                        O Wi-Fi não atende todo mundo ao mesmo tempo. Ele atende <strong>um por vez</strong>, muito rápido.
+                                        Imagine que o roteador é um Supermercado e as antenas são os Caixas.
+                                    </p>
+                                    <ul class="space-y-3 text-sm">
+                                        <li class="bg-white p-2 rounded shadow-sm border border-yellow-100">
+                                            <strong class="text-gray-800">Roteador Comum (SISO - 1x1):</strong>
+                                            <span class="text-gray-600 text-xs block">Apenas 1 caixa aberto. Se tiver 10 pessoas na fila (celulares), o último vai demorar para ser atendido. Isso gera <strong>LAG/PING ALTO</strong>.</span>
+                                        </li>
+                                        <li class="bg-white p-2 rounded shadow-sm border border-yellow-100">
+                                            <strong class="text-purple-700">Roteador Top (MIMO 2x2 ou 4x4):</strong>
+                                            <span class="text-gray-600 text-xs block">2 ou 4 caixas abertos simultaneamente. A fila anda 4x mais rápido.</span>
+                                        </li>
+                                        <li class="bg-white p-2 rounded shadow-sm border border-yellow-100">
+                                            <strong class="text-blue-700">MU-MIMO (Multi-User):</strong>
+                                            <span class="text-gray-600 text-xs block">O caixa consegue passar as compras de 4 pessoas ao mesmo tempo. É a tecnologia do Wi-Fi 5 (Wave 2) e Wi-Fi 6.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- O Problema do Airtime Fairness -->
+                            <div class="mb-10 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                                <h3 class="font-bold text-[#003366] mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-hourglass-half"></i> O "Vovô" na Pista de Corrida (Airtime Fairness)
+                                </h3>
+                                <div class="flex flex-col md:flex-row gap-6 items-center">
+                                    <div class="flex-1">
+                                        <p class="text-sm text-gray-700 mb-4">
+                                            Imagine uma rodovia onde todos devem andar na mesma velocidade. Se entrar um fusca velho a 40km/h (Celular Antigo Wi-Fi 4), todas as Ferraris (iPhones 15 Wi-Fi 6) atrás dele são obrigadas a frear.
+                                        </p>
+                                        <p class="text-sm text-gray-700">
+                                            <strong>Isso é o Airtime:</strong> Dispositivos velhos "roubam" tempo de processamento do roteador, pois eles demoram mais para transmitir a mesma foto.
+                                        </p>
+                                    </div>
+                                    <div class="w-full md:w-1/3 bg-white p-4 rounded text-center shadow-sm">
+                                        <div class="text-xs font-bold text-red-500 uppercase mb-2">Impacto Real</div>
+                                        <div class="text-4xl font-black text-gray-300 mb-2">
+                                            <i class="fa-solid fa-mobile-screen-button"></i>
+                                        </div>
+                                        <p class="text-xs text-gray-600">
+                                            Basta <strong>1 dispositivo antigo</strong> com sinal ruim para derrubar a performance de toda a rede em até 40%.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Realidade RL NET: Quantidade de Dispositivos (TABELA ATUALIZADA) -->
+                            <div class="bg-white border rounded-xl overflow-hidden shadow-sm">
+                                <div class="bg-[#003366] text-white p-4">
+                                    <h3 class="font-bold text-lg">Guia de Capacidade Real RL NET</h3>
+                                    <p class="text-xs opacity-80">Use esta tabela para vender a solução correta.</p>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm text-left border-collapse">
+                                        <thead class="bg-gray-100 text-gray-700 font-bold uppercase text-xs">
+                                            <tr>
+                                                <th class="p-3 border-b">Equipamento</th>
+                                                <th class="p-3 border-b">Tecnologia</th>
+                                                <th class="p-3 border-b">Uso Intenso <span class="block text-[10px] text-gray-500 font-normal">(Vídeo/Jogos)</span></th>
+                                                <th class="p-3 border-b">Uso Misto <span class="block text-[10px] text-gray-500 font-normal">(Celulares + IoT)</span></th>
+                                                <th class="p-3 border-b">Nível de Hardware</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200">
+                                            <!-- Entrada -->
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="p-3 font-medium text-gray-800">TP-Link EC220-G5</td>
+                                                <td class="p-3 text-gray-600">Wi-Fi 5 (AC1200)</td>
+                                                <td class="p-3 text-orange-600 font-bold">~3 a 5</td>
+                                                <td class="p-3 text-gray-600">~10</td>
+                                                <td class="p-3"><span class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-xs font-bold">Entrada</span></td>
+                                            </tr>
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="p-3 font-medium text-gray-800">ZTE H199A</td>
+                                                <td class="p-3 text-gray-600">Wi-Fi 5 (AC1200)</td>
+                                                <td class="p-3 text-orange-600 font-bold">~5 a 10</td>
+                                                <td class="p-3 text-gray-600">~15</td>
+                                                <td class="p-3"><span class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-xs font-bold">Entrada</span></td>
+                                            </tr>
+                                            <!-- Intermediário -->
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="p-3 font-medium text-gray-800">Huawei AX2S</td>
+                                                <td class="p-3 text-gray-600">Wi-Fi 6 (AX1500)</td>
+                                                <td class="p-3 text-blue-600 font-bold">~5 a 10</td>
+                                                <td class="p-3 text-gray-600">~15</td>
+                                                <td class="p-3"><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-bold">Intermediário</span></td>
+                                            </tr>
+                                            <!-- Alto Desempenho -->
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="p-3 font-medium text-gray-800">Huawei AX3S</td>
+                                                <td class="p-3 text-gray-600">Wi-Fi 6 (AX3000)</td>
+                                                <td class="p-3 text-green-600 font-bold">~10 a 20</td>
+                                                <td class="p-3 text-gray-600">~30+</td>
+                                                <td class="p-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">Alto Desempenho</span></td>
+                                            </tr>
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="p-3 font-medium text-gray-800">TP-Link EX530v</td>
+                                                <td class="p-3 text-gray-600">Wi-Fi 6 (AX3000)</td>
+                                                <td class="p-3 text-green-600 font-bold">~10 a 20</td>
+                                                <td class="p-3 text-gray-600">~35+</td>
+                                                <td class="p-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">Alto Desempenho</span></td>
+                                            </tr>
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="p-3 font-medium text-gray-800">ZTE F6600P</td>
+                                                <td class="p-3 text-gray-600">Wi-Fi 6 (AX3000)</td>
+                                                <td class="p-3 text-green-600 font-bold">~10 a 20</td>
+                                                <td class="p-3 text-gray-600">~35+</td>
+                                                <td class="p-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">Alto Desempenho</span></td>
+                                            </tr>
+                                            <!-- Premium -->
+                                            <tr class="bg-purple-50 hover:bg-purple-100">
+                                                <td class="p-3 font-bold text-purple-900">ZTE F8648P</td>
+                                                <td class="p-3 text-purple-700">Wi-Fi 6 (AX6000)</td>
+                                                <td class="p-3 text-purple-700 font-black">~30+</td>
+                                                <td class="p-3 text-purple-700 font-bold">~50+</td>
+                                                <td class="p-3"><span class="bg-purple-600 text-white px-2 py-1 rounded text-xs font-bold">Premium (Topo)</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="bg-red-50 p-4 text-xs text-red-800 text-center font-bold">
+                                    <i class="fa-solid fa-triangle-exclamation"></i> ATENÇÃO: "Dispositivo" inclui celulares, TVs, Alexa, Lâmpadas Smart, Câmeras Wi-Fi. Tudo conta!
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 8. SEPARAÇÃO DE BANDAS (CONTEÚDO COMPLETO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-16 border-b pb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">8</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Separação de Bandas: O Fim do Band Steering</h2>
+                            </div>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Você já foi em uma casa onde o cliente tem um iPhone 15, está do lado do roteador Wi-Fi 6, mas a velocidade não passa de 50 Mega? O culpado tem nome: <strong>Band Steering</strong> (ou "Rede Unificada").
+                            </p>
+
+                            <!-- O Problema do Band Steering -->
+                            <div class="mb-10 bg-white border rounded-xl p-6 shadow-sm">
+                                <h3 class="font-bold text-red-700 text-lg mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-link-slash"></i> Por que unificar as redes é ruim?
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                                    <div>
+                                        <p class="text-sm text-gray-700 mb-4">
+                                            O <strong>Band Steering</strong> é uma função que cria uma única rede Wi-Fi (Ex: "RLNET_WIFI") e promete jogar o dispositivo automaticamente para 5GHz ou 2.4GHz. 
+                                            <br><br>
+                                            <strong>A Realidade:</strong> A decisão de trocar de rede é do <em>celular</em>, não do roteador. E o celular é "preguiçoso".
+                                        </p>
+                                        <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-500">
+                                            <h4 class="font-bold text-red-800 text-xs uppercase mb-1">O Cenário Clássico de Erro:</h4>
+                                            <ol class="list-decimal pl-4 space-y-2 text-xs text-gray-700">
+                                                <li>O cliente chega em casa (garagem/portão).</li>
+                                                <li>O celular conecta na rede que alcança mais longe: <strong>2.4 GHz</strong>.</li>
+                                                <li>O cliente entra na sala, senta do lado do roteador.</li>
+                                                <li>O celular <strong>NÃO TROCA</strong> para 5GHz, porque o sinal 2.4GHz ainda está "forte" (cheio de barrinhas), mesmo sendo lento.</li>
+                                                <li><strong>Resultado:</strong> Cliente reclama de lentidão navegando a 40 Mega num plano de 800 Mega.</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-center justify-center bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                        <div class="text-center mb-4">
+                                            <i class="fa-solid fa-mobile-screen-button text-4xl text-gray-400"></i>
+                                            <p class="text-xs font-bold text-gray-500 mt-2">Celular "Preguiçoso"</p>
+                                        </div>
+                                        <div class="w-full bg-white p-3 rounded border border-gray-300 shadow-sm relative opacity-50">
+                                            <div class="flex justify-between items-center border-b pb-2 mb-2">
+                                                <span class="font-bold text-sm">RLNET_UNIFICADA</span>
+                                                <i class="fa-solid fa-wifi text-green-500"></i>
+                                            </div>
+                                            <p class="text-[10px] text-red-600 font-bold">CONECTADO EM 2.4GHz (LENTO)</p>
+                                        </div>
+                                        <div class="mt-4 text-center">
+                                            <i class="fa-solid fa-arrow-down text-red-400 animate-bounce"></i>
+                                            <p class="text-[10px] text-red-500">Não troca para 5G sozinho!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- A Solução RL NET: Separação -->
+                            <div class="bg-green-50 border border-green-200 rounded-xl p-6 mb-10">
+                                <h3 class="font-bold text-green-800 text-lg mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-scissors"></i> Padrão RL NET: Separar para Conquistar
+                                </h3>
+                                <p class="text-sm text-gray-700 mb-6">
+                                    Nós configuramos duas redes com nomes diferentes. Isso devolve o controle para o usuário.
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <!-- Rede 2.4 -->
+                                    <div class="bg-white p-4 rounded shadow-sm border-l-4 border-orange-400">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="font-mono text-sm font-bold bg-gray-100 px-2 py-1 rounded">CLIENTE_RLNET</span>
+                                            <span class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded font-bold">2.4 GHz</span>
+                                        </div>
+                                        <p class="text-xs text-gray-600">
+                                            Conectar apenas: Impressoras, Câmeras, Lâmpadas Smart, Celulares antigos e visitas rápidas.
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- Rede 5G -->
+                                    <div class="bg-white p-4 rounded shadow-sm border-l-4 border-purple-600">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="font-mono text-sm font-bold bg-gray-100 px-2 py-1 rounded">CLIENTE_RLNET_5G</span>
+                                            <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded font-bold">5 GHz</span>
+                                        </div>
+                                        <p class="text-xs text-gray-600">
+                                            Conectar: TV 4K, Videogames, Notebooks e Celulares dos moradores. <strong>Aqui roda a velocidade máxima.</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Script de Venda para o Cliente -->
+                            <div class="bg-gray-800 text-white p-6 rounded-xl shadow-lg">
+                                <h3 class="font-bold text-yellow-400 text-sm uppercase mb-3"><i class="fa-solid fa-comment-dots mr-2"></i> Como explicar isso para o cliente?</h3>
+                                <div class="space-y-4 text-sm italic text-gray-300">
+                                    <p>
+                                        <span class="text-blue-400 font-bold not-italic">Técnico:</span> "Sr. João, eu configurei duas redes Wi-Fi separadas propositalmente. A rede com final <strong>_5G</strong> é a 'VIP', é a estrada expressa. Conecte sua TV e seu celular nela para ter a velocidade máxima do plano."
+                                    </p>
+                                    <p>
+                                        <span class="text-blue-400 font-bold not-italic">Técnico:</span> "A outra rede, sem o 5G no nome, deixe para as visitas e para os aparelhos da casa inteligente. Assim, garantimos que seu filme nunca trave."
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 9. MESH CABEADO (CONTEÚDO NOVO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-16">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">9</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Mesh Cabeado (Wi-Fi Premium): A Solução Definitiva</h2>
+                            </div>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Quando o cliente tem uma casa grande ou um sobrado e quer "internet em tudo", muitos técnicos cometem o erro de instalar repetidores de tomada. Na RL NET, nós vendemos a solução profissional: <strong>Wi-Fi Premium com Mesh Cabeado</strong>.
+                            </p>
+
+                            <!-- A Grande Diferença: Repetidor vs Mesh Cabeado -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                                
+                                <!-- O Vilão: Repetidor Wi-Fi -->
+                                <div class="bg-red-50 p-6 rounded-xl border border-red-200 opacity-90">
+                                    <h3 class="font-bold text-red-800 text-lg mb-4 flex items-center gap-2">
+                                        <i class="fa-solid fa-ban"></i> Repetidor Wi-Fi (Sem Cabo)
+                                    </h3>
+                                    <div class="flex flex-col items-center mb-4">
+                                        <div class="flex items-center gap-2 text-gray-400 mb-2">
+                                            <i class="fa-solid fa-wifi text-red-400"></i>
+                                            <span class="text-xs border-t-2 border-dashed border-red-300 w-16 text-center">Wi-Fi</span>
+                                            <i class="fa-solid fa-wifi text-red-400"></i>
+                                        </div>
+                                        <p class="text-xs text-center text-red-700 font-bold">Perda de 50% da Banda</p>
+                                    </div>
+                                    <p class="text-xs text-gray-600 mb-2">
+                                        O repetidor tem apenas um rádio. Ele gasta metade do tempo ouvindo o roteador principal e a outra metade falando com o celular. 
+                                    </p>
+                                    <div class="bg-white p-2 rounded text-xs text-red-600 font-bold text-center border border-red-100">
+                                        Resultado: Se entra 500 Mega, sai 250 Mega (no máximo).
+                                    </div>
+                                </div>
+
+                                <!-- O Herói: Mesh Cabeado RL NET -->
+                                <div class="bg-green-50 p-6 rounded-xl border border-green-200 transform scale-[1.02] shadow-md">
+                                    <h3 class="font-bold text-green-800 text-lg mb-4 flex items-center gap-2">
+                                        <i class="fa-solid fa-check-double"></i> Wi-Fi Premium (Com Cabo)
+                                    </h3>
+                                    <div class="flex flex-col items-center mb-4">
+                                        <div class="flex items-center gap-2 text-gray-600 mb-2">
+                                            <i class="fa-solid fa-ethernet text-blue-600"></i>
+                                            <span class="text-xs border-t-4 border-blue-600 w-16 text-center font-bold text-blue-700">CABO</span>
+                                            <i class="fa-solid fa-ethernet text-blue-600"></i>
+                                        </div>
+                                        <p class="text-xs text-center text-green-700 font-bold">100% da Banda Garantida</p>
+                                    </div>
+                                    <p class="text-xs text-gray-600 mb-2">
+                                        Os dois roteadores conversam via cabo (Backhaul Ethernet). O Wi-Fi fica 100% livre para atender o celular do cliente.
+                                    </p>
+                                    <div class="bg-white p-2 rounded text-xs text-green-600 font-bold text-center border border-green-100">
+                                        Resultado: Se entra 500 Mega na sala, sai 500 Mega no quarto.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Padrão Técnico de Instalação -->
+                            <div class="bg-white border rounded-xl p-6 shadow-sm mb-10">
+                                <h3 class="font-bold text-[#003366] text-lg mb-6 flex items-center gap-2">
+                                    <i class="fa-solid fa-screwdriver-wrench"></i> Padrão de Instalação RL NET
+                                </h3>
+                                
+                                <div class="space-y-6">
+                                    <!-- Passo 1: Hardware -->
+                                    <div class="flex gap-4 items-start">
+                                        <div class="bg-purple-100 text-purple-700 font-bold w-8 h-8 rounded flex items-center justify-center shrink-0">1</div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Equipamento Homogêneo</h4>
+                                            <p class="text-xs text-gray-600">
+                                                Use sempre <strong>2 Roteadores da MESMA MARCA e MODELO</strong> (Ex: 2x Huawei AX3S). Não misture marcas (ex: TP-Link com Huawei), pois o protocolo de Roaming (802.11k/v/r) não funciona bem entre fabricantes diferentes.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Passo 2: Ligação Física -->
+                                    <div class="flex gap-4 items-start">
+                                        <div class="bg-purple-100 text-purple-700 font-bold w-8 h-8 rounded flex items-center justify-center shrink-0">2</div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Interligação Física (Cabo)</h4>
+                                            <div class="bg-gray-100 p-3 rounded mt-2 font-mono text-xs border border-gray-300">
+                                                [ROTEADOR PRINCIPAL (LAN)] <========== CABO CAT6 ==========> [ROTEADOR SECUNDÁRIO (WAN/LAN*)]
+                                            </div>
+                                            <p class="text-[10px] text-gray-500 mt-1 italic">*Em roteadores Mesh modernos (EasyMesh), geralmente usa-se a porta WAN do secundário para autoconfiguração. Consulte o manual do modelo específico.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Passo 3: Configuração -->
+                                    <div class="flex gap-4 items-start">
+                                        <div class="bg-purple-100 text-purple-700 font-bold w-8 h-8 rounded flex items-center justify-center shrink-0">3</div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Configuração "EasyMesh" ou "Link+"</h4>
+                                            <p class="text-xs text-gray-600">
+                                                Configure o principal normalmente (PPPoE). Resete o secundário. Conecte o cabo. Na maioria dos modelos Huawei/ZTE/TP-Link atuais, o secundário detecta o principal e copia a configuração (Nome e Senha) automaticamente, virando um "Satélite".
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- O Benefício Invisível: Roaming (Fast Roaming) -->
+                            <div class="bg-gray-800 text-white rounded-xl p-6 shadow-lg relative overflow-hidden">
+                                <div class="absolute right-0 top-0 p-4 opacity-10">
+                                    <i class="fa-solid fa-person-walking text-9xl"></i>
+                                </div>
+                                <h3 class="font-bold text-yellow-400 text-lg mb-3">O Que é o "Roaming Seamless"?</h3>
+                                <p class="text-sm text-gray-300 mb-4 max-w-lg">
+                                    É a mágica que faz o cliente andar da sala para o quarto jogando no celular sem o jogo cair.
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="bg-white/10 p-3 rounded border border-white/20">
+                                        <span class="text-red-400 font-bold text-xs uppercase mb-1 block">Sem Mesh (Repetidor Comum)</span>
+                                        <p class="text-xs text-gray-400">O celular segura o sinal fraco da sala até cair (desconectar), para só então conectar no repetidor do quarto. O jogo trava.</p>
+                                    </div>
+                                    <div class="bg-white/10 p-3 rounded border border-white/20">
+                                        <span class="text-green-400 font-bold text-xs uppercase mb-1 block">Com Mesh RL NET</span>
+                                        <p class="text-xs text-gray-400">Os roteadores conversam entre si. O da sala "avisa" o do quarto que o cliente está chegando. A troca é imperceptível (milisegundos).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- RESUMO FINAL DO MÓDULO -->
+                        <!-- ================================================================================= -->
+                        <div class="bg-[#003366] text-white p-8 rounded-xl text-center shadow-lg mt-12">
+                          <div class="inline-block bg-amber-500 p-4 rounded-full mb-6 shadow-lg animate-bounce">
+            <i class="fa-solid fa-trophy text-3xl text-white"></i>
+        </div>
+                          
+                            <h3 class="text-2xl font-bold mb-4">Você concluiu o Módulo de Wi-Fi!</h3>
+                            <p class="text-blue-100 mb-6 max-w-2xl mx-auto">
+                                Agora você domina as frequências, sabe evitar interferências, posicionar roteadores com maestria e usar o Wi-Fiman para garantir a melhor experiência para o cliente RL NET.
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-4 text-sm font-bold">
+                                <span class="bg-blue-800 px-4 py-2 rounded-full border border-blue-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> 2.4GHz vs 5GHz</span>
+                                <span class="bg-blue-800 px-4 py-2 rounded-full border border-blue-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Interferências</span>
+                                <span class="bg-blue-800 px-4 py-2 rounded-full border border-blue-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Canais & Largura</span>
+                                <span class="bg-blue-800 px-4 py-2 rounded-full border border-blue-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Wi-Fi 6</span>
+                                <span class="bg-blue-800 px-4 py-2 rounded-full border border-blue-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Wi-Fiman</span>
+                                <span class="bg-blue-800 px-4 py-2 rounded-full border border-blue-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Mesh Cabeado</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="layout.js"></script>
+
+</body>
+</html>

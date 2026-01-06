@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início - Manual do Técnico RL NET</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Roboto', sans-serif; }</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="md:pl-64 flex flex-col min-h-screen transition-all duration-300">
+        <div id="app-layout" class="flex flex-col min-h-screen">
+            
+            <!-- Padding reduzido no mobile de p-4 para p-2 -->
+            <main class="flex-1 p-2 md:p-8 animate-fade-in">
+                <div class="max-w-6xl mx-auto">
+                    
+                    <!-- Banner Compacto Mobile -->
+                    <!-- Reduzido padding (p-4) e margem inferior (mb-4) -->
+                    <div class="bg-gradient-to-r from-[#003366] to-[#0055A4] rounded-xl md:rounded-2xl p-4 md:p-10 text-white shadow-lg mb-4 md:mb-8 relative overflow-hidden">
+                        <div class="absolute right-0 top-0 opacity-10 transform translate-x-4 -translate-y-4 md:translate-x-10 md:-translate-y-10">
+                            <i class="fas fa-wifi text-7xl md:text-9xl"></i>
+                        </div>
+                        <!-- Texto reduzido no mobile -->
+                        <h1 class="text-xl md:text-4xl font-bold mb-2 md:mb-3 leading-tight">Bem-vindo, Técnico!</h1>
+                        <p class="text-blue-100 max-w-xl mb-4 text-xs md:text-base pr-8">Acesse os módulos de treinamento e procedimentos da RL NET.</p>
+                        <!-- Botão mais compacto -->
+                        <a href="01_cultura.html" class="inline-block bg-[#FFD700] text-[#003366] font-bold py-2 px-4 md:py-3 md:px-8 text-xs md:text-base rounded-lg shadow-md hover:bg-white transition-colors">
+                            Iniciar Agora
+                        </a>
+                    </div>
+
+                    <!-- Progresso Geral Compacto -->
+                    <!-- Padding reduzido para p-3 e margem mb-4 -->
+                    <div class="bg-white rounded-lg md:rounded-xl shadow-sm p-3 md:p-6 mb-4 md:mb-8 border border-gray-100">
+                        <div id="global-progress-container">
+                            <!-- Preenchido via layout.js -->
+                            <div class="animate-pulse flex space-x-4">
+                                <div class="flex-1 space-y-4 py-1">
+                                    <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                                    <div class="h-2 bg-gray-200 rounded"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Título Compacto -->
+                    <h3 class="font-bold text-[#003366] text-lg md:text-xl mb-3 md:mb-6 flex items-center gap-2 border-b pb-2">
+                        <i class="fas fa-th-large text-[#FFD700]"></i> Módulos
+                    </h3>
+                    
+                    <!-- GRADE AUTOMÁTICA -->
+                    <!-- Gap reduzido para 3 no mobile -->
+                    <div id="home-module-grid" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6 pb-8">
+                        <!-- O JS vai injetar os cards aqui -->
+                        <div class="col-span-full text-center py-10 text-gray-400">
+                            <i class="fas fa-circle-notch fa-spin text-3xl mb-2"></i>
+                            <p>Carregando módulos...</p>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="layout.js"></script>
+
+</body>
+</html>

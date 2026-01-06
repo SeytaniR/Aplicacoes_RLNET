@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 12 - Avaliação Final | RL NET</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        
+        /* Padrão de fundo "Diploma" */
+        .exam-pattern {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .option-card { transition: all 0.2s ease; }
+        .option-card:hover { transform: translateY(-2px); }
+        .option-card.selected { border-color: #003366; background-color: #f0f9ff; }
+        
+        /* Animações */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-in { animation: slideIn 0.3s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="md:pl-64 flex flex-col min-h-screen transition-all duration-300">
+        <div id="app-layout" class="flex flex-col min-h-screen">
+            
+            <main class="flex-1 p-4 md:p-8 exam-pattern">
+                <!-- Cabeçalho da Prova -->
+                <div class="max-w-4xl mx-auto mb-6">
+                    <h1 class="text-3xl font-bold text-[#003366] flex items-center gap-3">
+                        <i class="fa-solid fa-graduation-cap text-amber-500"></i>
+                        Avaliação de Certificação Técnica
+                    </h1>
+                    <p class="text-gray-600 mt-2">Validação de conhecimento teórico para técnicos de campo RL NET.</p>
+                </div>
+
+                <!-- ÁREA DO QUIZ -->
+                <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-[#003366] min-h-[400px]">
+                    
+                    <!-- TELA INICIAL (Instruções) -->
+                    <div id="start-screen" class="p-8 text-center animate-slide-in">
+                        <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa-solid fa-file-signature text-4xl text-[#003366]"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Instruções da Prova</h2>
+                        <ul class="text-left max-w-lg mx-auto space-y-3 mb-8 text-gray-600">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-check-circle text-green-500 mt-1"></i>
+                                <span>A prova contém <strong>66 questões</strong> de múltipla escolha.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-check-circle text-green-500 mt-1"></i>
+                                <span>Abrange todos os módulos e procedimentos padrão da RL NET.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-check-circle text-green-500 mt-1"></i>
+                                <span>A pontuação mínima para aprovação é de <strong>70%</strong>.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-check-circle text-green-500 mt-1"></i>
+                                <span>Leia atentamente cada pergunta antes de responder.</span>
+                            </li>
+                        </ul>
+                        <button onclick="startQuiz()" class="bg-[#003366] hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all transform hover:scale-105">
+                            Iniciar Avaliação
+                        </button>
+                    </div>
+
+                    <!-- TELA DA QUESTÃO (Oculta inicialmente) -->
+                    <div id="question-screen" class="hidden flex flex-col h-full">
+                        <!-- Barra de Progresso -->
+                        <div class="bg-gray-100 h-2 w-full">
+                            <div id="progress-bar" class="bg-green-500 h-2 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        
+                        <div class="p-6 md:p-10 flex-1">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-sm font-bold text-gray-400 uppercase tracking-wider">Questão <span id="current-q-num">1</span> de <span id="total-q-num"></span></span>
+                                <span class="bg-blue-100 text-[#003366] text-xs font-bold px-3 py-1 rounded-full">Múltipla Escolha</span>
+                            </div>
+
+                            <h3 id="question-text" class="text-xl md:text-2xl font-bold text-gray-800 mb-8 leading-snug">
+                                Carregando questão...
+                            </h3>
+
+                            <!-- Opções -->
+                            <div id="options-container" class="space-y-3">
+                                <!-- Opções injetadas via JS -->
+                            </div>
+
+                            <!-- Feedback Area -->
+                            <div id="feedback-area" class="hidden mt-6 p-4 rounded-lg border-l-4 animate-slide-in">
+                                <p id="feedback-text" class="text-sm"></p>
+                            </div>
+                        </div>
+
+                        <!-- Rodapé com Botões -->
+                        <div class="bg-gray-50 p-6 border-t flex justify-end">
+                            <button id="btn-confirm" onclick="checkAnswer()" class="bg-[#003366] text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                Confirmar Resposta
+                            </button>
+                            <button id="btn-next" onclick="nextQuestion()" class="hidden bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2">
+                                Próxima <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TELA DE RESULTADOS (Oculta inicialmente) -->
+                    <div id="result-screen" class="hidden p-8 text-center animate-slide-in">
+                        <div id="result-icon-container" class="mb-6">
+                            <!-- Ícone injetado via JS -->
+                        </div>
+                        
+                        <h2 id="result-title" class="text-3xl font-bold mb-2"></h2>
+                        <p id="result-message" class="text-gray-600 mb-8"></p>
+
+                        <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-8">
+                            <div class="bg-gray-50 p-4 rounded-lg border">
+                                <div class="text-sm text-gray-500">Sua Nota</div>
+                                <div id="final-score" class="text-3xl font-bold text-[#003366]">0%</div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg border">
+                                <div class="text-sm text-gray-500">Acertos</div>
+                                <div id="final-correct" class="text-3xl font-bold text-green-600">0/66</div>
+                            </div>
+                        </div>
+
+                        <div id="action-buttons" class="space-x-4">
+                            <button onclick="location.reload()" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-300">
+                                Refazer Prova
+                            </button>
+                            <button id="btn-print" onclick="window.print()" class="hidden bg-[#003366] text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-800">
+                                <i class="fa-solid fa-print mr-2"></i> Imprimir Resultado
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Dados das Questões e Lógica -->
+    <script>
+        // --- BANCO DE QUESTÕES REFORMULADO ---
+        const quizData = [
+            { q: "Qual opção melhor representa a identidade da RL NET?", options: ["Velocidade, Preço Baixo e Lucro.", "Qualidade, Humanização, Transparência e Confiança.", "Tecnologia, Frieza e Resultados.", "Vendas, Metas e Cobrança."], correct: 1, rationale: "Esses são os pilares fundamentais da nossa cultura." },
+            { q: "O que a RL NET espera de você, técnico?", options: ["Que faça o serviço o mais rápido possível.", "Postura, organização, e empatia com o cliente. Trabalhar com segurança e qualidade.", "Que venda planos durante a instalação.", "Que ignore as perguntas do cliente e foque no cabo."], correct: 1, rationale: "Técnica aliada à postura comportamental é o nosso diferencial." },
+            { q: "Quais os 5 pontos primordiais avaliados pelo CQI?", options: ["Velocidade, Preço, Uniforme, Carro e Ferramentas.", "Cabeamento, Atendimento, Acabamentos, Lógica e Documentação.", "Sinal, Ping, Download, Upload e Jitter.", "Horário, Assinatura, Foto, GPS e Ligações."], correct: 1, rationale: "Estes são os pilares técnicos e de processo auditados." },
+            { q: "Quais são as NRs obrigatórias para o técnico de campo?", options: ["NR-12 e NR-18", "NR-5 e NR-6", "NR-10 e NR-35", "NR-33 e NR-13"], correct: 2, rationale: "NR-10 (Eletricidade) e NR-35 (Altura) são vitais para nossa operação." },
+            { q: "Quais destes EPIs são obrigatórios para técnicos de campo?", options: ["Capacete, Cinto Paraquedista, Óculos de Proteção, Talabarte Duplo, Botina Isolada e Uniforme Refletivo.", "Apenas Capacete e Luva.", "Boné, Tênis e Colete.", "Cinto de Ferramentas e Óculos Escuros."], correct: 0, rationale: "Proteção completa para riscos elétricos e de queda." },
+            { q: "Quais dessas opções caracterizam erro crítico?", options: ["Esquecer uma ferramenta na base.", "Chegar 5 minutos atrasado.", "Subir sem amarrar a escada.", "Não oferecer água ao cliente."], correct: 2, rationale: "Subir sem amarrar a escada coloca a vida em risco iminente." },
+            { q: "Qual checklist deve ser realizado na viatura antes da partida a campo?", options: ["Som do rádio e ar condicionado.", "Escadas bem amarradas, pneus e estepe ok, sinalizações ok, Documentação ok, Nível e água e óleo ok.", "Limpeza dos vidros apenas.", "Calibragem dos pneus apenas."], correct: 1, rationale: "Segurança viária e operacional." },
+            { q: "Qual o padrão correto ao estacionar no local de trabalho?", options: ["Em cima da calçada para não atrapalhar.", "Pisca alerta, Cones na diagonal sentido fluxo, nunca em esquinas ou saídas de garagem.", "No meio da rua com pisca alerta.", "Na contra-mão para facilitar a saída."], correct: 1, rationale: "Sinalização correta previne acidentes e multas." },
+            { q: "Qual a principal diferença entre as redes WAN e LAN?", options: ["WAN é a rede interna, LAN é a externa.", "A rede WAN é externa (vem da OLT) e a LAN é a rede interna (do roteador para dentro).", "Não há diferença.", "WAN é Wi-Fi, LAN é Cabo."], correct: 1, rationale: "Conceito básico de redes." },
+            { q: "Qual a principal diferença entre IPv4 e IPv6?", options: ["IPv4 é antiga e limitada; IPv6 é quase infinito e moderno.", "IPv4 é mais rápido que IPv6.", "IPv6 é usado apenas para Wi-Fi.", "São a mesma coisa com nomes diferentes."], correct: 0, rationale: "O esgotamento do IPv4 exige a transição para IPv6." },
+            { q: "Qual o modo padrão de operação dos roteadores na RL NET?", options: ["DHCP", "IP Estático", "modo PPPoE (usuário e senha)", "Bridge"], correct: 2, rationale: "Autenticação segura do cliente." },
+            { q: "Quando você deve aplicar VLAN aos roteadores?", options: ["Sempre.", "Nunca.", "Quando for um roteador integrado (ONT).", "Quando o cliente pedir."], correct: 2, rationale: "Necessário para separar serviços em ONTs." },
+            { q: "Qual o modo de operação da ONU?", options: ["Router", "Bridge", "Repeater", "Switch"], correct: 1, rationale: "A ONU entrega o link transparente para o roteador autenticar." },
+            { q: "Qual modo deve-se definir no roteador secundário quando é uma rede mesh (wi-fi premium)?", options: ["Router", "Controller", "Agent ou Secundário", "Repeater simples"], correct: 2, rationale: "Permite o gerenciamento centralizado pela controladora." },
+            { q: "Qual a ferramenta do windows se usa para medir ping, tracert e conferir o IP da rede?", options: ["Word", "Excel", "CMD (prompt de comando)", "Calculadora"], correct: 2, rationale: "Ferramenta essencial de diagnóstico." },
+            { q: "Respectivamente, selecione a opção de comando no cmd que define: teste de estabilidade, teste de rota e análise de endereçamento IP:", options: ["ipconfig, ping, tracert", "ping, tracert e ipconfig", "tracert, ipconfig, ping", "ping, ipconfig, tracert"], correct: 1, rationale: "Ping (estabilidade), Tracert (rota), Ipconfig (endereçamento)." },
+            { q: "Qual o limite de uma cabo fast e um cabo giga, respectivamente?", options: ["10 e 100 mbps", "100 mbps e 1000 mbps", "500 e 1000 mbps", "Ambos suportam 1000 mbps"], correct: 1, rationale: "Fast Ethernet vai até 100M, Gigabit até 1000M." },
+            { q: "Qual o padrão utilizado nos conectores RJ45 da RL NET?", options: ["T568B", "T568A", "Crossover", "Coaxial"], correct: 1, rationale: "Padronização da rede interna." },
+            { q: "Quais itens são relacionados à segurança da rede do cliente?", options: ["Ping e Tracert", "WPS, Firewall, Portas e DMZ", "VLAN e Bridge", "DHCP e DNS"], correct: 1, rationale: "Configurações que protegem ou expõem a rede." },
+            { q: "Qual a principal diferença entre as redes 2.4GHz e a 5GHz respectivamente?", options: ["Menor distância, maior velocidade / Maior distância, menor velocidade", "Maior distância, menor velocidade / menor distância, maior velocidade", "São iguais em tudo", "5GHz não atravessa parede nenhuma"], correct: 1, rationale: "2.4GHz = Alcance; 5GHz = Velocidade." },
+            { q: "Qual o padrão de configuração de canais e banda Wi-Fi?", options: ["Tudo em Automático", "2.4G: 20MHz @ 1/6/11 | 5G: 80MHz+ @ 36/48/157", "2.4G: 40MHz | 5G: 20MHz", "Canais pares apenas"], correct: 1, rationale: "Garante canais sem sobreposição e largura de banda adequada." },
+            { q: "Quais os piores inimigos de interferência Wi-Fi?", options: ["Madeira e Plástico", "Água, Espelhos e Sinais de rádio", "Vento e Sol", "Escuro e Frio"], correct: 1, rationale: "Materiais que absorvem ou refletem o sinal." },
+            { q: "Quais configuração Wi-Fi abaixo é incorreta?", options: ["Usar WPA2/WPA3", "Canais e banda em automático", "Separar as frequências", "Fixar canais 1, 6 ou 11"], correct: 1, rationale: "O automático muitas vezes escolhe canais congestionados." },
+            { q: "Selecione a topologia que define o padrão Wi-Fi 5 e Wi-Fi 6 respectivamente:", options: ["802.11n e 802.11ac", "802.11ac e 802.11ax", "802.11g e 802.11n", "802.11ax e 802.11be"], correct: 1, rationale: "Nomenclatura técnica dos padrões." },
+            { q: "Qual é o posicionamento ideal para o roteador?", options: ["No chão, atrás do sofá.", "Dentro da gaveta.", "1,5 a 2m, longe do sol e obstáculos e centralizado.", "No teto da cozinha."], correct: 2, rationale: "Favorece a propagação omnidirecional." },
+            { q: "De que forma a onda de Wi-Fi se comporta ao sair da antena?", options: ["Em linha reta como laser.", "Efeito 'rosquinha' (omnidirecional).", "Apenas para cima.", "Apenas para baixo."], correct: 1, rationale: "O sinal irradia para os lados, com sombra acima e abaixo da antena." },
+            { q: "Qual APP é o melhor amigo do técnico que analisa Wi-Fi?", options: ["WhatsApp", "Instagram", "Wi-Fi Man", "Speedtest"], correct: 2, rationale: "Permite análise de espectro e sinal." },
+            { q: "Quais tecnologias definem a qualidade do roteador wi-fi?", options: ["SISO, MIMO e MU-MIMO", "VGA, HDMI e DVI", "USB, SATA e PATA", "AM, FM e Digital"], correct: 0, rationale: "Tecnologias de múltiplas antenas para transmissão simultânea." },
+            { q: "Defina o uso do Band Steering (junção das redes 2.4 e 5 G)", options: ["É obrigatório.", "É excelente para todos os dispositivos.", "É ruim, pois a maioria dos celulares comuns não conseguem escolher a melhor rede atual.", "Não existe essa função."], correct: 2, rationale: "Causa instabilidade em dispositivos legados que ficam presos no 2.4GHz." },
+            { q: "O que a fibra óptica transporta e de que forma?", options: ["Eletricidade via cobre.", "Luz, usando um núcleo de vidro que reflete a luz.", "Sinal de rádio via ar.", "Dados magnéticos."], correct: 1, rationale: "Princípio da reflexão total interna." },
+            { q: "Qual o padrão de medição para o Power Meter na RL NET?", options: ["@1310 nm", "@1490 nm", "@1550 nm", "@850 nm"], correct: 1, rationale: "Comprimento de onda de descida (Downstream) padrão PON." },
+            { q: "Quais são os elementos do cabo drop utilizado nas instalações?", options: ["Apenas fibra e plástico.", "Cobre e alumínio.", "Mensageiro Metálico, Mensageiro de Tração e Fibra (núcleo, casca e acrilato).", "Borracha e vidro."], correct: 2, rationale: "Estrutura completa do cabo drop compacto." },
+            { q: "Qual a principal diferença entre dBm e dB?", options: ["São iguais.", "dBm mede a potência, enquanto dB mede a perda (atenuação).", "dBm mede perda, dB mede potência.", "dBm é voltagem."], correct: 1, rationale: "dBm é absoluto (nível de sinal), dB é relativo (diferença/perda)." },
+            { q: "Qual o valor de perda máxima aceitável em uma instalação?", options: ["5dB", "10dB", "2dB (0,5dB conectores + 1dB ONU)", "0dB"], correct: 2, rationale: "Orçamento de potência padrão para instalação doméstica." },
+            { q: "Quanto de perda máxima um splitter 1x2 pode adicionar na sua instalação?", options: ["7dB", "10dB", "máximo 3,5dB do splitter + max 0,5dB por acoplador", "1dB"], correct: 2, rationale: "Perda típica de divisão passiva." },
+            { q: "Qual o nível de sinal ideal em uma instalação?", options: ["-30 a -40 dBm", "Entre -8dBm e -25dBm", "Positivo", "0 dBm"], correct: 1, rationale: "Faixa operacional segura dos transceivers." },
+            { q: "Qual o tipo correto de conexão entre fast conectors?", options: ["APC-UPC (Verde com Azul)", "Padrão 'cor com cor' APC-APC e UPC-UPC", "Qualquer um serve", "Apenas azul com azul"], correct: 1, rationale: "Misturar polimentos causa perda severa." },
+            { q: "Qual ferramenta avançada analisa completamente a fibra óptica?", options: ["Multímetro", "OTDR", "Alicate", "Lanterna"], correct: 1, rationale: "Reflectômetro Óptico no Domínio do Tempo." },
+            { q: "Qual é a curvatura máxima de atenuação da fibra óptica?", options: ["1mm", "30mm", "90 graus vincado", "10cm"], correct: 1, rationale: "Raios menores que 30mm causam fuga de luz (atenuação)." },
+            { q: "Quando usar ancoragem de encabeçamento?", options: ["Meio do vão.", "Fim de linha, travessias, tracionamento maior e mudança de direção.", "Apenas em retas.", "Nunca."], correct: 1, rationale: "Suporta a tensão mecânica total do cabo." },
+            { q: "Quando usar ancoragem de passagem?", options: ["Fim de linha.", "Meio de linha, apenas sustentação em X usando uma alça.", "Em curvas de 90 graus.", "Travessia de rua."], correct: 1, rationale: "Apenas sustenta o peso, não traciona." },
+            { q: "Como evitar que o cabo conduza água para dentro da casa do cliente?", options: ["Encher de silicone.", "Aplicar acabamento 'pingadeira' (Drip Loop), deixando o cabo em 'U' abaixo do furo.", "Furar inclinado para cima.", "Não tem como evitar."], correct: 1, rationale: "A gravidade impede a entrada da água." },
+            { q: "O que um técnico de instalação deve fazer antes de sair para a rota?", options: ["Tomar café.", "Checar as informações de suas ordens de serviços, materiais e ferramentas.", "Sair correndo.", "Ligar para o cliente."], correct: 1, rationale: "Planejamento evita improdutividade." },
+            { q: "Qual a forma correta de se apresentar ao cliente?", options: ["Entrar direto.", "Gritar no portão.", "Cumprimentar, se identificar, informar o motivo e solicitar acesso.", "Buzinar."], correct: 2, rationale: "Profissionalismo e segurança." },
+            { q: "Como o técnico deve se portar no momento da escolha do local do roteador?", options: ["Aceitar qualquer lugar que o cliente quiser.", "Deve argumentar de forma incisiva que o melhor local é centralizado, explicando o motivo.", "Colocar onde é mais fácil de instalar.", "Colocar na cozinha."], correct: 1, rationale: "Garantir a melhor experiência Wi-Fi é dever do técnico." },
+            { q: "O que significa 'narrar o atendimento'?", options: ["Falar sozinho.", "Avisar e explicar tudo que ocorrerá durante o atendimento para o cliente.", "Gravar um áudio.", "Escrever um livro."], correct: 1, rationale: "Reduz a ansiedade do cliente e alinha expectativas." },
+            { q: "Visando segurança, o que o técnico deve fazer antes de iniciar a instalação?", options: ["Nada.", "Checar tanto o ambiente externo quanto interno (riscos).", "Rezar.", "Pedir água."], correct: 1, rationale: "Análise preliminar de risco (APR)." },
+            { q: "Antes de desenrolar o cabo da bobina, o que o técnico deve analisar?", options: ["A cor do cabo.", "O trajeto, visando a CTO mais próxima/segura e solicitar mapa.", "Se o cabo está limpo.", "Nada."], correct: 1, rationale: "Evita retrabalho e uso excessivo de material." },
+            { q: "Qual das práticas abaixo descreve um bom lançamento do cabo?", options: ["Arrastar no chão.", "Usar base ou suspensão lisa, encabeçamento e passagem corretos.", "Passar por dentro de árvores.", "Esticar o máximo possível."], correct: 1, rationale: "Protege a integridade física do drop." },
+            { q: "Qual o padrão de acabamento obrigatório no cabo drop?", options: ["Cortar rente.", "Reserva técnica de 1 a 2 metros espinada e pingadeira em 'U'.", "Deixar solto.", "Enrolar 20 metros."], correct: 1, rationale: "Padrão visual e funcional (manutenção)." },
+            { q: "Qual o passo a passo correto para uma boa conectorização?", options: ["1-Conexão, 2-Limpeza.", "1-Decapagem, 2-Limpeza, 3-Clivagem e 4-Conexão.", "1-Clivagem, 2-Decapagem.", "Não precisa limpar."], correct: 1, rationale: "Sequência lógica para evitar sujeira e perda." },
+            { q: "Qual a forma correta de identificar o drop na CTO?", options: ["Com o ID da O.S.", "Com o ID de cadastro do cliente.", "Com o ID de contrato.", "Com o Login."], correct: 1, rationale: "Padrão de identificação da rede externa." },
+            { q: "Qual a forma correta de fixar o drop em paredes e tapar furos?", options: ["Prego e cola.", "Com grampos fixa-fio (30-40cm) sem esmagar e tapa-furos.", "Fita isolante.", "Deixar solto."], correct: 1, rationale: "Estética e proteção da fibra." },
+            { q: "Qual a melhor forma de organizar a sobra técnica dentro da residência?", options: ["Cortar fora.", "Escondendo atrás de móveis.", "Deixar no meio da sala.", "Pendurar na parede."], correct: 1, rationale: "Estética limpa." },
+            { q: "Para que a ONU tenha acesso à OLT e entregue internet, o que precisa ser feito?", options: ["Ligar e desligar.", "Solicitar provisionamento ao apoio operacional.", "Resetar a ONU.", "Trocar a fibra."], correct: 1, rationale: "Liberação lógica do equipamento na rede." },
+            { q: "Quais as quatro configurações principais a se realizar em uma instalação?", options: ["Apenas senha Wi-Fi.", "PPPoE, Nome/Senha Wi-Fi, Canais/Banda e IPv6/Gerência.", "IP Estático e DNS.", "Firewall e DMZ."], correct: 1, rationale: "Configuração completa do serviço." },
+            { q: "Quais são os testes obrigatórios que o técnico instalador deve realizar?", options: ["Abrir o YouTube.", "Teste de velocidade, IPv6, Wi-Fi Man e Estabilidade.", "Pingar o Google.", "Verificar se acendeu a luz."], correct: 1, rationale: "Validação total da entrega." },
+            { q: "Qual a importância de explicar a central do assinante ao cliente?", options: ["Nenhuma.", "Acesso a faturas, consumo e abertura de chamados.", "Para ele não ligar mais.", "Para vender mais."], correct: 1, rationale: "Empoderamento do cliente e redução de chamados simples." },
+            { q: "Caso o cliente tenha direito a outros aplicativos, qual é o procedimento correto?", options: ["Mandar ele se virar.", "Orientar sobre o produto e auxiliar na instalação/login.", "Dizer que não sabe.", "Cobrar pela instalação."], correct: 1, rationale: "Entrega completa do valor contratado." },
+            { q: "Quais os dois últimos passos da instalação?", options: ["Ir embora e tchau.", "Orientações gerais ao cliente e fechamento da O.S documentada.", "Pedir café e água.", "Limpar a bota."], correct: 1, rationale: "Finalização profissional." },
+            { q: "Como se chama o método padrão do instalador?", options: ["R.A.P.I.D.O", "I.D.E.A.L", "S.A.L.V.A", "F.A.C.I.L"], correct: 1, rationale: "Metodologia de instalação da RL NET." },
+            { q: "Qual é a missão do reparador RL NET?", options: ["Trocar o roteador.", "Restabelecer o procedimento padrão para resolver o problema.", "Culpar a instalação.", "Ir embora rápido."], correct: 1, rationale: "Resolução definitiva e padronização." },
+            { q: "Quais os quatros pilares do reparador?", options: ["Qualidade técnica/estética; Documentação; Zero Reincidências; Preservação Infra.", "Velocidade, Pressa, Gambiarra e Sorte.", "Troca, Venda, Cancelamento e Retrabalho.", "Nenhuma das anteriores."], correct: 0, rationale: "Bases da manutenção de excelência." },
+            { q: "Como se chama o método padrão do reparador?", options: ["I.D.E.A.L", "S.A.L.V.A", "C.O.R.R.E", "A.J.U.D.A"], correct: 1, rationale: "Metodologia de reparo da RL NET." },
+            { q: "Como a instalação deve ficar após um reparo?", options: ["Igual ou melhor do que antes.", "Do jeito que der.", "Pior, mas funcionando.", "Provisória."], correct: 0, rationale: "Compromisso com a qualidade contínua." },
+            { q: "O que é 'escalonamento de problema'?", options: ["Ignorar o problema.", "Levar o problema a outro setor (complexo/infra).", "Culpar o cliente.", "Desistir."], correct: 1, rationale: "Fluxo correto para problemas que fogem da alçada do campo." },
+            { q: "Qual o padrão ao realizar o escalonamento?", options: ["Mandar 'tá ruim'.", "Enviar máximo de informações, fotos, identificar clientes e canal correto.", "Não mandar foto.", "Enviar no grupo da família."], correct: 1, rationale: "Informação completa agiliza a solução." },
+            { q: "Quando deve-se acionar o supervisor?", options: ["Para pedir aumento.", "Sempre que algo fugir do padrão e houver dúvida.", "Para fofocar.", "Em todo atendimento."], correct: 1, rationale: "Suporte à tomada de decisão." },
+            { q: "Cite 3 ferramentas de fibra óptica:", options: ["Alicate, Faca, Dente.", "Decapador, Clivador e Caneta de Limpeza.", "Martelo, Chave, Serrote.", "Multímetro, Trena, Compasso."], correct: 1, rationale: "Ferramentas específicas de fibra." },
+            { q: "Cite as 3 ferramentas principais de medição óptica:", options: ["Power Meter, Caneta VFL e OTDR.", "Multímetro, Amperímetro, Voltímetro.", "Trena, Régua, Paquímetro.", "Speedtest, Ping, Tracert."], correct: 0, rationale: "Instrumentos de aferição de luz." },
+            { q: "Cite 3 ferramentas de instalação:", options: ["Enxada, Pá, Cimento.", "Furadeira, Martelo e Testador de cabo.", "Computador, Mouse, Teclado.", "Vassoura, Pano, Rodo."], correct: 1, rationale: "Kit básico do instalador." },
+            { q: "Cite 3 materiais de fixação e suporte:", options: ["Cola, Fita, Chiclete.", "Alça preformada, grampo fixa-fio e abraçadeiras.", "Prego, Arame, Barbante.", "Parafuso, Bucha, Durex."], correct: 1, rationale: "Materiais de rede externa." },
+            { q: "Cite 3 EPIs obrigatórios:", options: ["Boné, Chinelo, Óculos Escuros.", "Capacete, Cinto e Luva.", "Jaleco, Máscara, Touca.", "Nenhum."], correct: 1, rationale: "Proteção individual básica." },
+            { q: "Quais os procedimentos corretos para manter a integridade de materiais e ferramentas?", options: ["Jogar na mala.", "Limpeza, Calibragem, Alinhamento, Testes e Acomodação.", "Usar até quebrar.", "Não limpar."], correct: 1, rationale: "Zelo pelo patrimônio." },
+            { q: "Quais os cuidados principais com a viatura?", options: ["Som alto e tuning.", "Fixação racks, Mecânica diária, Organização, Higiene.", "Lavar só por fora.", "Andar rápido."], correct: 1, rationale: "A viatura é uma ferramenta de trabalho." },
+            { q: "Quais os conceitos primordiais para um atendimento de excelência?", options: ["Pressa e Gírias.", "Clareza, Eficiência, Postura, Solução, Acompanhamento, Experiência.", "Ignorar o cliente.", "Falar baixo."], correct: 1, rationale: "Pilares do CX (Customer Experience)." },
+            { q: "Qual é o perfil ideal do técnico que presta um atendimento excelente?", options: ["Rude e Bagunçado.", "Cordialidade, Auto-organização, Compromisso, Paciência, Ética, Proatividade.", "Atrasado e Sujo.", "Tímido e Calado."], correct: 1, rationale: "Soft skills esperadas." },
+            { q: "Por que a primeira impressão do cliente é importante?", options: ["Não é importante.", "Define o rumo do atendimento e a satisfação (Uniforme, postura...).", "O que importa é o sinal.", "Porque sim."], correct: 1, rationale: "A percepção inicial molda a confiança." },
+            { q: "Qual a forma correta de se comunicar durante o atendimento?", options: ["Rápido e com gírias.", "Falar com calma, narrar, reforçar segurança, sem tecniquês.", "Usar termos técnicos difíceis.", "Ficar mudo."], correct: 1, rationale: "Comunicação assertiva e acessível." },
+            { q: "Quais os pilares da comunicação não verbal?", options: ["Braço cruzado e cara feia.", "Coerência, Postura Firme, Semblante Amigável, Escuta Ativa, Movimentos Precisos.", "Olhar para o chão.", "Roer unhas."], correct: 1, rationale: "O corpo fala tanto quanto a boca." },
+            { q: "Qual a forma correta da comunicação escrita?", options: ["Abreviações e gírias.", "Objetiva, sem abreviações, ortografia correta, padrão RL, fotos.", "Textão sem nexo.", "Sem fotos."], correct: 1, rationale: "Documentação profissional." },
+            { q: "Qual o passo a passo da chegada ao local de atendimento?", options: ["Entrar direto.", "1-Cumprimento, 2-Confirmação OS, 3-Explicação, 4-Acesso, 5-Ambiente, 6-Análise.", "Pedir café.", "Subir na escada."], correct: 1, rationale: "Protocolo de entrada." },
+            { q: "Qual a importância de manter a escuta ativa com o cliente?", options: ["Fingir que ouve.", "Demonstra empatia, acrescenta detalhes técnicos e identifica expectativas.", "Perda de tempo.", "Para rebater o cliente."], correct: 1, rationale: "Ouvir para entender, não para responder." },
+            { q: "De que forma o técnico deve explicar o diagnóstico?", options: ["Complicado e técnico.", "Linguagem simples, metáforas, evidências, solução e validar entendimento.", "Dizer 'tá ruim'.", "Não explicar."], correct: 1, rationale: "Educar o cliente gera valor." },
+            { q: "Quais os pilares da transparência no atendimento?", options: ["Mentir sobre o tempo.", "Tempo Estimado, Etapas, Riscos, Impactos, Aceite, Expectativa.", "Esconder erros.", "Fazer surpresa."], correct: 1, rationale: "O combinado não sai caro." },
+            { q: "Como se porta um técnico de 'etiqueta'?", options: ["Suja tudo e fala muito.", "Minimiza sujeira, fala o necessário, respeita privacidade, organizado.", "Mexe na geladeira.", "Usa o banheiro sem pedir."], correct: 1, rationale: "Respeito ao lar do cliente." },
+            { q: "Qual é o procedimento correto para finalizar o atendimento?", options: ["Sair correndo.", "Orientações gerais e perguntar: 'ficou dúvida? posso ajudar mais?'.", "Pedir gorjeta.", "Assina aqui."], correct: 1, rationale: "Garantia de satisfação final." },
+            { q: "Se ocorrer um conflito, como o técnico deve se portar?", options: ["Brigar de volta.", "Manter a calma, não entrar no conflito, repetir explicações, paciência, supervisor.", "Chorar.", "Ir embora sem avisar."], correct: 1, rationale: "Inteligência emocional." },
+            { q: "O que são perfis de clientes?", options: ["Rico e Pobre.", "Perfil comportamental que dita a forma correta de comunicação.", "Chato e Legal.", "Nenhum."], correct: 1, rationale: "Adaptabilidade no atendimento." },
+            { q: "O que um técnico NUNCA deve fazer?", options: ["Sorrir.", "Culpar outro, falar mal da empresa, sujeira, omitir, gambiarra, sair sem solução.", "Limpar.", "Explicar."], correct: 1, rationale: "Erros fatais de conduta." },
+            { q: "O que é o CQI?", options: ["Clube Queijos Importados.", "Controle de Qualidade de Instalações.", "Central de Questionamentos.", "Comitê de Quitação."], correct: 1, rationale: "Setor guardião da qualidade." },
+            { q: "Quais os 5 pilares avaliados pelo CQI?", options: ["Preço, Venda...", "Cabeamento, Lógica, Acabamento, Atendimento, Documentação.", "Carro, Moto...", "Nenhum."], correct: 1, rationale: "Critérios de auditoria." },
+            { q: "Qual é o objetivo principal do CQI?", options: ["Punir.", "Padronizar instalações/reparos e garantir qualidade.", "Chatear.", "Demitir."], correct: 1, rationale: "Melhoria contínua." },
+            { q: "Como é feita a avaliação digital do CQI?", options: ["Sorteio.", "Auditor avalia fotos/infos do serviço vs regras padrão.", "O cliente dá nota.", "Automática."], correct: 1, rationale: "Auditoria remota." },
+            { q: "Como é feita a avaliação em campo?", options: ["Pergunta pro vizinho.", "Auditor acompanha equipe ou realiza pós-instalação.", "Drone.", "Câmera escondida."], correct: 1, rationale: "Auditoria presencial." },
+            { q: "Como é estruturada a avaliação diante dos 5 pilares?", options: ["Nota 0 a 100.", "Categorias avaliadas minuciosamente, nota 1 a 5, média.", "Aprovado/Reprovado apenas.", "Estrelinhas."], correct: 1, rationale: "Metodologia de scoring." },
+            { q: "Qual a média mínima aceitável dentro dos padrões?", options: ["10 pontos.", "15 pontos.", "50 pontos.", "100 pontos."], correct: 1, rationale: "Meta de qualidade." },
+            { q: "O que é uma ressalva?", options: ["Um elogio.", "Penalidade/registro permanente para serviço fora do padrão.", "Um bônus.", "Uma folga."], correct: 1, rationale: "Registro de não-conformidade." },
+            { q: "Além de fiscalizar e penalizar, o CQI também atua em:", options: ["Vendas.", "Relatórios, feedback, treinamentos e reciclagens.", "RH.", "Financeiro."], correct: 1, rationale: "Papel educativo do CQI." },
+            { q: "Por que focar no desenvolvimento pessoal?", options: ["Para ganhar mais sem trabalhar.", "Elevar qualidade técnica, diferencial, responsabilidade e preparo.", "Para mandar nos outros.", "Não precisa."], correct: 1, rationale: "Crescimento profissional." },
+            { q: "Quais as 4 trilhas principais que englobam o setor?", options: ["Terra, Ar, Fogo, Água.", "Técnica Infra, Humanizada Exp, Lógica, Gestão.", "Vendas, Mkt, RH, Fin.", "Norte, Sul, Leste, Oeste."], correct: 1, rationale: "Caminhos de carreira na RL NET." }
+        ];
+
+        // --- LÓGICA DO APP (Mantida idêntica) ---
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+        let hasAnswered = false;
+
+        const startScreen = document.getElementById('start-screen');
+        const questionScreen = document.getElementById('question-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackArea = document.getElementById('feedback-area');
+        const feedbackText = document.getElementById('feedback-text');
+        const btnConfirm = document.getElementById('btn-confirm');
+        const btnNext = document.getElementById('btn-next');
+        const progressBar = document.getElementById('progress-bar');
+        const currentQNum = document.getElementById('current-q-num');
+        const totalQNum = document.getElementById('total-q-num');
+
+        function startQuiz() {
+            startScreen.classList.add('hidden');
+            questionScreen.classList.remove('hidden');
+            totalQNum.innerText = quizData.length;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            hasAnswered = false;
+            const q = quizData[currentQuestionIndex];
+            
+            currentQNum.innerText = currentQuestionIndex + 1;
+            const progress = ((currentQuestionIndex) / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            questionText.innerText = q.q;
+            optionsContainer.innerHTML = '';
+            
+            feedbackArea.classList.add('hidden');
+            feedbackArea.className = "hidden mt-6 p-4 rounded-lg border-l-4 animate-slide-in";
+            btnConfirm.classList.remove('hidden');
+            btnConfirm.disabled = true;
+            btnNext.classList.add('hidden');
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('div');
+                btn.className = `option-card p-4 border-2 border-gray-200 rounded-lg cursor-pointer flex items-center gap-3 hover:border-blue-300 bg-white`;
+                btn.onclick = () => selectOption(index);
+                btn.innerHTML = `
+                    <div class="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center option-circle">
+                        <div class="w-3 h-3 rounded-full bg-[#003366] opacity-0 transition-opacity"></div>
+                    </div>
+                    <span class="text-gray-700 font-medium">${opt}</span>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        let selectedOptionIndex = null;
+        function selectOption(index) {
+            if (hasAnswered) return;
+            selectedOptionIndex = index;
+            btnConfirm.disabled = false;
+            const options = optionsContainer.children;
+            for (let i = 0; i < options.length; i++) {
+                options[i].classList.remove('selected', 'border-[#003366]', 'bg-blue-50');
+                options[i].querySelector('.option-circle').classList.remove('border-[#003366]');
+                options[i].querySelector('.option-circle div').classList.add('opacity-0');
+            }
+            const selected = options[index];
+            selected.classList.add('selected', 'border-[#003366]', 'bg-blue-50');
+            selected.querySelector('.option-circle').classList.add('border-[#003366]');
+            selected.querySelector('.option-circle div').classList.remove('opacity-0');
+        }
+
+        function checkAnswer() {
+            hasAnswered = true;
+            const q = quizData[currentQuestionIndex];
+            const isCorrect = selectedOptionIndex === q.correct;
+            
+            if (isCorrect) score++;
+
+            const options = optionsContainer.children;
+            for (let i = 0; i < options.length; i++) {
+                options[i].classList.add('cursor-default');
+                options[i].onclick = null; 
+                
+                if (i === q.correct) {
+                    options[i].classList.add('bg-green-100', 'border-green-500');
+                    options[i].innerHTML += '<i class="fa-solid fa-check text-green-600 ml-auto"></i>';
+                } else if (i === selectedOptionIndex && !isCorrect) {
+                    options[i].classList.add('bg-red-100', 'border-red-500');
+                    options[i].innerHTML += '<i class="fa-solid fa-xmark text-red-600 ml-auto"></i>';
+                } else {
+                    options[i].classList.add('opacity-50');
+                }
+            }
+
+            feedbackArea.classList.remove('hidden');
+            if (isCorrect) {
+                feedbackArea.classList.add('bg-green-50', 'border-green-500', 'text-green-800');
+                feedbackText.innerHTML = `<strong>Correto!</strong> ${q.rationale}`;
+            } else {
+                feedbackArea.classList.add('bg-red-50', 'border-red-500', 'text-red-800');
+                feedbackText.innerHTML = `<strong>Incorreto.</strong> ${q.rationale}`;
+            }
+
+            btnConfirm.classList.add('hidden');
+            btnNext.classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            questionScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            
+            const percentage = Math.round((score / quizData.length) * 100);
+            const passed = percentage >= 70; 
+
+            document.getElementById('final-score').innerText = `${percentage}%`;
+            document.getElementById('final-correct').innerText = `${score}/${quizData.length}`;
+
+            const iconContainer = document.getElementById('result-icon-container');
+            const title = document.getElementById('result-title');
+            const message = document.getElementById('result-message');
+            const btnPrint = document.getElementById('btn-print');
+
+            if (passed) {
+                iconContainer.innerHTML = `
+                    <div class="inline-block p-6 rounded-full bg-green-100 mb-4 animate-bounce">
+                        <i class="fa-solid fa-medal text-6xl text-green-500"></i>
+                    </div>`;
+                title.innerText = "Parabéns! Você foi Aprovado.";
+                title.className = "text-3xl font-bold mb-2 text-green-700";
+                message.innerText = "Você demonstrou excelente conhecimento teórico dos procedimentos da RL NET. Sua certificação foi validada.";
+                btnPrint.classList.remove('hidden');
+            } else {
+                iconContainer.innerHTML = `
+                    <div class="inline-block p-6 rounded-full bg-red-100 mb-4">
+                        <i class="fa-solid fa-book-open-reader text-6xl text-red-500"></i>
+                    </div>`;
+                title.innerText = "Não foi dessa vez.";
+                title.className = "text-3xl font-bold mb-2 text-red-700";
+                message.innerText = "Você não atingiu a pontuação mínima de 70%. Recomendamos revisar os módulos de treinamento e tentar novamente.";
+            }
+        }
+    </script>
+    
+    <script src="layout.js"></script>
+    <script src="https://static.app/js/static.js" type="text/javascript"></script>
+
+</body>
+</html>
+```
+```

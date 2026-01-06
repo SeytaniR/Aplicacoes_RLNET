@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RAT Digital - RL NET v17</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- HTML2PDF -->
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        
+        body { font-family: 'Roboto', sans-serif; background-color: #f0f2f5; color: #334155; -webkit-tap-highlight-color: transparent; padding-bottom: 260px; }
+
+        /* --- CORES (AZUL RL NET) --- */
+        :root { --brand-blue: #0369a1; --brand-light: #e0f2fe; --brand-border: #bae6fd; }
+
+        /* --- LAYOUT COMPACTO --- */
+        .block-container {
+            background: white; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            margin-bottom: 8px; overflow: hidden; border: 1px solid #e2e8f0;
+        }
+        .block-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 12px;
+            background: #fff; border-left: 4px solid #cbd5e1;
+            cursor: pointer; user-select: none; transition: background 0.2s;
+        }
+        .block-header.active { border-left-color: var(--brand-blue); background-color: var(--brand-light); }
+        .block-title { font-weight: 700; color: #1e293b; text-transform: uppercase; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; }
+        .block-icon { transition: transform 0.3s; color: #94a3b8; font-size: 0.9rem; }
+        .block-header.active .block-icon { transform: rotate(180deg); color: var(--brand-blue); }
+        .block-content { padding: 12px; border-top: 1px solid #f1f5f9; display: none; background-color: #fff; }
+        .block-content.show { display: block; animation: slideDown 0.2s ease-out; }
+
+        /* INPUTS */
+        .input-group { margin-bottom: 8px; page-break-inside: avoid; }
+        .input-label { font-size: 0.65rem; font-weight: 700; color: #64748b; margin-bottom: 2px; display: block; text-transform: uppercase; letter-spacing: 0.3px; }
+        .input-field {
+            width: 100%; padding: 6px 10px;
+            border: 1px solid #cbd5e1; border-radius: 6px;
+            font-size: 14px;
+            height: 38px;
+            background-color: #fff; color: #0f172a; transition: all 0.2s;
+        }
+        .input-field:focus { outline: none; border-color: var(--brand-blue); box-shadow: 0 0 0 2px rgba(3, 105, 161, 0.1); }
+        .input-field.error { border-color: #ef4444; background-color: #fef2f2; }
+        .input-field:disabled { background-color: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
+        .uppercase-input { text-transform: uppercase; }
+
+        /* CHECKBOXES */
+        .checkbox-grid { display: grid; grid-template-columns: 1fr; gap: 6px; }
+        @media(min-width: 640px) { .checkbox-grid { grid-template-columns: 1fr 1fr; } }
+        .checkbox-card { display: flex; align-items: center; background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 0.75rem; font-weight: 600; }
+        .checkbox-card input { width: 16px; height: 16px; margin-right: 8px; accent-color: var(--brand-blue); flex-shrink: 0; }
+        .checkbox-card.highlight { background-color: #eff6ff; border-color: #93c5fd; }
+
+        /* NAV BTN */
+        .btn-next-step {
+            display: flex; align-items: center; gap: 5px; margin-left: auto; margin-top: 10px;
+            background-color: #f8fafc; color: #64748b; font-size: 0.7rem; font-weight: 700;
+            padding: 4px 10px; border-radius: 15px; border: 1px solid #cbd5e1; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-next-step:hover { background-color: var(--brand-light); color: var(--brand-blue); border-color: var(--brand-blue); }
+
+        /* ASSINATURA */
+        .sig-box { position: relative; width: 100%; height: 140px; background: #fff; border: 2px dashed #94a3b8; border-radius: 6px; overflow: hidden; touch-action: none; }
+        canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: crosshair; }
+        .sig-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.8); display: flex; justify-content: center; align-items: center; z-index: 10; }
+        .sig-status { position: absolute; bottom: 5px; right: 5px; font-size: 9px; font-weight: bold; color: #166534; background: #dcfce7; padding: 2px 5px; border-radius: 4px; display: none; }
+
+        /* FOOTER */
+        .footer-fixed {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(255,255,255,0.98); backdrop-filter: blur(8px);
+            border-top: 1px solid #e2e8f0; padding: 8px 10px 15px 10px; z-index: 50;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 5px;
+        }
+        .btn { border-radius: 6px; font-weight: 700; display: flex; align-items: center; justify-content: center; transition: 0.2s; height: 32px; font-size: 0.75rem; }
+        .btn:active { transform: scale(0.98); }
+        .btn-brand { background: var(--brand-blue); color: white; box-shadow: 0 2px 5px rgba(3, 105, 161, 0.3); height: 36px; font-size: 0.8rem; }
+        .btn-indigo { background: #6366f1; color: white; }
+        .btn-dark { background: #1e293b; color: white; }
+        .btn-green { background: #10b981; color: white; }
+        .btn-red { background: #ef4444; color: white; }
+        .btn-outline-red { border: 1px solid #ef4444; color: #ef4444; background: transparent; }
+        .btn-outline-blue { border: 1px solid var(--brand-blue); color: var(--brand-blue); background: transparent; }
+        
+        /* ALERTA */
+        .alert-content { background: white; padding: 15px; border-radius: 10px; width: 85%; max-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; }
+        .risk-alert { animation: pulse-red 2s infinite; color: #991b1b; background-color: #fee2e2; border: 1px solid #ef4444; padding: 4px; font-size: 0.7rem; border-radius: 4px; text-align: center; font-weight: bold; }
+
+        /* SAVE INDICATOR */
+        .save-indicator { position: fixed; top: 10px; right: 10px; font-size: 10px; color: #166534; background: #dcfce7; padding: 2px 6px; border-radius: 4px; opacity: 0; transition: opacity 0.5s; pointer-events: none; z-index: 100; font-weight: bold; border: 1px solid #bbf7d0; }
+        .save-indicator.show { opacity: 1; }
+        
+        /* STATUS BAR */
+        .status-bar { font-size: 9px; color: #64748b; display: flex; justify-content: space-between; padding: 0 2px; }
+
+        /* PDF MODE */
+        .pdf-mode body { background: white; padding: 0; font-family: 'Roboto', sans-serif; font-size: 11pt; color: #000; }
+        .pdf-mode .footer-fixed, .pdf-mode .no-print, .pdf-mode .sig-overlay, .pdf-mode .btn-next-step, .pdf-mode .block-icon, .pdf-mode #btn_nova_rat { display: none !important; }
+        .pdf-mode .block-container { border: none; box-shadow: none; margin-bottom: 15px; border-bottom: 1px solid #ccc; border-radius: 0; page-break-inside: avoid; }
+        .pdf-mode .block-header { background: transparent !important; padding: 5px 0; border-left: none !important; color: var(--brand-blue); border-bottom: 2px solid var(--brand-blue); margin-bottom: 5px; }
+        .pdf-mode .block-title { font-size: 11pt; color: var(--brand-blue); }
+        .pdf-mode .block-content { display: block !important; padding: 0; border: none; }
+        .pdf-mode .input-group { margin-bottom: 5px; }
+        .pdf-mode .input-field { border: none; border-bottom: 1px dotted #999; border-radius: 0; padding: 0; height: auto; min-height: auto; background: transparent !important; font-size: 10pt; font-weight: 500; }
+        .pdf-mode .input-label { color: #555; font-size: 8pt; margin-bottom: 0; }
+        .pdf-mode .checkbox-card { border: none; background: transparent; padding: 2px 0; font-size: 9pt; }
+        .pdf-sig-img { display: block; max-width: 200px; height: auto; margin-top: 5px; }
+        .pdf-text-replace { white-space: pre-wrap; font-size: 10pt; border: 1px solid #eee; padding: 5px; }
+        
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse-red { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+    </style>
+</head>
+<body>
+
+    <!-- SAVE INDICATOR -->
+    <div id="save_indicator" class="save-indicator">💾 Salvo</div>
+
+    <!-- CUSTOM ALERT -->
+    <div id="custom-alert" class="hidden fixed inset-0 bg-black/60 z-[9999] items-center justify-center">
+        <div class="alert-content">
+            <div id="alert-icon" class="text-3xl mb-2"></div>
+            <h3 id="alert-title" class="text-base font-bold mb-1"></h3>
+            <p id="alert-msg" class="text-xs text-gray-600 mb-3"></p>
+            <div class="flex gap-2 justify-center">
+                <button id="btn-alert-cancel" class="hidden btn btn-dark w-24 h-8 text-xs">Cancelar</button>
+                <button id="btn-alert-ok" class="btn btn-brand w-24 h-8 text-xs">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DATALISTS -->
+    <datalist id="lista_suporte">
+        <option value="EDGAR MELO"><option value="FILIPE CRUZ"><option value="GIULLIANO MORAES"><option value="IGOR ALVES"><option value="MATHEUS ECHELI"><option value="THIAGO CORLASOLI"><option value="THOMAS MAGNUM"><option value="TUANI MARTINS"><option value="VÍTOR NOBRE">
+    </datalist>
+
+    <datalist id="lista_autorizados">
+        <option value="ALESSANDRA NOBRE"><option value="ANA PEREIRA"><option value="FILIPE CRUZ"><option value="IVANIR NUNES"><option value="JULIANO ABREU"><option value="MATHEUS ECHELI">
+    </datalist>
+
+    <div id="rat-content" class="max-w-2xl mx-auto p-2 md:p-6">
+        
+        <!-- HEADER -->
+        <div class="keep-together flex items-center justify-between border-b-2 border-blue-700 pb-2 mb-4">
+            <div class="flex items-center">
+                <img id="main-logo" src="https://i.imgur.com/qndtfM0.png" class="h-8 object-contain" crossorigin="anonymous" onerror="this.style.display='none'; safeShow('logo-text');">
+                <span id="logo-text" class="hidden text-xl font-black text-blue-800 tracking-tighter">RL NET</span>
+            </div>
+            <div class="text-right flex flex-col items-end">
+                <h1 class="text-lg font-black text-slate-800 tracking-tight">RAT INSTALAÇÃO</h1>
+                <div class="flex items-center gap-2">
+                    <p class="text-[9px] text-slate-500 font-bold uppercase">v1.0</p>
+					<a href="index.html" class="no-print bg-blue-100 text-blue-600 border border-blue-200 text-[9px] font-bold px-2 py-0.5 rounded hover:bg-blue-200 ml-1 transition-colors flex items-center gap-1 no-underline">
+    <i class="fas fa-home"></i> INÍCIO
+</a>
+                    <button id="btn_nova_rat" onclick="confirmarNovaRat()" class="no-print bg-red-100 text-red-600 border border-red-200 text-[9px] font-bold px-2 py-0.5 rounded hover:bg-red-200 ml-1 transition-colors flex items-center gap-1">
+                        <i class="fas fa-trash-alt"></i> NOVA RAT
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. CLIENTE -->
+        <div class="block-container" id="block_cliente">
+            <div class="block-header active" onclick="toggleBlock('block_cliente')">
+                <span class="block-title"><i class="fas fa-user text-blue-600"></i> CLIENTE *</span>
+                <i class="fas fa-chevron-down block-icon"></i>
+            </div>
+            <div class="block-content show">
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="input-group col-span-1">
+                        <label class="input-label">OS / ID</label>
+                        <input type="number" id="os_id" class="input-field required font-bold bg-slate-50 text-center" placeholder="0000">
+                    </div>
+                    <div class="input-group col-span-2">
+                        <label class="input-label">NOME</label>
+                        <input type="text" id="cliente_nome" class="input-field required uppercase-input" placeholder="NOME DO CLIENTE">
+                    </div>
+                </div>
+                <button type="button" class="btn-next-step" onclick="irParaProximoBloco(this)">Próximo <i class="fas fa-arrow-down"></i></button>
+            </div>
+        </div>
+
+        <!-- 2. SERVIÇOS -->
+        <div class="block-container" id="block_servicos">
+            <div class="block-header" onclick="toggleBlock('block_servicos')">
+                <span class="block-title"><i class="fas fa-wrench"></i> SERVIÇO *</span>
+                <i class="fas fa-chevron-down block-icon"></i>
+            </div>
+            <div class="block-content">
+                <div class="checkbox-grid" id="servicos_grid"></div>
+                <div id="error_servico" class="hidden text-red-500 text-[10px] mt-2 font-bold bg-red-50 p-1 rounded">⚠️ Selecione um serviço.</div>
+                <button type="button" class="btn-next-step" onclick="irParaProximoBloco(this)">Próximo <i class="fas fa-arrow-down"></i></button>
+            </div>
+        </div>
+
+        <!-- 3. EXECUÇÃO -->
+        <div class="block-container" id="block_execucao">
+            <div class="block-header" onclick="toggleBlock('block_execucao')">
+                <span class="block-title"><i class="fas fa-clock"></i> EXECUÇÃO *</span>
+                <i class="fas fa-chevron-down block-icon"></i>
+            </div>
+            <div class="block-content">
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="input-group">
+                        <label class="input-label">DATA</label>
+                        <input type="date" id="data_exec" class="input-field required px-1">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">ENTRADA</label>
+                        <input type="time" id="hora_entrada" class="input-field required px-1" onchange="validarHora()">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">SAÍDA</label>
+                        <input type="time" id="hora_saida" class="input-field required px-1" onchange="validarHora()">
+                    </div>
+                </div>
+
+                <!-- TAXA -->
+                <div class="bg-blue-50 p-2 rounded border border-blue-100 mt-1">
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="input-label text-blue-900">TAXA</label>
+                        <button onclick="toggleTaxaProblem()" id="btn_taxa_problem" class="text-[9px] bg-red-100 text-red-600 px-2 py-0.5 rounded border border-red-200 font-bold hover:bg-red-200 no-print">
+                            <i class="fas fa-exclamation-circle"></i> Problema
+                        </button>
+                    </div>
+
+                    <div id="taxa_normal_area">
+                        <div class="flex gap-2 mb-2">
+                             <label class="flex-1 btn bg-white border border-blue-200 text-blue-800 text-xs h-8 cursor-pointer">
+                                <input type="radio" name="taxa_cobrada" value="isenta" class="mr-1" checked> ISENTA
+                             </label>
+                             <label class="flex-1 btn bg-white border border-blue-200 text-blue-800 text-xs h-8 cursor-pointer">
+                                <input type="radio" name="taxa_cobrada" value="cobrada" class="mr-1"> COBRADA
+                             </label>
+                        </div>
+                        <div id="pagamento_area" class="hidden grid grid-cols-2 gap-2 border-t border-blue-200 pt-2">
+                            <div class="input-group">
+                                <label class="input-label">VALOR (R$)</label>
+                                <input type="tel" id="valor_taxa" class="input-field" placeholder="0,00" oninput="formatarMoeda(this)">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">PAGTO</label>
+                                <select id="forma_pagamento" class="input-field text-sm">
+                                    <option value="">...</option>
+                                    <option value="Pix">Pix</option>
+                                    <option value="Dinheiro">Dinheiro</option>
+                                    <option value="Cartão">Cartão</option>
+                                    <option value="Boleto">Boleto</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="taxa_problem_area" class="hidden bg-red-50 p-2 rounded border border-red-200 mt-1">
+                        <div class="grid grid-cols-1 gap-2">
+                            <input type="text" id="taxa_motivo" class="input-field h-8 text-xs border-red-300" placeholder="Motivo">
+                            <input list="lista_autorizados" type="text" id="taxa_autorizado" class="input-field h-8 text-xs border-red-300 uppercase-input" placeholder="AUTORIZADO POR">
+                        </div>
+                        <button onclick="toggleTaxaProblem()" class="text-[9px] text-gray-500 underline mt-1 no-print">Cancelar</button>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-next-step" onclick="irParaProximoBloco(this)">Próximo <i class="fas fa-arrow-down"></i></button>
+            </div>
+        </div>
+
+        <!-- 4. CABEAMENTO -->
+        <div class="block-container" id="block_cabeamento">
+            <div class="block-header" onclick="toggleBlock('block_cabeamento')">
+                <span class="block-title"><i class="fas fa-network-wired"></i> CABEAMENTO</span>
+                <i class="fas fa-chevron-down block-icon"></i>
+            </div>
+            <div class="block-content">
+                <!-- Drop -->
+                <div class="mb-2">
+                    <label class="flex items-center justify-between p-2 bg-blue-50 border border-blue-200 rounded cursor-pointer h-10">
+                        <span class="font-bold text-blue-900 text-xs">CABO DROP</span>
+                        <div class="flex items-center">
+                            <span class="text-[10px] text-blue-600 mr-2 font-bold">USOU?</span>
+                            <input type="checkbox" id="usou_drop" class="accent-blue-600 w-4 h-4">
+                        </div>
+                    </label>
+                    <div id="area_drop" class="hidden mt-2 p-2 bg-blue-50 rounded">
+                         <div class="grid grid-cols-2 gap-2">
+                            <div class="input-group col-span-2">
+                                <label class="input-label">ID BOBINA</label>
+                                <input type="number" id="drop_id" class="input-field" placeholder="Números">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">INI (m)</label>
+                                <input type="number" id="drop_ini" class="input-field" oninput="calcCabo('drop')">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">FIM (m)</label>
+                                <input type="number" id="drop_fim" class="input-field" oninput="calcCabo('drop')">
+                            </div>
+                            <div class="input-group col-span-2">
+                                <label class="input-label">TOTAL</label>
+                                <input type="text" id="drop_total" class="input-field bg-gray-100 font-bold text-center" readonly value="0">
+                            </div>
+                         </div>
+                    </div>
+                </div>
+
+                 <!-- UTP -->
+                <div>
+                    <label class="flex items-center justify-between p-2 bg-slate-100 border border-slate-200 rounded cursor-pointer h-10">
+                        <span class="font-bold text-slate-700 text-xs">CABO UTP</span>
+                        <div class="flex items-center">
+                            <span class="text-[10px] text-slate-600 mr-2 font-bold">USOU?</span>
+                            <input type="checkbox" id="usou_utp" class="accent-slate-600 w-4 h-4">
+                        </div>
+                    </label>
+                    <div id="area_utp" class="hidden mt-2 p-2 bg-slate-100 rounded">
+                         <div class="grid grid-cols-2 gap-2">
+                            <div class="input-group col-span-2">
+                                <label class="input-label">ID BOBINA</label>
+                                <input type="number" id="utp_id" class="input-field">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">INI</label>
+                                <input type="number" id="utp_ini" class="input-field" oninput="calcCabo('utp')">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">FIM</label>
+                                <input type="number" id="utp_fim" class="input-field" oninput="calcCabo('utp')">
+                            </div>
+                            <div class="input-group col-span-2">
+                                <label class="input-label">TOTAL</label>
+                                <input type="text" id="utp_total" class="input-field bg-gray-100 font-bold text-center" readonly value="0">
+                            </div>
+                         </div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-next-step" onclick="irParaProximoBloco(this)">Próximo <i class="fas fa-arrow-down"></i></button>
+            </div>
+        </div>
+
+        <!-- 5. REDE EXTERNA -->
+        <div class="block-container" id="block_potencia">
+            <div class="block-header" onclick="toggleBlock('block_potencia')">
+                <span class="block-title"><i class="fas fa-bolt"></i> REDE E POTÊNCIA *</span>
+                <i class="fas fa-chevron-down block-icon"></i>
+            </div>
+            <div class="block-content">
+                <div class="grid grid-cols-2 gap-2 mb-3">
+                    <div class="input-group">
+                        <label class="input-label">CTO</label>
+                        <div class="flex gap-1 items-center">
+                            <input type="number" id="cto_cliente" class="input-field required" placeholder="Nº">
+                            <label class="flex flex-col items-center justify-center border border-gray-300 rounded p-1 h-[38px] bg-gray-50 cursor-pointer w-12">
+                                <input type="checkbox" id="cto_sem_id_check" onchange="toggleCtoSemId()" class="w-4 h-4">
+                                <span class="text-[8px] leading-none text-center font-bold mt-0.5">SEM ID</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">PORTA</label>
+                        <select id="porta_cto" class="input-field">
+                            <!-- JS preenche -->
+                        </select>
+                    </div>
+                    
+                    <div class="input-group col-span-2 bg-yellow-50 p-1.5 border border-yellow-200 rounded">
+                        <label class="input-label text-yellow-800">POTÊNCIA IXC (dBm)</label>
+                        <input type="tel" id="pot_ixc" class="input-field required text-center font-bold text-lg font-mono border-yellow-400" 
+                               placeholder="-00,00dBm" oninput="mascaraDBM(this)" onblur="formatarDBMBlur(this)" onfocus="this.select()">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">MEDIDO CTO</label>
+                        <input type="tel" id="pot_cto" class="input-field text-center font-mono text-sm" placeholder="-00,00" oninput="mascaraDBM(this)" onblur="formatarDBMBlur(this)">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">MEDIDO CLI</label>
+                        <input type="tel" id="pot_cliente" class="input-field text-center font-mono text-sm" placeholder="-00,00" oninput="mascaraDBM(this)" onblur="formatarDBMBlur(this)">
+                    </div>
+
+                    <div class="input-group col-span-2">
+                        <label class="input-label">ANCORAGENS</label>
+                        <select id="ancoragens" class="input-field"><option value="0">0</option></select>
+                    </div>
+                </div>
+
+                <!-- OPÇÕES DETALHADAS -->
+                <div class="mt-2 border-t pt-2 bg-gray-50 p-2 rounded space-y-2">
+                    <!-- CTO BATIDA -->
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-bold text-red-700 w-20">CTO BATIDA?</span>
+                            <label class="inline-flex items-center text-[10px]"><input type="radio" name="cto_batida" value="Não" checked onchange="toggleNetworkDetail('cto_batida_detail', false)" class="mr-1"> Não</label>
+                            <label class="inline-flex items-center text-[10px]"><input type="radio" name="cto_batida" value="Sim" onchange="toggleNetworkDetail('cto_batida_detail', true)" class="mr-1"> Sim</label>
+                        </div>
+                        <div id="cto_batida_detail" class="hidden mt-1 ml-20">
+                            <input list="lista_suporte" id="cto_suporte" class="input-field h-7 text-xs uppercase-input" placeholder="Operador...">
+                        </div>
+                    </div>
+
+                    <!-- ID REMOVIDO -->
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-bold text-red-700 w-20">ID REMOVIDO?</span>
+                            <label class="inline-flex items-center text-[10px]"><input type="radio" name="id_removido" value="Não" checked onchange="toggleNetworkDetail('id_removido_detail', false)" class="mr-1"> Não</label>
+                            <label class="inline-flex items-center text-[10px]"><input type="radio" name="id_removido" value="Sim" onchange="toggleNetworkDetail('id_removido_detail', true)" class="mr-1"> Sim</label>
+                        </div>
+                        <div id="id_removido_detail" class="hidden mt-1 ml-20 flex items-center gap-1">
+                            <input type="number" id="id_removido_val" class="input-field h-7 text-xs" placeholder="Qual ID?">
+                            <label class="text-[9px] font-bold flex items-center bg-gray-200 px-1 h-7 rounded border border-gray-300 cursor-pointer">
+                                <input type="checkbox" id="sem_id_check" class="mr-1" onchange="toggleSemId()"> SEM ID
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- SPLITTER 1x2 -->
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-bold text-red-700 w-20">SPLITTER 1x2?</span>
+                            <label class="inline-flex items-center text-[10px]"><input type="radio" name="splitter" value="Não" checked onchange="toggleNetworkDetail('splitter_detail', false)" class="mr-1"> Não</label>
+                            <label class="inline-flex items-center text-[10px]"><input type="radio" name="splitter" value="Sim" onchange="toggleNetworkDetail('splitter_detail', true)" class="mr-1"> Sim</label>
+                        </div>
+                        <div id="splitter_detail" class="hidden mt-1 ml-20 flex flex-col gap-1">
+                            <input list="lista_autorizados" id="splitter_autorizado" class="input-field h-7 text-xs uppercase-input" placeholder="AUTORIZADO POR...">
+                            <input type="tel" id="splitter_potencia" class="input-field h-7 text-xs w-24" placeholder="-00,00dBm" oninput="mascaraDBM(this)" onblur="formatarDBMBlur(this)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="no-print mt-2">
+                    <button onclick="analisarIA()" id="btn_analise" class="w-full btn btn-indigo text-[10px] h-8 gap-2 mb-1">
+                        ✨ Analisar Sinal (IA)
+                    </button>
+                    <!-- Resultado da IA -->
+                    <div id="ia_result_signal" class="hidden mt-1 p-2 bg-indigo-50 border border-indigo-200 rounded text-xs text-indigo-900 font-medium leading-snug"></div>
+                    <p id="ia_disclaimer" class="hidden text-[9px] text-gray-500 italic text-center mt-1 border-t pt-1">
+                        * Essa é uma dica gerada por IA, ela não conhece todas as regras de potência da RL NET e não substitui a orientação da supervisão técnica.
+                    </p>
+                </div>
+
+                <button type="button" class="btn-next-step" onclick="irParaProximoBloco(this)">Próximo <i class="fas fa-arrow-down"></i></button>
+            </div>
+        </div>
+
+        <!-- 6. ESTRUTURA -->
+        <div class="block-container" id="block_estrutura">
+            <div class="block-header" onclick="toggleBlock('block_estrutura')">
+                <span class="block-title"><i class="fas fa-home"></i> ESTRUTURA</span>
+                <i class="fas fa-chevron-down block-icon"></i>
+            </div>
+            <div class="block-content">
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="input-group">
+                        <label class="input-label">CÔMODOS</label>
+                        <select id="qtd_comodos" class="input-field"><!-- JS --></select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">ANDARES</label>
+                        <select id="qtd_andares" class="input-field" onchange="atualizarAndaresInst()"><!-- JS --></select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">LOCAL INST.</label>
+                        <input list="lista_comodos" id="comodo_inst" class="input-field uppercase-input" placeholder="Ex: SALA">
+                        <datalist id="lista_comodos">
+                            <option value="SALA"><option value="QUARTO PRINCIPAL"><option value="COZINHA"><option value="CORREDOR"><option value="ESCRITÓRIO"><option value="GARAGEM">
+                        </datalist>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">ANDAR INST.</label>
+                        <select id="andar_inst" class="input-field"><!-- JS --></select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mt-2 border-t pt-2">
+                    <div>
+                        <span class="input-label mb-1">CENTRALIZADO?</span>
+                        <div class="flex gap-2 text-xs">
+                            <label><input type="radio" name="centralizado" value="Sim"> Sim</label>
+                            <label><input type="radio" name="centralizado" value="Não" checked> Não</label>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="input-label mb-1">EXTENSÕES WI-FI?</span>
+                        <div class="flex gap-2 text-xs">
+                            <label><input type="radio" name="extensoes" value="Sim"> Sim</label>
+                            <label><input type="radio" name="extensoes" value="Não" checked> Não</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-next-step" onclick="irParaProximoBloco(this)">Próximo <i class="fas fa-arrow-down"></i></button>
+            </div>
+        </div>
+
+        <!-- 7. EQUIPAMENTOS -->
+        <div class="block-container" id="block_equipamentos">
+            <div class="block-header" onclick="toggleBlock('block_equipamentos')">
+                <span class="block-title"><i class="fas fa-server"></i> EQUIPAMENTOS E APPS</span>
+                <i class="fas fa-chevron-down block-icon"></i>
+            </div>
+            <div class="block-content">
+                <div class="bg-gray-100 p-2 rounded mb-2 no-print">
+                    <div class="grid grid-cols-2 gap-2 mb-2">
+                        <select id="add_eq_status" class="input-field h-9 text-xs">
+                            <option value="INSTALADO">🟢 INSTALADO</option>
+                            <option value="RETIRADO">🔴 RETIRADO</option>
+                        </select>
+                        <select id="add_eq_tipo" class="input-field h-9 text-xs" onchange="atualizarModelos()">
+                            <option value="" disabled selected>TIPO...</option>
+                            <option value="Roteador">Roteador</option>
+                            <option value="ONU">ONU</option>
+                            <option value="TV Box">TV Box</option>
+                            <option value="Câmera">Câmera</option>
+                            <option value="Outros">Outros</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <input list="lista_modelos" id="add_eq_modelo" class="input-field h-9 text-xs uppercase-input" placeholder="MODELO...">
+                        <datalist id="lista_modelos"><!-- JS --></datalist>
+                    </div>
+                    <button onclick="adicionarEquipamento()" class="btn btn-dark w-full text-xs h-9"><i class="fas fa-plus mr-2"></i> ADICIONAR</button>
+                </div>
+                <div id="lista_equipamentos_visual" class="space-y-1 mb-3">
+                    <p class="text-[10px] text-gray-400 text-center italic" id="msg_sem_eq">Nenhum equipamento.</p>
+                </div>
+
+                <div class="border-t pt-2">
+                    <span class="input-label mb-1"><i class="fas fa-mobile-alt mr-1"></i> APPS</span>
+                    <div class="checkbox-grid text-xs" id="apps_grid"></div>
+                </div>
+
+                <button type="button" class="btn-next-step" onclick="irParaProximoBloco(this)">Próximo <i class="fas fa-arrow-down"></i></button>
+            </div>
+        </div>
+
+        <!-- 8. OBS -->
+        <div class="block-container" id="block_obs">
+            <div class="block-header" onclick="toggleBlock('block_obs')">
+                <span class="block-title"><i class="fas fa-comment-alt"></i> OBSERVAÇÕES</span>
+                <i class="fas fa-chevron-down block-icon"></i>
+            </div>
+            <div class="block-content">
+                <div id="aviso_emenda" class="hidden bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-2 mb-2 text-xs font-bold">
+                    ⚠️ Atenção: Para emendas, descreva a localização exata aqui.
+                </div>
+                <textarea id="obs_texto" class="input-field h-24 p-2 text-sm mb-1" placeholder="Detalhes..."></textarea>
+                <button type="button" class="btn-next-step" onclick="irParaProximoBloco(this)">Próximo <i class="fas fa-arrow-down"></i></button>
+            </div>
+        </div>
+
+        <!-- 9. CHECKLIST -->
+        <div class="block-container" id="block_checklist">
+            <div class="block-header" onclick="toggleBlock('block_checklist')">
+                <span class="block-title"><i class="fas fa-camera"></i> CHECKLIST <span id="checklist_count" class="text-[9px] font-normal ml-1 bg-blue-200 text-blue-800 px-1.5 py-0.5 rounded-full hidden">0</span></span>
+                <i class="fas fa-chevron-down block-icon"></i>
+            </div>
+            <div class="block-content">
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-2 mb-2">
+                    <p class="text-[10px] text-yellow-800 font-bold">⚠️ Atenção: Registre todas as fotos para evitar ressalva.</p>
+                </div>
+                <div class="checkbox-grid text-[10px]" id="checklist_grid"></div>
+                <div id="error_checklist" class="hidden text-red-500 text-[10px] mt-2 font-bold bg-red-50 p-1 rounded">⚠️ Selecione as fotos.</div>
+                <button type="button" class="btn-next-step" onclick="irParaProximoBloco(this)">Próximo <i class="fas fa-arrow-down"></i></button>
+            </div>
+        </div>
+
+        <!-- 10. ASSINATURAS -->
+        <div class="block-container" id="block_assinaturas">
+            <div class="block-header" onclick="toggleBlock('block_assinaturas')">
+                <span class="block-title"><i class="fas fa-file-signature"></i> ASSINATURAS *</span>
+                <i class="fas fa-chevron-down block-icon"></i>
+            </div>
+            <div class="block-content">
+                <!-- Cliente -->
+                <div class="mb-3">
+                    <label class="input-label mb-1">CLIENTE</label>
+                    <div class="flex gap-4 mb-2 text-xs">
+                        <label class="flex items-center"><input type="radio" name="titular_presente" value="Sim" checked onclick="toggleTitular(true)" class="mr-1"> Titular Presente</label>
+                        <label class="flex items-center"><input type="radio" name="titular_presente" value="Não" onclick="toggleTitular(false)" class="mr-1"> Titular Ausente</label>
+                    </div>
+                    <div id="area_responsavel" class="hidden bg-slate-50 p-2 rounded border mb-2">
+                        <input type="text" id="resp_nome" class="input-field h-8 mb-2 text-xs" placeholder="Nome Responsável">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="tel" id="resp_cpf" class="input-field h-8 text-xs" maxlength="14" placeholder="CPF" oninput="mascaraCPF(this)">
+                            <input type="tel" id="resp_contato" class="input-field h-8 text-xs" maxlength="15" placeholder="Contato" oninput="mascaraTelefone(this)">
+                        </div>
+                    </div>
+                    <div class="sig-box">
+                        <canvas id="sig_cliente"></canvas>
+                        <div class="sig-overlay" id="overlay_cliente">
+                            <button onclick="unlockSig('cliente')" class="btn btn-indigo px-3 h-8 text-xs rounded-full">ASSINAR</button>
+                        </div>
+                        <div class="sig-status" id="status_cliente">SALVO ✓</div>
+                    </div>
+                    <div class="flex gap-2 mt-1 no-print">
+                        <button onclick="clearSig('cliente')" class="text-[9px] text-red-500 font-bold underline">Limpar</button>
+                        <button onclick="saveSig('cliente')" class="text-[9px] text-green-600 font-bold underline ml-auto">Salvar</button>
+                    </div>
+                </div>
+
+                <!-- Técnico -->
+                <div>
+                    <label class="input-label mb-1">TÉCNICO</label>
+                    <input list="lista_tecnicos" id="tec_nome" class="input-field required h-8 mb-2 font-bold text-blue-900 border-blue-200 uppercase-input text-xs" placeholder="SELECIONE SEU NOME">
+                    <datalist id="lista_tecnicos"><!-- JS --></datalist>
+                    <div class="sig-box">
+                        <canvas id="sig_tecnico"></canvas>
+                        <div class="sig-overlay" id="overlay_tecnico">
+                            <button onclick="unlockSig('tecnico')" class="btn btn-indigo px-3 h-8 text-xs rounded-full">ASSINAR</button>
+                        </div>
+                        <div class="sig-status" id="status_tecnico">SALVO ✓</div>
+                    </div>
+                    <div class="flex gap-2 mt-1 no-print">
+                        <button onclick="clearSig('tecnico')" class="text-[9px] text-red-500 font-bold underline">Limpar</button>
+                        <button onclick="saveSig('tecnico')" class="text-[9px] text-green-600 font-bold underline ml-auto">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER FIXO REDUZIDO (V17) -->
+    <div class="footer-fixed">
+        <div id="risk_alert" class="hidden risk-alert">⚠️ RISCO DE RESSALVA (Preenchimento Baixo)</div>
+        <div class="w-full bg-gray-200 rounded-full h-1.5 mb-2 overflow-hidden">
+            <div id="progress_bar" class="bg-blue-600 h-1.5 rounded-full transition-all duration-500 w-0"></div>
+        </div>
+        
+        <!-- Status Bar -->
+        <div class="status-bar mb-2">
+            <span id="last_save_time">Nunca salvo</span>
+            <span id="save_size">0 B</span>
+        </div>
+        
+               <div class="grid grid-cols-2 gap-2">
+            <button onclick="gerarResumoIA()" id="btn_ia_resumo" class="btn btn-indigo text-[10px] h-8">✨ Resumo IA</button>
+            <button onclick="gerarResumoSimples()" class="btn btn-dark text-[10px] h-8"><i class="fas fa-file-alt mr-2"></i> Simples</button>
+        </div>
+        <button onclick="validarEGerarPDF()" id="btn_finalizar" class="btn btn-brand shadow-lg text-xs h-9">FINALIZAR E GERAR PDF <i class="fas fa-file-pdf ml-2"></i></button>
+        <!-- CRÉDITOS -->
+        <div class="text-[8px] text-gray-400 text-center mt-1">Desenvolvido por Filipe Cruz</div>
+    </div>
+
+    <!-- MODAIS -->
+    <div id="modal_ia" class="fixed inset-0 bg-black bg-opacity-80 hidden z-[60] flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg w-full max-w-md p-4 flex flex-col max-h-[80vh]">
+            <h3 class="font-bold text-base mb-2 text-indigo-700">✨ Resumo Inteligente</h3>
+            <textarea id="ia_output" class="w-full flex-grow p-3 border rounded text-sm bg-indigo-50 mb-3" rows="10"></textarea>
+            <div class="flex gap-2">
+                <button onclick="copiarTexto('ia_output')" class="flex-1 btn btn-green text-xs">COPIAR</button>
+                <button onclick="safeAdd('modal_ia', 'hidden')" class="flex-1 btn btn-outline text-xs">FECHAR</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="modal_simples" class="fixed inset-0 bg-black bg-opacity-80 hidden z-[60] flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg w-full max-w-md p-4 flex flex-col max-h-[80vh]">
+            <h3 class="font-bold text-base mb-2 text-gray-700">Resumo Simples</h3>
+            <textarea id="simples_output" class="w-full flex-grow p-3 border rounded text-sm bg-gray-50 mb-3 font-mono" rows="10"></textarea>
+            <div class="flex gap-2">
+                <button onclick="copiarTexto('simples_output')" class="flex-1 btn btn-green text-xs">COPIAR</button>
+                <button onclick="safeAdd('modal_simples', 'hidden')" class="flex-1 btn btn-outline text-xs">FECHAR</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURAÇÕES INICIAIS ---
+        window.addEventListener('unhandledrejection', function(event) {
+            console.warn("Erro assíncrono capturado:", event.reason);
+            event.preventDefault(); 
+        });
+
+        // --- HELPER PARA EVITAR ERRO NULL ---
+        function safeShow(id) { const el = document.getElementById(id); if(el) el.classList.remove('hidden'); }
+        function safeHide(id) { const el = document.getElementById(id); if(el) el.classList.add('hidden'); }
+        function safeAdd(id, cls) { const el = document.getElementById(id); if(el) el.classList.add(cls); }
+        function safeRemove(id, cls) { const el = document.getElementById(id); if(el) el.classList.remove(cls); }
+
+        // --- FLAGS GLOBAIS (SMART LOCK) ---
+        let isRestoring = false; 
+        let isLoaded = false;
+        let isResetting = false; 
+        const STORAGE_KEY = 'rat_rlnet_autosave_v16_3'; // Compatível
+
+        // --- Proteção contra fechamento acidental ---
+        window.onbeforeunload = function(e) {
+            if (isResetting) return; 
+            if (document.querySelectorAll('input:checked, input[type="text"][value]:not([value=""]), textarea[value]:not([value=""])').length > 0) {
+                 e.preventDefault(); e.returnValue = ''; return '';
+            }
+        };
+
+        // --- Salvar ao minimizar ou trocar de aba ---
+        document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "hidden") {
+                saveLocal();
+            }
+        });
+
+        const apiKey = "AIzaSyAuyLnLvHNH3N9D5lk7MRVLIEC2w5UL3ao"; 
+        const sheetUrl = "https://script.google.com/macros/s/AKfycbyQHELBKVetwf4Ciw9AyAj7-P4fWwdFapdbiUFKhnXuOOVjaJaewqgNiCHowq6iz_NS/exec"; 
+        
+        let equipamentosList = [];
+        let elementToFocus = null;
+        let saveTimeout = null;
+
+        // --- LISTAS DE DADOS ---
+        const listaTecnicos = [
+            "ADRIANO SILVA", "ANDRÉ LUIS", "ANDRÉ MORRUDO", "CARLOS ALBERTO", "CLEITON SANTOS",
+            "DAVID SALVALAIO", "EVERSON NUNES", "FAGNER JUDES", "FERNANDO NOAL", "FILIPE ALVES",
+            "GENESIO CHAVES", "GIOVANNI MEIRA", "GIULLIANO MORAES", "GUILHERME ROSA", "IGOR ALVES",
+            "JADER BECK", "JEFFERSON SILVA", "JOSÉ ALBERTO", "JOYLSON ELIAS", "KELVYN CAETANO",
+            "MARCELO PAPPI", "MÁRIO SILVA", "MAXISOEL OLIVEIRA", "NICOLAS ALVES", "PETERSON SALIM",
+            "ROBERSON ALMEIDA", "RODRIGO BANDEIRA", "ROVER SILVA", "SANDRO MOURA", "THALES SILVA",
+            "VITOR SANTOS", "WILLIAM CRUZ", "WILLIAM TOLEDO"
+        ].sort();
+
+        const servicos = [
+            "Instalação Comum", "Instalação Corporativo", "Troca de Cabo Drop", "Adequação de Drop", 
+            "Conectores na Emenda", "Adição de Emenda", "Emenda existente mantida", 
+            "Wi-Fi Premium", "Troca de Conectores", "Troca de Roteador/ONU", 
+            "Config. e Testes Rede", "Inst. e Orientação Apps", "Cabeamento Interno UTP",
+            "Instalação TV Box", "Instalação Câmera"
+        ];
+        
+        const servicosEmenda = ["Conectores na Emenda", "Adição de Emenda", "Emenda existente mantida", "Adequação de Drop"];
+        const appsList = ["RLNet TV", "Watch", "Paramount", "Tip Play", "Qualifica", "Clube", "Central do Assinante", "Câmeras", "Outros"];
+        const exclusionGroup = ["Instalação Comum", "Instalação Corporativo", "Troca de Cabo Drop", "Adequação de Drop", "Conectores na Emenda", "Adição de Emenda", "Emenda existente mantida"];
+        
+       const mapaFotos = {
+            // GRUPO 1: Instalação e Troca de Drop (Completo com Ancoragens)
+            "Instalação Comum": ["ID Cliente", "Potência da CTO", "Potência no Cliente", "Reserva técnica", "CTO aberta", "CTO fechada", "Ancoragens", "Caixas de passagem", "Acabamentos", "MAC Roteador/ONT", "MAC ONU", "Lacres de garantia", "Teste velocidade RL", "Teste velocidade cliente", "Teste IPv6", "Teste acesso remoto"],
+            "Instalação Corporativo": ["ID Cliente", "Potência da CTO", "Potência no Cliente", "Reserva técnica", "CTO aberta", "CTO fechada", "Ancoragens", "Caixas de passagem", "Acabamentos", "MAC Roteador/ONT", "MAC ONU", "Lacres de garantia", "Teste velocidade RL", "Teste velocidade cliente", "Teste IPv6", "Teste acesso remoto"],
+            "Troca de Cabo Drop": ["ID Cliente", "Potência da CTO", "Potência no Cliente", "Reserva técnica", "CTO aberta", "CTO fechada", "Ancoragens", "Caixas de passagem", "Acabamentos", "MAC Roteador/ONT", "MAC ONU", "Lacres de garantia", "Teste velocidade RL", "Teste velocidade cliente", "Teste IPv6", "Teste acesso remoto"],
+
+            // GRUPO 2: Emendas e Adequação (Completo com Ancoragens)
+            "Adequação de Drop": ["ID Cliente", "Potência da CTO", "Potência no Cliente", "Reserva técnica", "CTO aberta", "CTO fechada", "Ancoragens", "Caixas de passagem", "Acabamentos", "MAC Roteador/ONT", "MAC ONU", "Lacres de garantia", "Teste velocidade RL", "Teste velocidade cliente", "Teste IPv6", "Teste acesso remoto"],
+            "Emenda existente mantida": ["ID Cliente", "Potência da CTO", "Potência no Cliente", "Reserva técnica", "CTO aberta", "CTO fechada", "Ancoragens", "Caixas de passagem", "Acabamentos", "MAC Roteador/ONT", "MAC ONU", "Lacres de garantia", "Teste velocidade RL", "Teste velocidade cliente", "Teste IPv6", "Teste acesso remoto"],
+            "Adição de Emenda": ["ID Cliente", "Potência da CTO", "Potência no Cliente", "Reserva técnica", "CTO aberta", "CTO fechada", "Ancoragens", "Caixas de passagem", "Acabamentos", "MAC Roteador/ONT", "MAC ONU", "Lacres de garantia", "Teste velocidade RL", "Teste velocidade cliente", "Teste IPv6", "Teste acesso remoto"],
+
+            // GRUPO 3: Conectores na Emenda (Sem Ancoragens)
+            "Conectores na Emenda": ["ID Cliente", "Potência da CTO", "Potência no Cliente", "Reserva técnica", "CTO aberta", "CTO fechada", "Caixas de passagem", "Acabamentos", "Lacres de garantia", "Teste velocidade RL", "Teste velocidade cliente", "Teste IPv6", "Teste acesso remoto"],
+
+            // GRUPO 4: Interno / Premium (Sem Rede Externa)
+            "Wi-Fi Premium": ["MAC Roteador/ONT", "MAC ONU", "Caixas de passagem", "Acabamentos", "Lacres de garantia", "Teste velocidade RL", "Teste velocidade cliente", "Teste IPv6", "Teste acesso remoto"],
+            "Cabeamento Interno UTP": ["MAC Roteador/ONT", "MAC ONU", "Caixas de passagem", "Acabamentos", "Lacres de garantia", "Teste velocidade RL", "Teste velocidade cliente", "Teste IPv6", "Teste acesso remoto"],
+
+            // GRUPO 5: Troca de Conectores (Sem MACs, Sem Ancoragem)
+            "Troca de Conectores": ["ID Cliente", "Potência da CTO", "Potência no Cliente", "Reserva técnica", "CTO aberta", "CTO fechada", "Acabamentos", "Lacres de garantia", "Teste velocidade RL", "Teste velocidade cliente", "Teste IPv6", "Teste acesso remoto"],
+
+            // GRUPO 6: Equipamentos (Básico)
+            "Troca de Roteador/ONU": ["Acabamentos", "Lacres de garantia", "Teste velocidade RL", "Teste velocidade cliente", "Teste IPv6", "Teste acesso remoto"],
+            "Config. e Testes Rede": ["Acabamentos", "Lacres de garantia", "Teste velocidade RL", "Teste velocidade cliente", "Teste IPv6", "Teste acesso remoto"],
+
+            // GRUPO 7: Apps
+            "Inst. e Orientação Apps": ["Acabamentos", "Aplicativos instalados", "Aplicativos executando"],
+
+            // GRUPO 8: TV e Câmera
+            "Instalação TV Box": ["Acabamentos", "Lacres de garantia", "Aplicativos instalados", "Aplicativos executando"],
+            "Instalação Câmera": ["Acabamentos", "Lacres de garantia", "Aplicativos instalados", "Aplicativos executando"]
+        };
+
+        const modelosEq = { 
+            "Roteador": ["ZTE F6600P", "ZTE H199A", "HUAWEI AX3", "HUAWEI AX2", "TP LINK XX530V", "TP LINK EX141", "TP LINK G5"], 
+            "ONU": ["ZTE", "FIBERHOME", "TENDA", "SUMEC", "ELSYS", "HUAWEI"], 
+            "TV Box": ["AQUARIO", "ZTE", "PRO ELETRONICS"], 
+            "Câmera": ["INTERNA", "EXTERNA"], "Outros": [] 
+        };
+
+        const sigs = {};
+
+        // --- INICIALIZAÇÃO ---
+        window.onload = function() {
+            // Inicializa UI
+            const tecList = document.getElementById('lista_tecnicos');
+            listaTecnicos.forEach(nome => { tecList.innerHTML += `<option value="${nome}">`; });
+            renderCheckboxes(servicos, 'servicos_grid', 'servico');
+            renderCheckboxes(appsList, 'apps_grid', 'apps');
+            atualizarChecklist(); 
+            const portaSel = document.getElementById('porta_cto');
+            portaSel.innerHTML = '<option value="0" selected>0</option>'; 
+            for(let i=1; i<=16; i++) portaSel.innerHTML += `<option value="${i}">${i}</option>`;
+            fillSelect('ancoragens', 1, 15);
+            fillSelect('qtd_comodos', 1, 20);
+            fillSelect('qtd_andares', 1, 5);
+            atualizarAndaresInst(); 
+            
+            // Data Default
+            const now = new Date();
+            document.getElementById('data_exec').valueAsDate = now;
+            document.getElementById('hora_saida').value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+            // Listeners e Canvas
+            setupListeners();
+            document.querySelectorAll('.uppercase-input').forEach(el => {
+                el.addEventListener('blur', function() { this.value = this.value.toUpperCase(); debouncedSave(); });
+            });
+            initCanvas('sig_cliente'); 
+            initCanvas('sig_tecnico');
+
+            // --- RESTAURAÇÃO CRÍTICA ---
+            restoreLocal(true); // Força tentativa inicial
+        };
+
+        // --- FUNÇÕES DE SISTEMA (CACHE E UI) ---
+        
+        function debouncedSave() {
+            if (isRestoring || isResetting) return; // Se está restaurando ou resetando, ignora
+            
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                saveLocal();
+            }, 300);
+        }
+
+        function saveLocal(force = false) {
+            // TRAVA DE SEGURANÇA (SMART LOCK)
+            if (isRestoring) { console.log("Save bloqueado: Restaurando..."); return; }
+            if (isResetting) { console.log("Save bloqueado: Resetando..."); return; } // TRAVA NOVA
+            if (!isLoaded && !force) { console.log("Save bloqueado: Não carregado completamente."); return; }
+
+            const data = {};
+            
+            document.querySelectorAll('input:not([type="checkbox"]):not([type="radio"]), select, textarea').forEach(el => { if(el.id) data[el.id] = el.value; });
+            document.querySelectorAll('input[type="checkbox"]').forEach(el => { if(el.id) data[el.id] = el.checked; });
+
+            ['servico', 'checklist', 'apps'].forEach(groupName => {
+                data[groupName] = [];
+                document.querySelectorAll(`input[name="${groupName}"]:checked`).forEach(el => { data[groupName].push(el.value); });
+            });
+
+            document.querySelectorAll('input[type="radio"]:checked').forEach(el => { if(el.name) data[el.name] = el.value; });
+
+            data['equipamentos'] = equipamentosList;
+
+            const sigCliCanvas = document.getElementById('sig_cliente');
+            const sigTecCanvas = document.getElementById('sig_tecnico');
+            if(sigCliCanvas && sigCliCanvas.dataset.signed === "true") data['sig_cliente_data'] = sigCliCanvas.toDataURL();
+            if(sigTecCanvas && sigTecCanvas.dataset.signed === "true") data['sig_tecnico_data'] = sigTecCanvas.toDataURL();
+
+            try {
+                const jsonStr = JSON.stringify(data);
+                
+                // PROTEÇÃO CONTRA ESVAZIAMENTO (Se não for forçado)
+                if (!force) {
+                    const saved = localStorage.getItem(STORAGE_KEY);
+                    if (saved && saved.length > 500 && jsonStr.length < 200) {
+                        console.warn("BLOQUEIO: Tentativa de sobrescrever dados com formulário vazio.");
+                        return;
+                    }
+                }
+
+                localStorage.setItem(STORAGE_KEY, jsonStr);
+                
+                // Atualiza Status Bar
+                const now = new Date();
+                const timeEl = document.getElementById('last_save_time');
+                if(timeEl) timeEl.innerText = "Salvo: " + now.toLocaleTimeString();
+                
+                const sizeEl = document.getElementById('save_size');
+                if(sizeEl) sizeEl.innerText = Math.round(jsonStr.length/1024 * 10)/10 + " KB";
+                
+                safeAdd('save_indicator', 'show');
+                setTimeout(() => safeRemove('save_indicator', 'show'), 1500);
+                
+
+            } catch(e) {
+                console.error("Erro ao salvar cache:", e);
+                showCustomAlert("Erro Memória", "Espaço cheio! Limpe o cache do navegador.", "error");
+            }
+        }
+
+        function restoreLocal(force = false) {
+            isRestoring = true; // ATIVA TRAVA: NADA É SALVO AGORA
+            console.log("Iniciando restauração...");
+
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if(!saved) {
+                isRestoring = false;
+                isLoaded = true; // Libera sistema para novos saves
+                console.log("Nada salvo para restaurar.");
+                if(force) showCustomAlert("Backup", "Nenhum backup encontrado.", "info");
+                return; 
+            }
+
+            try {
+                const data = JSON.parse(saved);
+                
+                if(data['equipamentos']) { equipamentosList = data['equipamentos']; renderEquipamentos(); }
+
+                Object.keys(data).forEach(key => {
+                    if(['equipamentos', 'servico', 'checklist', 'apps', 'sig_cliente_data', 'sig_tecnico_data'].includes(key)) return;
+                    const el = document.getElementById(key);
+                    if(el) {
+                        if(el.type === 'checkbox') el.checked = data[key];
+                        else el.value = data[key];
+                        el.dispatchEvent(new Event('change'));
+                    } 
+                });
+
+                ['taxa_cobrada', 'cto_batida', 'id_removido', 'splitter', 'centralizado', 'extensoes', 'titular_presente'].forEach(radioName => {
+                    if(data[radioName]) {
+                        const rd = document.querySelector(`input[name="${radioName}"][value="${data[radioName]}"]`);
+                        if(rd) { rd.checked = true; rd.dispatchEvent(new Event('change')); }
+                    }
+                });
+
+                if(data['servico'] && Array.isArray(data['servico'])) {
+                     data['servico'].forEach(val => {
+                         const cb = document.querySelector(`input[name="servico"][value="${val}"]`);
+                         if(cb) cb.checked = true;
+                     });
+                }
+                
+                atualizarChecklist(); 
+
+                ['checklist', 'apps'].forEach(groupName => {
+                    if(data[groupName] && Array.isArray(data[groupName])) {
+                        data[groupName].forEach(val => {
+                            const cb = document.querySelector(`input[name="${groupName}"][value="${val}"]`);
+                            if(cb) cb.checked = true;
+                        });
+                    }
+                });
+
+                if(data['sig_cliente_data']) restoreSig('sig_cliente', data['sig_cliente_data']);
+                if(data['sig_tecnico_data']) restoreSig('sig_tecnico', data['sig_tecnico_data']);
+
+                updateProgress();
+                
+                // Atualiza info visual
+                const sizeEl = document.getElementById('save_size');
+                if(sizeEl) sizeEl.innerText = Math.round(saved.length/1024 * 10)/10 + " KB (Backup)";
+                
+                if(force) showCustomAlert("Sucesso", "Backup recarregado!", "success");
+
+            } catch(e) { 
+                console.error("Erro restore", e);
+                if(force) showCustomAlert("Erro", "Backup corrompido.", "error");
+            } finally {
+                // LIBERA O SISTEMA: AGORA PODE SALVAR
+                isRestoring = false;
+                isLoaded = true;
+                console.log("Restauração concluída. Sistema liberado.");
+            }
+        }
+
+        function restoreSig(id, dataUrl) {
+            const canvas = document.getElementById(id);
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.onload = function() {
+                ctx.clearRect(0,0, canvas.width, canvas.height); 
+                ctx.drawImage(img, 0, 0); 
+                canvas.dataset.signed = "true";
+                saveSig(id.split('_')[1]); 
+            };
+            img.src = dataUrl;
+        }
+
+        function setupListeners() {
+            document.getElementById('usou_drop').addEventListener('change', e => {
+                const el = document.getElementById('area_drop'); 
+                if(e.target.checked) el.classList.remove('hidden'); else el.classList.add('hidden'); 
+                debouncedSave();
+            });
+            document.getElementById('usou_utp').addEventListener('change', e => {
+                const el = document.getElementById('area_utp'); 
+                if(e.target.checked) el.classList.remove('hidden'); else el.classList.add('hidden'); 
+                debouncedSave();
+            });
+            document.querySelectorAll('input[name="taxa_cobrada"]').forEach(r => {
+                r.addEventListener('change', e => {
+                    if(e.target.value==='cobrada') safeRemove('pagamento_area', 'hidden'); 
+                    else safeAdd('pagamento_area', 'hidden'); 
+                    debouncedSave();
+                });
+            });
+            document.querySelectorAll('input[name="servico"]').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    if(e.target.checked && exclusionGroup.includes(e.target.value)) {
+                        document.querySelectorAll('input[name="servico"]').forEach(other => { if(other !== e.target && exclusionGroup.includes(other.value)) { other.checked = false; } });
+                    }
+                    atualizarChecklist(); debouncedSave();
+                });
+            });
+
+            // Listener Geral
+            document.querySelectorAll('input, select, textarea').forEach(el => {
+                el.addEventListener('input', () => { updateProgress(); debouncedSave(); });
+                el.addEventListener('change', () => { updateProgress(); debouncedSave(); });
+                el.addEventListener('blur', () => { if(isLoaded && !isRestoring) saveLocal(); }); 
+            });
+            
+            // Garante salvamento ao fechar a página
+            window.addEventListener('pagehide', () => {
+                if(isLoaded && !isRestoring && !isResetting) saveLocal();
+            });
+        }
+
+        // --- FUNÇÕES DE UI E LÓGICA DE NEGÓCIO ---
+        function showCustomAlert(title, msg, type='info', onConfirm=null) {
+            const el = document.getElementById('custom-alert'); const icon = document.getElementById('alert-icon');
+            const btnOk = document.getElementById('btn-alert-ok'); const btnCancel = document.getElementById('btn-alert-cancel');
+            if(type==='error') { icon.innerHTML = '❌'; icon.className = 'text-3xl mb-2 text-red-500'; }
+            else if(type==='success') { icon.innerHTML = '✅'; icon.className = 'text-3xl mb-2 text-green-500'; }
+            else if(type==='confirm') { icon.innerHTML = '❓'; icon.className = 'text-3xl mb-2 text-orange-500'; }
+            else { icon.innerHTML = 'ℹ️'; icon.className = 'text-3xl mb-2 text-blue-500'; }
+            document.getElementById('alert-title').innerText = title; document.getElementById('alert-msg').innerText = msg;
+            if(type === 'confirm') { btnCancel.classList.remove('hidden'); btnCancel.onclick = closeCustomAlert; btnOk.onclick = () => { closeCustomAlert(); if(onConfirm) onConfirm(); }; } 
+            else { btnCancel.classList.add('hidden'); btnOk.onclick = closeCustomAlert; }
+            if(el) { el.classList.remove('hidden'); el.classList.add('flex'); }
+        }
+        function closeCustomAlert() { const el = document.getElementById('custom-alert'); if(el) { el.classList.add('hidden'); el.classList.remove('flex'); if(elementToFocus) { setTimeout(() => { elementToFocus.scrollIntoView({behavior: 'smooth', block: 'center'}); elementToFocus.focus(); elementToFocus.classList.add('ring-2', 'ring-red-400'); setTimeout(() => elementToFocus.classList.remove('ring-2', 'ring-red-400'), 2000); elementToFocus = null; }, 300); } } }
+        function irParaProximoBloco(btn) { const currentBlockContainer = btn.closest('.block-container'); toggleBlock(currentBlockContainer.id); const nextBlock = currentBlockContainer.nextElementSibling; if (nextBlock && nextBlock.classList.contains('block-container')) { toggleBlock(nextBlock.id); setTimeout(() => { nextBlock.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 300); } else { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); } }
+        function toggleCtoSemId() { const check = document.getElementById('cto_sem_id_check'); const input = document.getElementById('cto_cliente'); if(check.checked) { input.value = ""; input.disabled = true; input.placeholder = "SEM ID"; } else { input.disabled = false; input.placeholder = "Nº"; } debouncedSave(); updateProgress(); }
+        function toggleNetworkDetail(id, show) { const el = document.getElementById(id); if(!el) return; if(show) { el.classList.remove('hidden'); } else { el.classList.add('hidden'); el.querySelectorAll('input').forEach(i => { if(i.type === 'checkbox') i.checked = false; else i.value = ''; }); const semIdCheck = document.getElementById('sem_id_check'); const idVal = document.getElementById('id_removido_val'); if(semIdCheck && idVal) { semIdCheck.checked = false; idVal.disabled = false; } } debouncedSave(); updateProgress(); }
+        function toggleSemId() { const check = document.getElementById('sem_id_check'); const input = document.getElementById('id_removido_val'); if(check.checked) { input.value = ""; input.disabled = true; input.placeholder = "SEM ID"; input.classList.remove('error'); } else { input.disabled = false; input.placeholder = "ID?"; } debouncedSave(); updateProgress(); }
+        function atualizarChecklist() { const container = document.getElementById('checklist_grid'); const countBadge = document.getElementById('checklist_count'); const servicosMarcados = Array.from(document.querySelectorAll('input[name="servico"]:checked')).map(el => el.value); const fotosNecessarias = new Set(); fotosNecessarias.add("Fachada da casa"); let temEmenda = false; if (servicosMarcados.length > 0) { servicosMarcados.forEach(servico => { const regras = mapaFotos[servico] || []; regras.forEach(foto => fotosNecessarias.add(foto)); if (servicosEmenda.includes(servico)) { temEmenda = true; } }); } const aviso = document.getElementById('aviso_emenda'); if(temEmenda) safeRemove('aviso_emenda', 'hidden'); else safeAdd('aviso_emenda', 'hidden'); const checksAntigos = Array.from(document.querySelectorAll('input[name="checklist"]:checked')).map(c => c.value); container.innerHTML = ""; fotosNecessarias.forEach(foto => { const isChecked = checksAntigos.includes(foto) ? 'checked' : ''; container.innerHTML += `<label class="checkbox-card cursor-pointer highlight"><input type="checkbox" name="checklist" value="${foto}" ${isChecked} onchange="updateProgress(); debouncedSave()"> ${foto}</label>`; }); if(fotosNecessarias.size > 0) { countBadge.innerText = fotosNecessarias.size; countBadge.classList.remove('hidden'); } else { countBadge.classList.add('hidden'); } updateProgress(); }
+        
+        function updateProgress() { 
+            const allInputs = document.querySelectorAll('.input-field'); 
+            const checkboxesServ = document.querySelectorAll('input[name="servico"]:checked'); 
+            const checkboxesCheck = document.querySelectorAll('input[name="checklist"]:checked'); 
+            const totalChecklistItems = document.querySelectorAll('input[name="checklist"]').length; 
+            const sigCli = document.getElementById('sig_cliente').dataset.signed === "true"; 
+            const sigTec = document.getElementById('sig_tecnico').dataset.signed === "true"; 
+            let totalPoints = 0; let currentPoints = 0; 
+            allInputs.forEach(el => { if (el.type !== 'hidden') { if(el.disabled) { totalPoints++; currentPoints++; } else { totalPoints++; if (el.value && el.value.trim() !== '') currentPoints++; } } }); 
+            totalPoints += 2; if (checkboxesServ.length > 0) currentPoints += 2; 
+            if (totalChecklistItems > 0) { const checkWeight = 5; totalPoints += checkWeight; const ratio = checkboxesCheck.length / totalChecklistItems; currentPoints += (ratio * checkWeight); } 
+            totalPoints += 5; if(sigCli) currentPoints += 5; totalPoints += 5; if(sigTec) currentPoints += 5; 
+            let pct = Math.min(100, Math.round((currentPoints / totalPoints) * 100)); if(isNaN(pct)) pct = 0; 
+            const bar = document.getElementById('progress_bar'); 
+            
+            if(bar) {
+                bar.style.width = pct + '%'; 
+                if (pct < 40) bar.className = "bg-red-600 h-1.5 rounded-full transition-all duration-500"; 
+                else if (pct < 85) bar.className = "bg-orange-500 h-1.5 rounded-full transition-all duration-500"; 
+                else bar.className = "bg-green-600 h-1.5 rounded-full transition-all duration-500"; 
+            }
+            
+            if (pct < 70) safeRemove('risk_alert', 'hidden'); else safeAdd('risk_alert', 'hidden'); 
+        }
+
+        function toggleBlock(id) { const content = document.querySelector(`#${id} .block-content`); const header = document.querySelector(`#${id} .block-header`); if(content) content.classList.toggle('show'); if(header) header.classList.toggle('active'); }
+        function toggleTitular(isYes) { if(isYes) safeAdd('area_responsavel', 'hidden'); else safeRemove('area_responsavel', 'hidden'); debouncedSave(); }
+        function toggleTaxaProblem() { const normal = document.getElementById('taxa_normal_area'); const problem = document.getElementById('taxa_problem_area'); if(problem.classList.contains('hidden')) { problem.classList.remove('hidden'); normal.classList.add('hidden'); } else { problem.classList.add('hidden'); normal.classList.remove('hidden'); } }
+        function renderCheckboxes(list, id, name) { const container = document.getElementById(id); list.forEach(i => { container.innerHTML += `<label class="checkbox-card cursor-pointer"><input type="checkbox" name="${name}" value="${i}"> ${i}</label>`; }); }
+        function fillSelect(id, min, max) { const sel = document.getElementById(id); for(let i=min; i<=max; i++) sel.innerHTML += `<option value="${i}">${i}</option>`; }
+        function atualizarAndaresInst() { const max = parseInt(document.getElementById('qtd_andares').value); const sel = document.getElementById('andar_inst'); sel.innerHTML = ''; for(let i=1; i<=max; i++) sel.innerHTML += `<option value="${i}º Andar">${i}º Andar</option>`; }
+        
+        function confirmarNovaRat() { 
+            showCustomAlert("Nova RAT", "Deseja limpar todos os dados?", "confirm", () => { 
+                isResetting = true; // ATIVA TRAVA DE RESET
+                localStorage.removeItem(STORAGE_KEY); 
+                location.reload(); 
+            }); 
+        }
+        
+        function validarHora() { const ent = document.getElementById('hora_entrada').value; const sai = document.getElementById('hora_saida').value; if(ent && sai && ent > sai) { showCustomAlert("Horário", "Entrada > Saída?", "error"); document.getElementById('hora_entrada').value = ""; } debouncedSave(); }
+        function mascaraDBM(el) { let v = el.value.replace(/[^\d-]/g, ""); if(v.indexOf('-') === -1 && v.length > 0) v = '-' + v; if(v.length > 3) { const num = v.replace('-', ''); const inteira = num.slice(0, 2); const decimal = num.slice(2, 4); el.value = `-${inteira},${decimal}dBm`; } else { el.value = v; } }
+        function formatarDBMBlur(el) { let v = el.value; if (v.match(/^-?\d+$/)) { let num = v.replace('-', ''); if (num.length > 0 && num.length <= 2) { el.value = `-${num},00dBm`; } } debouncedSave(); }
+        function formatarMoeda(el) { let v = el.value.replace(/\D/g,""); v = (v/100).toFixed(2) + ""; v = v.replace(".", ","); v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."); el.value = v; }
+        function mascaraCPF(el) { let v = el.value.replace(/\D/g, ""); if (v.length > 11) v = v.slice(0, 11); v = v.replace(/(\d{3})(\d)/, "$1.$2"); v = v.replace(/(\d{3})(\d)/, "$1.$2"); v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2"); el.value = v; }
+        function mascaraTelefone(el) { let v = el.value.replace(/\D/g,""); if (v.length > 11) v = v.slice(0, 11); if (v.length > 10) { v = v.replace(/^(\d{2})(\d)(\d{4})(\d{4}).*/, "($1) $2 $3-$4"); } else if (v.length > 5) { v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, "($1) $2-$3"); } else if (v.length > 2) { v = v.replace(/^(\d{2})/, "($1) "); } el.value = v; }
+        function calcCabo(tipo) { const i = parseFloat(document.getElementById(tipo+'_ini').value)||0; const f = parseFloat(document.getElementById(tipo+'_fim').value)||0; document.getElementById(tipo+'_total').value = Math.abs(f-i); debouncedSave(); }
+        function atualizarModelos() { const tipo = document.getElementById('add_eq_tipo').value; const lista = document.getElementById('lista_modelos'); lista.innerHTML = ""; if(modelosEq[tipo]) modelosEq[tipo].forEach(m => lista.innerHTML += `<option value="${m}">`); }
+        function adicionarEquipamento() { const status = document.getElementById('add_eq_status').value; const tipo = document.getElementById('add_eq_tipo').value; const modelo = document.getElementById('add_eq_modelo').value; if(!tipo || !modelo) { showCustomAlert("Atenção", "Preencha tipo e modelo.", "error"); return; } equipamentosList.push({ status, tipo, modelo }); renderEquipamentos(); document.getElementById('add_eq_modelo').value = ""; debouncedSave(); updateProgress(); }
+        function renderEquipamentos() { const div = document.getElementById('lista_equipamentos_visual'); div.innerHTML = ""; if(equipamentosList.length===0) div.innerHTML = `<p class="text-[10px] text-gray-400 text-center italic">Nenhum equipamento.</p>`; equipamentosList.forEach((item, index) => { const cls = item.status === 'INSTALADO' ? 'inst' : 'ret'; const icon = item.status === 'INSTALADO' ? '🟢' : '🔴'; div.innerHTML += `<div class="eq-item ${cls}"><div>${icon} ${item.status}: ${item.tipo} - ${item.modelo}</div><button onclick="equipamentosList.splice(${index},1);renderEquipamentos();updateProgress();debouncedSave()" class="text-red-500 font-bold">X</button></div>`; }); }
+        function initCanvas(id) { const canvas = document.getElementById(id); if(!canvas) return; const ctx = canvas.getContext('2d'); function resize() { const ratio = Math.max(window.devicePixelRatio || 1, 1); canvas.width = (canvas.parentElement.offsetWidth || 300) * ratio; canvas.height = (canvas.parentElement.offsetHeight || 150) * ratio; ctx.scale(ratio, ratio); } resize(); let drawing = false; function getPos(e) { const rect = canvas.getBoundingClientRect(); const x = e.touches ? e.touches[0].clientX : e.clientX; const y = e.touches ? e.touches[0].clientY : e.clientY; return { x: x - rect.left, y: y - rect.top }; } function start(e) { if(canvas.style.pointerEvents === 'none') return; drawing = true; ctx.beginPath(); const pos = getPos(e); ctx.moveTo(pos.x, pos.y); } function move(e) { if(!drawing) return; e.preventDefault(); const pos = getPos(e); ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.strokeStyle = '#000000'; ctx.lineTo(pos.x, pos.y); ctx.stroke(); canvas.dataset.signed = "true"; } function end() { drawing = false; updateProgress(); debouncedSave(); } canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', move); canvas.addEventListener('mouseup', end); canvas.addEventListener('touchstart', start, {passive: false}); canvas.addEventListener('touchmove', move, {passive: false}); canvas.addEventListener('touchend', end); sigs[id] = { canvas, ctx }; }
+        function unlockSig(suffix) { const id = 'sig_' + suffix; safeAdd('overlay_'+suffix, 'hidden'); document.getElementById(id).style.pointerEvents='auto'; safeAdd('status_'+suffix, 'hidden'); updateProgress(); }
+        function saveSig(suffix) { const id = 'sig_' + suffix; document.getElementById(id).style.pointerEvents='none'; safeRemove('status_'+suffix, 'hidden'); updateProgress(); debouncedSave(); }
+        function clearSig(suffix) { const id = 'sig_' + suffix; if (sigs[id]) { const {canvas, ctx} = sigs[id]; ctx.clearRect(0, 0, canvas.width/(window.devicePixelRatio||1), canvas.height/(window.devicePixelRatio||1)); canvas.width = canvas.width; const ratio = Math.max(window.devicePixelRatio || 1, 1); ctx.scale(ratio, ratio); canvas.dataset.signed = "false"; } document.getElementById(id).style.pointerEvents='auto'; safeAdd('status_'+suffix, 'hidden'); updateProgress(); debouncedSave(); }
+        
+        // --- FUNÇÃO DE IA MAIS ROBUSTA (503 HANDLER) ---
+        async function callGemini(prompt) { 
+            const btn = document.activeElement; 
+            const old = btn.innerHTML; 
+            btn.innerHTML = '⏳ ...'; 
+            btn.disabled = true; 
+            
+            try { 
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, { 
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) 
+                }); 
+                
+                if (!res.ok) throw new Error(`Status: ${res.status}`);
+                
+                const data = await res.json(); 
+                btn.innerHTML = old; 
+                btn.disabled = false; 
+                return data.candidates[0].content.parts[0].text; 
+            } catch(e) { 
+                btn.innerHTML = old; 
+                btn.disabled = false; 
+                console.error("Erro IA:", e);
+                let msg = "Falha na conexão.";
+                if(e.message.includes('503')) msg = "Serviço IA sobrecarregado (503). Tente em 1 min.";
+                showCustomAlert("Erro IA", msg, "error"); 
+                return null; 
+            } 
+        }
+        
+        async function analisarIA() { 
+            try { 
+                const cto = document.getElementById('pot_cto').value; 
+                const cli = document.getElementById('pot_cliente').value; 
+                const ixc = document.getElementById('pot_ixc').value; 
+                if (!cto || !cli || !ixc) { showCustomAlert("Dados", "Preencha as potências.", "error"); return; } 
+                
+                const splitterSim = document.querySelector('input[name="splitter"][value="Sim"]').checked; 
+                const prompt = `Aja como um supervisor técnico especialista em FTTH. Analise os seguintes dados de potência:
+                - Potência Medida na CTO: ${cto}
+                - Potência Medida no Cliente: ${cli}
+                - Potência IXC (Final/Real): ${ixc}
+                - Splitter 1x2 na instalação? ${splitterSim ? "Sim (considerar -4dB de perda extra)" : "Não"}
+
+                Regras de validação obrigatórias:
+                1. Da CTO para o cliente a perda máxima aceitável é de 1dB.
+                2. Da CTO para o IXC a perda máxima aceitável é de 2dB.
+                3. Quando houver 1x2, a perda máxima aceitável sobe para 4dB.
+                4. O técnico trabalha apenas com drop e conector mecânico (não usa fusão).
+                5. A potência máxima (limite crítico) em qualquer cenário é -26dBm. Acima disso é problema.
+
+                Cenários de exemplo para basear sua resposta:
+                - Potência do IXC pior que cliente/CTO (Ex: CTO -20, Cli -21, IXC -25): Indica provável problema na ONU/ONT.
+                - Potência IXC melhor que CTO (Ex: CTO -20, IXC -19): Impossível fisicamente. Indica medição errada, rever power meter ou patch cord.
+                - Potência IXC e Cliente OK, mas CTO ruim: Provável patch cord de teste com problema.
+                - Instalação com 1x2 (Ex: CTO -20, IXC -25.5): Aceitável pois -20 (base) -4 (splitter) -1 (perda) = -25. Está no limite mas dentro da regra até -26dBm.
+
+                Com base nisso, entregue uma dica breve e pontual (máximo 3 linhas) para o técnico sobre a qualidade do sinal e onde pode estar o erro se houver.`; 
+                
+                const text = await callGemini(prompt); 
+                if(text) { 
+                    const div = document.getElementById('ia_result_signal');
+                    if(div) {
+                        div.innerHTML = marked.parse(text); 
+                        div.classList.remove('hidden'); 
+                    }
+                    safeRemove('ia_disclaimer', 'hidden'); 
+                } 
+            } catch (e) { console.error(e); } 
+        }
+
+        async function gerarResumoIA() { 
+            if (!validarCampos()) { showCustomAlert("Dados", "Preencha obrigatórios.", "error"); return; } 
+            try { 
+                const getVal = (id) => document.getElementById(id)?.value || "";
+                const getChecked = (name) => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(c=>c.value).join(', ');
+                
+                const rawData = { 
+                    os: getVal('os_id'), 
+                    cliente: getVal('cliente_nome'), 
+                    data: getVal('data_exec'),
+                    entrada: getVal('hora_entrada'),
+                    saida: getVal('hora_saida'),
+                    servicos: getChecked('servico'),
+                    taxa: {
+                        tipo: document.querySelector('input[name="taxa_cobrada"]:checked')?.value || "isenta",
+                        problema: document.getElementById('taxa_problem_area').classList.contains('hidden') ? false : true,
+                        motivo_problema: getVal('taxa_motivo'),
+                        valor: getVal('valor_taxa'),
+                        pagto: getVal('forma_pagamento')
+                    },
+                    cabeamento: {
+                        drop: { id: getVal('drop_id'), ini: getVal('drop_ini'), fim: getVal('drop_fim'), total: getVal('drop_total') },
+                        utp: { total: getVal('utp_total') }
+                    },
+                    rede: { 
+                        cto_id: document.getElementById('cto_sem_id_check').checked ? "SEM ID" : getVal('cto_cliente'), 
+                        porta: getVal('porta_cto'),
+                        pot_cto: getVal('pot_cto'), 
+                        pot_cli: getVal('pot_cliente'), 
+                        pot_ixc: getVal('pot_ixc'),
+                        ancoragens: getVal('ancoragens'),
+                        batida: document.querySelector('input[name="cto_batida"]:checked')?.value === 'Sim' ? getVal('cto_suporte') : "Não batida",
+                        id_removido: document.querySelector('input[name="id_removido"]:checked')?.value === 'Sim' ? (document.getElementById('sem_id_check').checked ? "Sem ID" : getVal('id_removido_val')) : "Nenhum",
+                        splitter: document.querySelector('input[name="splitter"]:checked')?.value === 'Sim' ? "Sim" : "Não"
+                    }, 
+                    estrutura: {
+                        comodos: getVal('qtd_comodos'),
+                        andares: getVal('qtd_andares'),
+                        local_inst: getVal('comodo_inst'),
+                        andar_inst: getVal('andar_inst'),
+                        centralizado: document.querySelector('input[name="centralizado"]:checked')?.value || "Não",
+                        extensoes: document.querySelector('input[name="extensoes"]:checked')?.value || "Não"
+                    },
+                    equipamentos: equipamentosList,
+                    apps: getChecked('apps'),
+                    obs: getVal('obs_texto'), 
+                    titular: {
+                        presente: document.querySelector('input[name="titular_presente"]:checked')?.value || "Sim",
+                        recebedor: getVal('resp_nome'),
+                        contato: getVal('resp_contato')
+                    }
+                }; 
+                
+                const prompt = `Aqui estão os dados brutos do formulário em JSON: ${JSON.stringify(rawData)}.
+                
+                Gere um relatório formal na primeira pessoa seguindo EXATAMENTE esta estrutura narrativa e preencha apenas com o que estiver nos dados (ignore campos vazios):
+                
+                "Realizei no dia [data] entre [entrada] e [saída] os serviços de [serviços] com taxa [detalhes da taxa]. Utilizei o cabeamento [dados do drop: id, inicio, fim, total], instalado na CTO [cto] porta [porta] com potencias de [cto, cli, ixc]. Realizei [ancoragens] ancoragens. Sobre a rede: [se cto batida, citar operador], [se removeu id, citar id], [se usou splitter].
+                A casa possui [comodos] comodos e [andares] andares. O roteador ficou no [local_inst], [andar_inst]. Centralizado: [sim/nao]. Cliente possui extensões: [sim/nao].
+                Movimentação de equipamentos: [listar instalados e retirados]. Apps configurados: [apps].
+                Observações: [obs].
+                [Se titular presente: "Titular presente". Se não: "Titular ausente, recebido por [nome] - [contato]"]."`; 
+                
+                const text = await callGemini(prompt); 
+                if(text) { 
+                    const el = document.getElementById('ia_output');
+                    if(el) {
+                        el.value = text; 
+                        safeRemove('modal_ia', 'hidden'); 
+                    }
+                } 
+            } catch (e) { showCustomAlert("Erro IA", "Falha no resumo.", "error"); } 
+        }
+
+        function gerarResumoSimples() { /* (Lógica mantida, apenas comprimida visualmente para focar no bug fix) */ const getVal = (id) => document.getElementById(id)?.value || ""; const getChecked = (name) => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(c=>c.value).join(', '); const os = getVal('os_id') || "N/A"; const cli = getVal('cliente_nome') || "N/A"; const tecnico = getVal('tec_nome') || "N/A"; const dataExec = getVal('data_exec'); const hEnt = getVal('hora_entrada'); const hSai = getVal('hora_saida'); const servicos = getChecked('servico') || "Nenhum"; const ctoNum = document.getElementById('cto_sem_id_check').checked ? "SEM ID" : getVal('cto_cliente'); const porta = getVal('porta_cto'); const potCto = getVal('pot_cto'); const potCli = getVal('pot_cliente'); const potIxc = getVal('pot_ixc'); let redeDetalhes = ""; const batida = document.querySelector('input[name="cto_batida"]:checked')?.value || "Não"; if(batida === "Sim") redeDetalhes += `\n⚠ CTO BATIDA: ${getVal('cto_suporte')}`; const idRem = document.querySelector('input[name="id_removido"]:checked')?.value || "Não"; if(idRem === "Sim") redeDetalhes += `\n⚠ ID REMOVIDO: ${getVal('id_removido_val')}`; const split = document.querySelector('input[name="splitter"]:checked')?.value || "Não"; if(split === "Sim") redeDetalhes += `\n⚠ SPLITTER: Aut ${getVal('splitter_autorizado')} | Pot ${getVal('splitter_potencia')}`; const drop = getVal('drop_total'); const utp = getVal('utp_total'); const comodos = getVal('qtd_comodos'); const andares = getVal('qtd_andares'); const local = getVal('comodo_inst'); let eqStr = equipamentosList.length > 0 ? equipamentosList.map(e => `${e.status === 'INSTALADO' ? '(+) ' : '(-) '} ${e.tipo} ${e.modelo}`).join('\n') : "Nenhum equipamento movimentado."; const obs = getVal('obs_texto') || "Sem observações."; const txt = `RESUMO TÉCNICO - RL NET\n--------------------------------\nOS: ${os}\nCLIENTE: ${cli}\nTÉCNICO: ${tecnico}\nDATA: ${dataExec} (${hEnt} às ${hSai})\n--------------------------------\nSERVIÇOS:\n${servicos}\n--------------------------------\nREDE:\nCTO: ${ctoNum} (Porta: ${porta})\nPotências: CTO: ${potCto} | Cli: ${potCli} | Ref: ${potIxc}${redeDetalhes}\n--------------------------------\nMATERIAIS:\nDrop: ${drop}m | UTP: ${utp}m\n--------------------------------\nESTRUTURA:\n${comodos} Cômodos | ${andares} Andares\nInstalado em: ${local}\n--------------------------------\nEQUIPAMENTOS:\n${eqStr}\n--------------------------------\nOBSERVAÇÕES:\n${obs}`; document.getElementById('simples_output').value = txt; safeRemove('modal_simples', 'hidden'); }
+        
+        async function enviarDadosPlanilha() { 
+            const btn = document.getElementById('btn_finalizar'); 
+            const originalText = btn.innerHTML; 
+            btn.innerHTML = '⏳ ...'; 
+            btn.disabled = true; 
+            
+            const getVal = (id) => { const el = document.getElementById(id); return el ? el.value : ""; }; 
+            const cleanPower = (val) => val.replace('dBm', '').replace(',', '.').trim(); 
+            const eqInst = equipamentosList.filter(e => e.status === 'INSTALADO').map(e => `${e.tipo} ${e.modelo}`).join(', ') || ""; 
+            const eqRet = equipamentosList.filter(e => e.status === 'RETIRADO').map(e => `${e.tipo} ${e.modelo}`).join(', ') || ""; 
+            const servicosStr = Array.from(document.querySelectorAll('input[name="servico"]:checked')).map(c=>c.value).join(', '); 
+            const appsStr = Array.from(document.querySelectorAll('input[name="apps"]:checked')).map(c=>c.value).join(', '); 
+            let ctoBatidaVal = document.querySelector('input[name="cto_batida"]:checked')?.value || "Não"; 
+            if(ctoBatidaVal === "Sim") ctoBatidaVal += `, suporte: ${getVal('cto_suporte')}`; 
+            let idRemovidoVal = document.querySelector('input[name="id_removido"]:checked')?.value || "Não"; 
+            if(idRemovidoVal === "Sim") { const semIdChecked = document.getElementById('sem_id_check').checked; idRemovidoVal += semIdChecked ? " (SEM ID)" : `, ID: ${getVal('id_removido_val')}`; } 
+            let ctoNum = getVal('cto_cliente'); if(document.getElementById('cto_sem_id_check').checked) ctoNum = "SEM ID"; 
+            let splitterVal = document.querySelector('input[name="splitter"]:checked')?.value || "Não"; 
+            if(splitterVal === "Sim") splitterVal += `, Aut: ${getVal('splitter_autorizado')}, Pot: ${getVal('splitter_potencia')}`; 
+            
+            const dados = { data_registro: new Date().toLocaleString('pt-BR'), os_id: getVal('os_id'), cliente: getVal('cliente_nome'), servicos: servicosStr, data_exec: getVal('data_exec'), entrada: getVal('hora_entrada'), saida: getVal('hora_saida'), equip_instalados: eqInst, equip_retirados: eqRet, drop_total: getVal('drop_total'), utp_total: getVal('utp_total'), pot_cto: cleanPower(getVal('pot_cto')), pot_cliente: cleanPower(getVal('pot_cliente')), pot_ixc: cleanPower(getVal('pot_ixc')), comodos: getVal('qtd_comodos'), andares: getVal('qtd_andares'), apps_orientados: appsStr, equipe: getVal('tec_nome'), obs: getVal('obs_texto'), cto_batida: ctoBatidaVal, id_removido: idRemovidoVal, splitter: splitterVal, ancoragens: getVal('ancoragens'), cto_numero: ctoNum }; 
+            
+            try { 
+                console.log("Enviando dados:", JSON.stringify(dados));
+                await fetch(sheetUrl, { method: 'POST', body: JSON.stringify(dados), mode: 'no-cors' }); 
+            } catch (e) { 
+                console.error("Erro Planilha:", e); 
+            } finally { 
+                btn.innerHTML = originalText; 
+                btn.disabled = false; 
+            } 
+        }
+        
+        function validarCampos() { 
+            let isValid = true; 
+            let firstError = null; 
+            
+            document.querySelectorAll('.required').forEach(el => { if(!el.value && !el.disabled) { el.classList.add('error'); isValid = false; if(!firstError) firstError = el; } else el.classList.remove('error'); }); 
+            
+            const servicosMarcados = Array.from(document.querySelectorAll('input[name="servico"]:checked')).map(c=>c.value); 
+            const servicosSelecionados = servicosMarcados.length > 0; 
+            
+            if (!servicosSelecionados) { 
+                isValid = false; 
+                safeRemove('error_servico', 'hidden'); 
+                if (!firstError) firstError = document.getElementById('block_servicos'); 
+            } else safeAdd('error_servico', 'hidden'); 
+            
+            const checklistSelecionado = document.querySelectorAll('input[name="checklist"]:checked').length > 0; 
+            if (servicosSelecionados && !checklistSelecionado) { 
+                isValid = false; 
+                safeRemove('error_checklist', 'hidden'); 
+                if (!firstError) firstError = document.getElementById('block_checklist'); 
+            } else safeAdd('error_checklist', 'hidden'); 
+            
+            const temEmenda = servicosMarcados.some(s => servicosEmenda.includes(s)); 
+            const obsVal = document.getElementById('obs_texto').value.trim(); 
+            if(temEmenda && !obsVal) { 
+                isValid = false; 
+                document.getElementById('obs_texto').classList.add('error'); 
+                showCustomAlert("Atenção", "Para emendas, descreva a localização nas observações.", "error"); 
+                if(!firstError) firstError = document.getElementById('obs_texto'); 
+            } else { document.getElementById('obs_texto').classList.remove('error'); } 
+            
+            if(document.querySelector('input[name="cto_batida"][value="Sim"]').checked && !document.getElementById('cto_suporte').value.trim()) { 
+                isValid = false; document.getElementById('cto_suporte').classList.add('error'); if(!firstError) firstError = document.getElementById('cto_suporte'); 
+            } 
+            
+            const idRemovidoSim = document.querySelector('input[name="id_removido"][value="Sim"]').checked; 
+            if(idRemovidoSim && !document.getElementById('id_removido_val').value.trim() && !document.getElementById('sem_id_check').checked) { 
+                isValid = false; document.getElementById('id_removido_val').classList.add('error'); if(!firstError) firstError = document.getElementById('id_removido_val'); 
+            } 
+            
+            const splitterSim = document.querySelector('input[name="splitter"][value="Sim"]').checked; 
+            if(splitterSim) { 
+                if(!document.getElementById('splitter_autorizado').value.trim()) { 
+                    isValid = false; document.getElementById('splitter_autorizado').classList.add('error'); if(!firstError) firstError = document.getElementById('splitter_autorizado'); 
+                } 
+                if(!document.getElementById('splitter_potencia').value.trim()) { 
+                    isValid = false; document.getElementById('splitter_potencia').classList.add('error'); if(!firstError) firstError = document.getElementById('splitter_potencia'); 
+                } 
+            } 
+            
+            if(firstError) { 
+                elementToFocus = firstError; 
+                const parentBlock = firstError.closest('.block-content'); 
+                if(parentBlock && !parentBlock.classList.contains('show')) { toggleBlock(parentBlock.parentElement.id); } 
+                setTimeout(() => { firstError.scrollIntoView({behavior: 'smooth', block: 'center'}); }, 300); 
+            } 
+            return isValid; 
+        }
+        
+        async function validarEGerarPDF() { 
+            // 1. Validações e Envio (Mantido)
+            if(!validarCampos()) { showCustomAlert("Atenção", "Preencha os campos obrigatórios.", "error"); return; } 
+            
+            await enviarDadosPlanilha(); 
+            saveLocal(true); 
+            
+            const btn = document.getElementById('btn_finalizar'); 
+            const old = btn.innerHTML; 
+            btn.innerHTML = '⏳ PREPARANDO IMPRESSÃO...'; 
+            btn.disabled = true; 
+            
+            // 2. EXPANDIR TODOS OS CONTEÚDOS (Mantido)
+            document.querySelectorAll('.block-content').forEach(el => el.classList.add('show'));
+            document.querySelectorAll('.block-header').forEach(el => el.classList.add('active'));
+
+            await new Promise(r => setTimeout(r, 500));
+
+            // 3. PREPARAÇÃO DO VISUAL (Mantido)
+            document.body.classList.add('pdf-mode'); 
+            document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(el => { if(el.checked) el.setAttribute('checked', 'checked'); else el.removeAttribute('checked'); }); 
+            document.querySelectorAll('textarea').forEach(el => { const div = document.createElement('div'); div.className = 'pdf-text-replace input-field'; div.innerText = el.value; el.style.display = 'none'; el.parentElement.appendChild(div); el.dataset.replaced = 'true'; }); 
+            document.querySelectorAll('select').forEach(el => { const options = el.querySelectorAll('option'); options.forEach(opt => { if (opt.selected) opt.setAttribute('selected', 'selected'); else opt.removeAttribute('selected'); }); }); 
+            
+            const originalCanvases = []; 
+            document.querySelectorAll('canvas').forEach(c => { 
+                if (c.width === 0) { c.width = 300; c.height = 150; } 
+                const img = document.createElement('img'); 
+                img.src = c.toDataURL("image/png"); 
+                img.className = 'pdf-sig-img'; 
+                originalCanvases.push({ parent: c.parentElement, canvas: c, img: img }); 
+                c.parentElement.appendChild(img); 
+                c.style.display='none'; 
+            }); 
+            
+            const logoImg = document.getElementById('main-logo'); 
+            if(logoImg && (logoImg.naturalWidth === 0 || logoImg.style.display === 'none')) { logoImg.style.display = 'none'; safeRemove('logo-text', 'hidden'); } 
+            
+            // --- NOVO: ALTERAÇÃO DO NOME DO ARQUIVO ---
+            const oldTitle = document.title; // Salva o título original (RAT Digital...)
+            const nomeCli = document.getElementById('cliente_nome').value || 'CLIENTE';
+            const osId = document.getElementById('os_id').value || '';
+            // Limpa caracteres especiais para evitar erro no arquivo e coloca em MAIÚSCULO
+            const nomeArquivo = `RAT_${nomeCli.replace(/[^a-zA-Z0-9\s]/g, '').trim().toUpperCase()}_${osId}`;
+            document.title = nomeArquivo; // Define o nome do arquivo PDF
+            // ------------------------------------------
+
+            await new Promise(r => setTimeout(r, 100));
+            
+            // 4. IMPRESSÃO
+            window.print();
+
+            // 5. RESTAURAÇÃO
+            setTimeout(() => { 
+                document.title = oldTitle; // <--- Restaura o nome original da aba/app
+
+                document.body.classList.remove('pdf-mode'); 
+                
+                originalCanvases.forEach(obj => { obj.img.remove(); obj.canvas.style.display='block'; }); 
+                document.querySelectorAll('.pdf-text-replace').forEach(el => el.remove()); 
+                document.querySelectorAll('textarea[data-replaced]').forEach(el => { el.style.display = 'block'; delete el.dataset.replaced; }); 
+                
+                if(logoImg) logoImg.style.display = ''; 
+                
+                btn.innerHTML = old; 
+                btn.disabled = false; 
+            }, 1000); 
+        }
+        function copiarTexto(id) { const el = document.getElementById(id); el.select(); document.execCommand('copy'); showCustomAlert("Copiado", "Sucesso.", "success"); }
+    </script>
+</body>
+</html>

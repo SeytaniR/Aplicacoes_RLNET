@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coletor CTO v2.1 - RL NET</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #475569; transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #2563eb; }
+        input:checked + .slider:before { transform: translateX(20px); }
+        .port-card { transition: all 0.2s; }
+        .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .input-sem-id { background-color: #1e293b !important; font-style: italic; color: #94a3b8 !important; }
+        .input-sem-pot { background-color: #450a0a !important; font-style: italic; color: #fca5a5 !important; border-color: #b91c1c !important; font-weight: bold; }
+        
+        /* Modal Style */
+        #modalResultado { display: none; }
+        #modalResultado.active { display: flex; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen pb-32">
+
+    <!-- CABEÇALHO -->
+    <header class="bg-slate-800 p-4 sticky top-0 z-50 shadow-lg border-b border-slate-700">
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+                <img src="logorlnet.png" alt="RL NET" class="h-8 w-auto object-contain" onerror="this.src='https://i.imgur.com/qndtfM0.png'">
+                <h1 class="text-xl font-bold text-blue-400">Coleta CTO</h1>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <a href="index.html" class="text-[10px] font-bold text-blue-300 border border-blue-700 bg-blue-900/30 px-3 py-1.5 rounded hover:bg-blue-800/50 flex items-center gap-2 no-underline transition shadow-sm">
+                    <i class="fas fa-home"></i> INÍCIO
+                </a>
+                <span class="text-xs bg-blue-900 text-blue-200 px-2 py-1 rounded border border-blue-700">v1.0 by Filipe Cruz</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+            <input type="text" id="nomeTecnico" placeholder="Técnico" class="w-full bg-slate-700 border border-slate-600 rounded p-3 text-sm focus:border-blue-500 outline-none transition text-white">
+            <input type="text" id="nomeCto" placeholder="CTO (Nome/Nº)" class="w-full bg-slate-700 border border-slate-600 rounded p-3 text-sm focus:border-blue-500 outline-none transition text-white">
+        </div>
+    </header>
+
+    <!-- LISTA DE PORTAS -->
+    <main class="p-3 max-w-lg mx-auto" id="portsContainer"></main>
+
+    <!-- FOOTER COM BOTÃO EXPORTAR -->
+    <div class="fixed bottom-0 left-0 right-0 p-4 bg-slate-800/95 backdrop-blur border-t border-slate-700 shadow-2xl flex justify-center z-50">
+        <button onclick="gerarResultado()" class="w-full max-w-md bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg flex items-center justify-center transition transform active:scale-95">
+            <i class="fas fa-check-circle mr-2"></i> FINALIZAR COLETA
+        </button>
+    </div>
+
+    <!-- MODAL DE RESULTADO (SOLUÇÃO PARA BLOQUEIO DE DOWNLOAD) -->
+    <div id="modalResultado" class="fixed inset-0 z-[100] bg-slate-950/90 backdrop-blur-sm p-4 flex-col items-center justify-center animate-fade-in">
+        <div class="bg-slate-800 w-full max-w-md rounded-2xl border border-slate-700 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-slate-700 flex justify-between items-center bg-slate-800">
+                <h2 class="font-bold text-blue-400 flex items-center gap-2">
+                    <i class="fas fa-file-code"></i> Dados da Coleta
+                </h2>
+                <button onclick="fecharModal()" class="text-slate-400 hover:text-white p-2">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="p-4 overflow-y-auto flex-1 bg-slate-900">
+                <p class="text-xs text-slate-400 mb-2 uppercase font-bold tracking-widest">Conteúdo JSON:</p>
+                <pre id="jsonOutput" class="bg-slate-950 p-3 rounded-lg text-[10px] text-green-400 border border-slate-800 overflow-x-auto whitespace-pre-wrap"></pre>
+            </div>
+
+            <div class="p-4 bg-slate-800 border-t border-slate-700 grid grid-cols-2 gap-3">
+                <button onclick="copiarTexto()" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 transition">
+                    <i class="fas fa-copy"></i> COPIAR
+                </button>
+                <button onclick="baixarArquivo()" class="bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 transition">
+                    <i class="fas fa-download"></i> BAIXAR
+                </button>
+                <button onclick="compartilharWhatsApp()" class="col-span-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 transition">
+                    <i class="fab fa-whatsapp"></i> ENVIAR VIA WHATSAPP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const totalPortas = 16;
+        const container = document.getElementById('portsContainer');
+        let currentPayload = null;
+
+        function init() {
+            for (let i = 1; i <= totalPortas; i++) {
+                const html = `
+                <div class="port-card bg-slate-800 rounded-xl p-4 mb-3 border border-slate-700 shadow-sm relative">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex items-center">
+                            <span class="font-bold text-lg text-white w-8 h-8 flex items-center justify-center bg-blue-600 rounded-lg shadow-md mr-3">${i}</span>
+                            <span class="text-slate-400 text-sm font-semibold uppercase tracking-wider">Porta ${i}</span>
+                        </div>
+                        <div class="flex items-center bg-slate-900 rounded-full px-3 py-1 border border-slate-700">
+                            <span class="text-[10px] mr-2 text-slate-400 font-bold tracking-wide">SPLITTER 1x2</span>
+                            <label class="switch">
+                                <input type="checkbox" onchange="toggleSplitter(${i})" id="check-${i}">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="direct-${i}" class="block animate-fade-in">
+                        ${gerarInputGroup(i, 'single', 'ID / Etiqueta')}
+                    </div>
+                    <div id="split-${i}" class="hidden space-y-3 animate-fade-in">
+                        ${gerarInputGroup(i, 'a', 'Saída A (1x2)', 'border-l-4 border-l-yellow-500')}
+                        ${gerarInputGroup(i, 'b', 'Saída B (1x2)', 'border-l-4 border-l-orange-500')}
+                    </div>
+                </div>`;
+                container.innerHTML += html;
+            }
+        }
+
+        function gerarInputGroup(port, suffix, placeholder, extraClasses = '') {
+            return `
+            <div class="flex items-center space-x-2">
+                <div class="relative w-full">
+                    <input type="text" id="input-${port}-${suffix}" placeholder="${placeholder}" 
+                        class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-3 text-sm focus:border-blue-500 outline-none transition disabled:opacity-70 ${extraClasses}">
+                </div>
+                <div class="flex flex-col items-center justify-center min-w-[40px]">
+                    <input type="checkbox" id="noid-${port}-${suffix}" onchange="toggleStatus('${port}-${suffix}', 'noid')" class="w-5 h-5 accent-slate-500 rounded cursor-pointer">
+                    <label class="text-[8px] text-slate-400 mt-1 cursor-pointer text-center leading-tight" for="noid-${port}-${suffix}">SEM<br>ID</label>
+                </div>
+                <div class="flex flex-col items-center justify-center min-w-[40px]">
+                    <input type="checkbox" id="nopot-${port}-${suffix}" onchange="toggleStatus('${port}-${suffix}', 'nopot')" class="w-5 h-5 accent-red-600 rounded cursor-pointer">
+                    <label class="text-[8px] text-red-400 mt-1 cursor-pointer text-center leading-tight font-bold" for="nopot-${port}-${suffix}">SEM<br>POT</label>
+                </div>
+            </div>`;
+        }
+
+        function toggleSplitter(id) {
+            const check = document.getElementById(`check-${id}`);
+            const direct = document.getElementById(`direct-${id}`);
+            const split = document.getElementById(`split-${id}`);
+            check.checked ? (direct.classList.add('hidden'), split.classList.remove('hidden')) : (split.classList.add('hidden'), direct.classList.remove('hidden'));
+        }
+
+        function toggleStatus(idSuffix, triggerType) {
+            const input = document.getElementById(`input-${idSuffix}`);
+            const checkNoId = document.getElementById(`noid-${idSuffix}`);
+            const checkNoPot = document.getElementById(`nopot-${idSuffix}`);
+            if (triggerType === 'noid' && checkNoId.checked) checkNoPot.checked = false;
+            if (triggerType === 'nopot' && checkNoPot.checked) checkNoId.checked = false;
+            input.classList.remove('input-sem-id', 'input-sem-pot');
+            input.disabled = false;
+            const originalPlaceholder = idSuffix.includes('single') ? `ID / Etiqueta` : `Saída ${idSuffix.includes('a') ? 'A' : 'B'}`;
+            input.placeholder = originalPlaceholder;
+            if (checkNoPot.checked) { input.value = ''; input.disabled = true; input.placeholder = "SEM POTÊNCIA"; input.classList.add('input-sem-pot'); }
+            else if (checkNoId.checked) { input.value = ''; input.disabled = true; input.placeholder = "SEM ID / VAZIO"; input.classList.add('input-sem-id'); }
+        }
+
+        function gerarResultado() {
+            const tecnico = document.getElementById('nomeTecnico').value.trim();
+            const cto = document.getElementById('nomeCto').value.trim();
+            if (!tecnico || !cto) return alert("Preencha Técnico e CTO!");
+
+            const dadosPortas = [];
+            for (let i = 1; i <= totalPortas; i++) {
+                const isSplitter = document.getElementById(`check-${i}`).checked;
+                if (isSplitter) {
+                    const idA = getVal(`input-${i}-a`, `noid-${i}-a`, `nopot-${i}-a`);
+                    const idB = getVal(`input-${i}-b`, `noid-${i}-b`, `nopot-${i}-b`);
+                    if (idA || idB) dadosPortas.push({ porta: i, tipo: "1x2", ids: [idA, idB] });
+                } else {
+                    const idSingle = getVal(`input-${i}-single`, `noid-${i}-single`, `nopot-${i}-single`);
+                    if (idSingle) dadosPortas.push({ porta: i, tipo: "direta", ids: [idSingle] });
+                }
+            }
+
+            currentPayload = { meta: { tecnico, cto, data: new Date().toLocaleString('pt-BR') }, dados: dadosPortas };
+            const jsonStr = JSON.stringify(currentPayload, null, 2);
+            document.getElementById('jsonOutput').textContent = jsonStr;
+            document.getElementById('modalResultado').classList.add('active');
+        }
+
+        function fecharModal() {
+            document.getElementById('modalResultado').classList.remove('active');
+        }
+
+        function copiarTexto() {
+            const texto = document.getElementById('jsonOutput').textContent;
+            const el = document.createElement('textarea');
+            el.value = texto;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            alert("Copiado para a área de transferência!");
+        }
+
+        function compartilharWhatsApp() {
+            const texto = `*COLETA CTO - RL NET*\n*CTO:* ${currentPayload.meta.cto}\n*Técnico:* ${currentPayload.meta.tecnico}\n\n\`\`\`${JSON.stringify(currentPayload, null, 2)}\`\`\``;
+            const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(texto)}`;
+            window.open(url, '_blank');
+        }
+
+        function baixarArquivo() {
+            const jsonString = JSON.stringify(currentPayload, null, 2);
+            const blob = new Blob([jsonString], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const dl = document.createElement('a');
+            dl.href = url;
+            dl.download = `COLETA_${currentPayload.meta.cto}_${currentPayload.meta.tecnico}.json`.toUpperCase();
+            document.body.appendChild(dl);
+            dl.click();
+            setTimeout(() => { document.body.removeChild(dl); URL.revokeObjectURL(url); }, 100);
+        }
+
+        function getVal(inputId, checkId, checkPotId) {
+            if (document.getElementById(checkPotId).checked) return "SEM_POTENCIA";
+            if (document.getElementById(checkId).checked) return "SEM_ID";
+            return document.getElementById(inputId).value.trim();
+        }
+
+        init();
+    </script>
+</body>
+</html>

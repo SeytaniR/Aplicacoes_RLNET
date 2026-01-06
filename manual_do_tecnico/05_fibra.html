@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 05 - Fibra Óptica | RL NET</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        
+        /* Efeito de Laser/Fibra no fundo */
+        .fiber-pattern {
+            background-image: linear-gradient(0deg, transparent 24%, rgba(225, 29, 72, .05) 25%, rgba(225, 29, 72, .05) 26%, transparent 27%, transparent 74%, rgba(225, 29, 72, .05) 75%, rgba(225, 29, 72, .05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(225, 29, 72, .05) 25%, rgba(225, 29, 72, .05) 26%, transparent 27%, transparent 74%, rgba(225, 29, 72, .05) 75%, rgba(225, 29, 72, .05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+        }
+
+        /* Animação do pulso de luz (Seção 1) - ZIG ZAG CORRIGIDO */
+        .light-beam {
+            width: 15px; 
+            height: 4px;
+            background: #ff0055;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ff0055, 0 0 15px #ff0055;
+            /* Caminho ZIG ZAG */
+            offset-path: path("M0,32 L50,8 L100,56 L150,8 L200,56 L250,8 L300,56 L350,8 L400,56 L450,8 L500,56");
+            animation: followPath 3s infinite linear;
+            position: absolute;
+            top: 0; left: 0;
+            opacity: 0;
+            z-index: 20;
+        }
+
+        @keyframes followPath {
+            0% { offset-distance: 0%; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { offset-distance: 100%; opacity: 0; }
+        }
+
+        /* --- ESTILOS OTDR MODERNO (SEÇÃO 6) --- */
+        .otdr-screen {
+            background-color: #0f172a;
+            background-image: 
+                linear-gradient(rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+            background-size: 20px 20px;
+            position: relative;
+        }
+        
+        /* Linha do Gráfico */
+        .otdr-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawTrace 4s ease-out infinite;
+            filter: drop-shadow(0 0 4px #3b82f6);
+        }
+        
+        @keyframes drawTrace {
+            0% { stroke-dashoffset: 1000; }
+            60% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: 0; }
+        }
+
+        /* Barra de Escaneamento Vertical */
+        .scan-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, #3b82f6, transparent);
+            box-shadow: 0 0 15px #3b82f6;
+            animation: scanMove 4s ease-out infinite;
+            z-index: 5;
+        }
+
+        @keyframes scanMove {
+            0% { left: 0%; opacity: 1; }
+            60% { left: 100%; opacity: 1; }
+            65% { opacity: 0; }
+            100% { opacity: 0; left: 100%; }
+        }
+
+        /* Pontos de Evento */
+        .otdr-point {
+            opacity: 0;
+            animation: popIn 4s infinite;
+            transform-origin: center;
+        }
+        .p1 { animation-delay: 0.8s; } /* Conector */
+        .p2 { animation-delay: 1.8s; } /* Fusão */
+        .p3 { animation-delay: 2.8s; } /* Fim */
+
+        @keyframes popIn {
+            0%, 10% { opacity: 0; transform: scale(0); }
+            15%, 90% { opacity: 1; transform: scale(1.5); }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="md:pl-64 flex flex-col min-h-screen transition-all duration-300">
+        <div id="app-layout" class="flex flex-col min-h-screen">
+            
+            <main class="flex-1 p-4 md:p-8 fiber-pattern">
+                <!-- Card Principal -->
+                <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-rose-700">
+                    
+                    <div class="p-6 md:p-10">
+                        <!-- Cabeçalho do Módulo -->
+                        <div class="flex flex-col md:flex-row items-center gap-6 mb-10 border-b pb-8">
+                            <div class="w-20 h-20 rounded-full bg-rose-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg shrink-0 border-4 border-white ring-2 ring-rose-200">
+                                05
+                            </div>
+                            <div class="text-center md:text-left">
+                                <h1 class="text-3xl md:text-4xl font-black text-[#003366] mb-2 uppercase">Fibra Óptica</h1>
+                                <p class="text-gray-600 text-lg font-medium">A espinha dorsal da RL NET: Física, Manuseio e Diagnóstico Avançado</p>
+                              <div class="flex flex-wrap justify-center md:justify-start gap-2 mt-4">
+
+    <span class="bg-red-50 text-red-700 px-3 py-1 rounded-full text-xs font-bold border border-red-200 flex items-center">
+        <i class="fa-solid fa-lightbulb mr-2"></i> Física da Luz
+    </span>
+
+    <span class="bg-red-50 text-red-700 px-3 py-1 rounded-full text-xs font-bold border border-red-200 flex items-center">
+        <i class="fa-solid fa-file-waveform mr-2"></i> Anatomia do Drop
+    </span>
+
+    <span class="bg-red-50 text-red-700 px-3 py-1 rounded-full text-xs font-bold border border-red-200 flex items-center">
+        <i class="fa-solid fa-bolt-lightning mr-2"></i> Potência
+    </span>
+
+    <span class="bg-red-50 text-red-700 px-3 py-1 rounded-full text-xs font-bold border border-red-200 flex items-center">
+        <i class="fa-solid fa-plug-circle-check mr-2"></i> Conectorização
+    </span>
+
+    <span class="bg-red-50 text-red-700 px-3 py-1 rounded-full text-xs font-bold border border-red-200 flex items-center">
+        <i class="fa-solid fa-microscope mr-2"></i> Diagnóstico
+    </span>
+
+    <span class="bg-red-50 text-red-700 px-3 py-1 rounded-full text-xs font-bold border border-red-200 flex items-center">
+        <i class="fa-solid fa-chart-line mr-2"></i> OTDR
+    </span>
+
+    <span class="bg-red-50 text-red-700 px-3 py-1 rounded-full text-xs font-bold border border-red-200 flex items-center">
+        <i class="fa-solid fa-thumbtack mr-2"></i> Fixação
+    </span>
+
+    <span class="bg-red-50 text-red-700 px-3 py-1 rounded-full text-xs font-bold border border-red-200 flex items-center">
+        <i class="fa-solid fa-scissors mr-2"></i> Acabamentos
+    </span>
+
+</div>
+                            </div>
+                        </div>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 1: CONCEITOS BÁSICOS E TRANSMISSÃO -->
+                        <!-- ================================================================================= -->
+                        <section id="section1" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-rose-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">1</span>
+                                A Física da Luz: Como Funciona a Fibra Óptica
+                            </h2>
+                            
+                            <!-- Introdução Impactante -->
+                            <div class="mb-10 bg-gradient-to-r from-rose-900 to-[#003366] text-white p-8 rounded-xl shadow-lg relative overflow-hidden">
+                                <div class="relative z-10">
+                                    <h3 class="text-xl font-bold mb-3">O que você está carregando na escada?</h3>
+                                    <p class="text-rose-100 leading-relaxed mb-0">
+                                        Não é um fio elétrico. É um <strong>guia de luz</strong>.
+                                        <br>
+                                        Ao contrário do cobre, que transporta elétrons (eletricidade) e sofre com raios, chuva e interferência de motores, a fibra óptica transporta <strong>fótons (luz)</strong>.
+                                        <br><br>
+                                        Você está instalando um espelho tubular, mais fino que um fio de cabelo, capaz de transportar toda a enciclopédia do mundo em segundos.
+                                    </p>
+                                </div>
+                                <i class="fa-solid fa-bolt absolute -right-6 -bottom-6 text-9xl text-white opacity-5 rotate-12"></i>
+                            </div>
+
+                            <!-- O Princípio da Reflexão Interna Total -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12 items-center">
+                                <div>
+                                    <h3 class="font-bold text-[#003366] text-lg mb-4 flex items-center gap-2">
+                                        <i class="fa-solid fa-share-nodes text-rose-500"></i> Como a luz faz curva?
+                                    </h3>
+                                    <p class="text-gray-600 text-sm mb-4 leading-relaxed">
+                                        Se você acender uma lanterna num campo aberto, a luz vai em linha reta. Como fazemos ela viajar quilômetros fazendo curvas nos postes?
+                                    </p>
+                                    <p class="text-gray-600 text-sm mb-4 leading-relaxed">
+                                        Usamos a física da <strong>Reflexão Interna Total</strong>. A fibra é composta por dois tipos de vidro:
+                                    </p>
+                                    <ul class="space-y-3 text-sm">
+                                        <li class="flex items-start gap-3 bg-gray-50 p-3 rounded border-l-4 border-rose-500">
+                                            <div class="font-bold text-rose-700 min-w-[60px]">Núcleo</div>
+                                            <div class="text-gray-600">O centro por onde a luz passa. (9 mícrons de diâmetro).</div>
+                                        </li>
+                                        <li class="flex items-start gap-3 bg-gray-50 p-3 rounded border-l-4 border-blue-500">
+                                            <div class="font-bold text-blue-700 min-w-[60px]">Casca</div>
+                                            <div class="text-gray-600">O vidro externo (Cladding) que funciona como um espelho perfeito, jogando a luz de volta para o núcleo.</div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- Diagrama Visual Interativo (ZIG ZAG) -->
+                                <div class="bg-gray-900 rounded-xl p-6 shadow-inner relative h-64 flex items-center justify-center overflow-hidden border-4 border-gray-800">
+                                    <div class="absolute top-2 left-2 text-gray-500 text-xs font-mono">SIMULAÇÃO DE TRANSMISSÃO</div>
+                                    
+                                    <!-- A Fibra -->
+                                    <div class="relative w-full h-16 bg-blue-900/30 border-y-2 border-blue-400 overflow-hidden">
+                                        <!-- O Núcleo -->
+                                        <div class="absolute top-0 left-0 w-full h-full bg-transparent z-10"></div>
+                                        
+                                        <!-- O Feixe de Luz (Caminho Zig Zag Estático - Linha vermelha fraca de fundo) -->
+                                        <svg class="absolute top-0 left-0 w-full h-full" preserveAspectRatio="none">
+                                            <path d="M0,32 L50,8 L100,56 L150,8 L200,56 L250,8 L300,56 L350,8 L400,56 L450,8 L500,56" 
+                                                  fill="none" stroke="#ff0055" stroke-width="1" stroke-opacity="0.3"/>
+                                        </svg>
+                                        
+                                        <!-- Partículas de luz viajando (Caminho Zig Zag Animado) -->
+                                        <div class="light-beam" style="animation-duration: 2s;"></div>
+                                        <div class="light-beam" style="animation-duration: 2.5s; animation-delay: 1s;"></div>
+                                    </div>
+                                    <div class="absolute bottom-2 w-full text-center">
+                                        <p class="text-rose-400 text-xs font-mono animate-pulse">TRANSMISSÃO DE DADOS (PULSOS)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Monomodo vs Multimodo -->
+                            <div class="mb-10">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-microscope text-gray-500"></i> Tipos de Fibra: Não Confunda!
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Monomodo -->
+                                    <div class="bg-yellow-50 border-t-4 border-yellow-400 p-4 rounded shadow-sm">
+                                        <h4 class="font-bold text-yellow-800 mb-2">1. Monomodo (Single Mode - SM)</h4>
+                                        <p class="text-sm text-gray-700 leading-relaxed mb-2">
+                                            É a que usamos na rua e na casa do cliente (Drop). O núcleo é extremamente fino (9µm). A luz viaja "direto", sem ricochetear tanto. Permite longas distâncias (KM).
+                                        </p>
+                                        <div class="bg-white p-2 rounded text-xs text-gray-600 border border-yellow-200 mt-2">
+                                            <strong>Cor do Cabo Interno (RL NET):</strong><br>
+                                            <span class="inline-block w-3 h-3 bg-green-500 rounded-full mr-1"></span> Verde ou 
+                                            <span class="inline-block w-3 h-3 bg-blue-500 rounded-full mr-1"></span> Azul (Varia conforme lote, mas é SM).
+                                        </div>
+                                    </div>
+
+                                    <!-- Multimodo -->
+                                    <div class="bg-orange-50 border-t-4 border-orange-400 p-4 rounded shadow-sm opacity-75">
+                                        <h4 class="font-bold text-orange-800 mb-2">2. Multimodo (MM)</h4>
+                                        <p class="text-sm text-gray-700 leading-relaxed mb-2">
+                                            Núcleo mais grosso. Usada apenas dentro de Data Centers curtos. <strong>Não usamos em clientes.</strong>
+                                        </p>
+                                        <div class="bg-white p-2 rounded text-xs text-gray-600 border border-orange-200 mt-2">
+                                            <strong>Cor Padrão de Mercado:</strong><br>
+                                            <span class="inline-block w-3 h-3 bg-orange-500 rounded-full mr-1"></span> Laranja ou 
+                                            <span class="inline-block w-3 h-3 bg-cyan-400 rounded-full mr-1"></span> Aqua.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Comprimentos de Onda e SEGURANÇA -->
+                            <div class="bg-gray-800 text-white p-6 rounded-xl shadow-lg relative overflow-hidden">
+                                <h3 class="font-bold text-yellow-400 mb-6 text-sm uppercase flex items-center gap-2">
+                                    <i class="fa-solid fa-wave-square"></i> Comprimentos de Onda (nm)
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center relative z-10 mb-8">
+                                    <!-- 1490nm -->
+                                    <div class="bg-white/10 p-4 rounded border-2 border-green-400/50 shadow-[0_0_15px_rgba(74,222,128,0.2)]">
+                                        <div class="text-3xl font-black mb-1 text-white">1490 nm</div>
+                                        <div class="text-xs text-green-300 font-bold uppercase tracking-wider mb-2">Downstream (Descida)</div>
+                                        <p class="text-[10px] text-gray-300">Sinal que sai da OLT e vai para a ONU (Internet chegando).</p>
+                                        <div class="mt-3 bg-green-600 text-white text-[10px] font-bold py-1 px-2 rounded">
+                                            PADRÃO DE MEDIÇÃO RL NET
+                                        </div>
+                                    </div>
+
+                                    <!-- 1310nm -->
+                                    <div class="bg-white/10 p-4 rounded border border-white/20">
+                                        <div class="text-3xl font-black mb-1 text-gray-300">1310 nm</div>
+                                        <div class="text-xs text-blue-300 font-bold uppercase tracking-wider mb-2">Upstream (Subida)</div>
+                                        <p class="text-[10px] text-gray-300">Sinal que sai da ONU e vai para a OLT (Upload do cliente).</p>
+                                    </div>
+
+                                    <!-- 1550nm -->
+                                    <div class="bg-white/10 p-4 rounded border border-white/20 opacity-60 grayscale">
+                                        <div class="text-3xl font-black mb-1 text-gray-400">1550 nm</div>
+                                        <div class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-2">TV / RF (Opcional)</div>
+                                        <p class="text-[10px] text-gray-300">Usado para TV a cabo sobre fibra (não comum em dados puros).</p>
+                                    </div>
+                                </div>
+
+                                <!-- ALERTA DE SEGURANÇA EXTREMA -->
+                                <div class="bg-red-600 p-8 rounded-lg border-4 border-red-500 shadow-[0_0_40px_rgba(220,38,38,0.8)] animate-pulse mb-8 relative overflow-hidden">
+                                    <div class="absolute top-0 right-0 p-4 opacity-20">
+                                        <i class="fa-solid fa-skull-crossbones text-9xl"></i>
+                                    </div>
+                                    <div class="flex flex-col md:flex-row items-center gap-6 text-white relative z-10">
+                                        <div class="bg-black/30 p-4 rounded-full">
+                                            <i class="fa-solid fa-eye-slash text-5xl"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-black text-3xl uppercase mb-2 text-yellow-300">Risco Grave de Cegueira!</h4>
+                                            <p class="text-lg font-bold leading-relaxed">
+                                                A luz da fibra é <span class="bg-white text-red-600 px-1">INVISÍVEL</span> e queima a retina instantaneamente.
+                                                <br>
+                                                Você não sente dor, não vê o laser e não pisca. O dano é irreversível.
+                                            </p>
+                                            <div class="mt-4 bg-black text-white text-center py-3 rounded text-xl font-black uppercase tracking-widest border-2 border-yellow-400">
+                                                NUNCA OLHE PARA A PONTA DA FIBRA
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3 bg-gray-700 p-3 rounded border border-gray-600">
+                                    <i class="fa-solid fa-triangle-exclamation text-yellow-400 mt-1"></i>
+                                    <div>
+                                        <p class="text-xs text-yellow-100 font-bold mb-1">REGRA TÉCNICA:</p>
+                                        <p class="text-[10px] text-gray-300">
+                                            O técnico deve SEMPRE configurar o Power Meter em <strong>1490 nm</strong> para medir o sinal na casa do cliente. Medir em outra frequência dará um valor falso e causará reprovação da instalação.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 2: ESTRUTURA DO CABO DROP -->
+                        <!-- ================================================================================= -->
+                        <section id="section2" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-rose-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">2</span>
+                                Anatomia do Drop: O Que Tem Dentro?
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Para trabalhar com fibra, você precisa conhecer a cirurgia do cabo. O cabo Drop que usamos na RL NET não é apenas plástico e vidro; ele é uma engenharia complexa projetada para aguentar sol, chuva e tração. Vamos dissecar o cabo.
+                            </p>
+
+                            <!-- Diagrama da Estrutura do Cabo -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12 items-center">
+                                
+                                <!-- Visualização Gráfica -->
+                                <div class="flex flex-col items-center justify-center bg-white p-4 rounded-xl shadow-lg border border-gray-100">
+                                    <h4 class="text-sm font-bold text-gray-500 mb-6 uppercase tracking-widest text-center">Estrutura Interna</h4>
+                                    <img src="dropelementos.png" alt="Elementos do Cabo Drop" class="w-full max-w-xs object-contain" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'text-center p-8 text-red-500 font-bold\'>Imagem dropelementos.png não encontrada.<br>Verifique se o arquivo está na pasta.</div>'">
+                                </div>
+
+                                <!-- Explicação Técnica -->
+                                <div class="space-y-6">
+                                    <!-- 1. Mensageiro -->
+                                    <div class="flex gap-4 items-start">
+                                        <div class="bg-gray-200 text-gray-700 font-bold w-8 h-8 rounded flex items-center justify-center shrink-0">1</div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Mensageiro Metálico (Sustentação)</h4>
+                                            <p class="text-xs text-gray-600 mt-1">
+                                                É o arame grosso que fica no topo. Ele serve para aguentar o peso do cabo no poste (tensão).
+                                            </p>
+                                            <div class="bg-blue-50 border-l-4 border-blue-600 p-2 mt-2 rounded text-xs text-gray-700">
+                                                <strong>Procedimento RL NET:</strong> Ao ancorar o cabo no poste, utilizamos a <strong>alça pré-formada trançada sobre o cabo inteiro</strong>. Não separamos o mensageiro do resto do cabo para fixação. Isso agiliza a instalação e mantém a integridade da capa protetora.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 2. Elementos de Tração -->
+                                    <div class="flex gap-4 items-start">
+                                        <div class="bg-gray-200 text-gray-700 font-bold w-8 h-8 rounded flex items-center justify-center shrink-0">2</div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800 text-sm">Elementos de Tração (FRP ou Aço)</h4>
+                                            <p class="text-xs text-gray-600 mt-1">
+                                                Duas varetas rígidas que correm ao lado da fibra (sanduíche). Elas impedem que o cabo dobre demais ou estique a ponto de romper o vidro no meio.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- 3. A Fibra -->
+                                    <div class="flex gap-4 items-start bg-blue-50 p-3 rounded-lg border border-blue-100">
+                                        <div class="bg-blue-600 text-white font-bold w-8 h-8 rounded flex items-center justify-center shrink-0"><i class="fa-solid fa-heart"></i></div>
+                                        <div>
+                                            <h4 class="font-bold text-blue-800 text-sm">A Fibra Óptica (Núcleo + Casca + Acrilato)</h4>
+                                            <p class="text-xs text-gray-600 mt-1">
+                                                No centro de tudo está o filamento de vidro. Ele é revestido por uma "tinta" colorida (geralmente azul ou verde) chamada <strong>Acrilato</strong>.
+                                            </p>
+                                            <p class="text-[10px] text-red-500 font-bold mt-2">
+                                                <i class="fa-solid fa-triangle-exclamation"></i> Atenção: Quando você usa o alicate decapador, você está removendo o ACRILATO para expor o vidro nu.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 3: ATENUAÇÃO E POTÊNCIA -->
+                        <!-- ================================================================================= -->
+                        <section id="section3" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-rose-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">3</span>
+                                Atenuação e Potência: A Matemática da Fibra
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                A luz que sai da OLT não chega com a mesma força na casa do cliente. Ela paga "pedágios" pelo caminho (conectores, emendas, curvas e splitters). 
+                                Entender quanto de luz se perde é a diferença entre um técnico e um "passador de cabo".
+                            </p>
+
+                            <!-- dB vs dBm -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                                <div class="bg-gray-800 text-white p-6 rounded-xl shadow-lg border border-gray-700">
+                                    <h3 class="text-xl font-bold text-yellow-400 mb-4 flex items-center gap-2">
+                                        <i class="fa-solid fa-scale-balanced"></i> dB vs dBm
+                                    </h3>
+                                    <div class="space-y-6">
+                                        <div>
+                                            <div class="flex justify-between items-center mb-1">
+                                                <strong class="text-lg">dBm</strong>
+                                                <span class="text-[10px] bg-white/20 px-2 rounded">POTÊNCIA ABSOLUTA</span>
+                                            </div>
+                                            <p class="text-xs text-gray-300">
+                                                É a <strong>"Temperatura"</strong> da fibra. É o valor que você lê no Power Meter. Mede a força da luz naquele ponto exato.
+                                                <br><span class="text-green-400 font-bold">Ex: -20 dBm (Sinal Bom)</span>
+                                            </p>
+                                        </div>
+                                        <div class="border-t border-gray-600 pt-4">
+                                            <div class="flex justify-between items-center mb-1">
+                                                <strong class="text-lg">dB</strong>
+                                                <span class="text-[10px] bg-white/20 px-2 rounded">PERDA / GANHO</span>
+                                            </div>
+                                            <p class="text-xs text-gray-300">
+                                                É a <strong>"Diferença"</strong>. Quanto o sinal caiu ao passar por um conector ou splitter.
+                                                <br><span class="text-red-400 font-bold">Ex: Perdi 3 dB no splitter.</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 bg-yellow-600/20 p-3 rounded border border-yellow-500/50 text-xs text-yellow-200 italic text-center">
+                                        "Se eu tenho -15 dBm e passo por um conector ruim que perde 2 dB, eu fico com -17 dBm."
+                                    </div>
+                                </div>
+
+                                <!-- Causas de Atenuação -->
+                                <div class="bg-white border p-6 rounded-xl shadow-sm">
+                                    <h3 class="font-bold text-[#003366] text-lg mb-4">Vilões da Atenuação (Onde a luz morre)</h3>
+                                    <ul class="space-y-4">
+                                        <li class="flex items-start gap-3">
+                                            <div class="bg-red-100 p-2 rounded text-red-600 font-bold text-xs w-16 text-center shrink-0">-0.5 dB</div>
+                                            <div>
+                                                <strong class="text-sm text-gray-800 block">Conector (Par)</strong>
+                                                <p class="text-xs text-gray-600">Cada vez que você conecta um patch cord na caixa ou na ONU. Se estiver sujo, a perda pode pular para -5 dB ou mais!</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <div class="bg-red-100 p-2 rounded text-red-600 font-bold text-xs w-16 text-center shrink-0">-0.5 dB</div>
+                                            <div>
+                                                <strong class="text-sm text-gray-800 block">Acoplador (Emenda Mecânica)</strong>
+                                                <p class="text-xs text-gray-600">Usado para emendar cabo quebrado sem fusão. Útil em emergências, mas gera perda significativa se mal feito.</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <div class="bg-red-100 p-2 rounded text-red-600 font-bold text-xs w-16 text-center shrink-0">-0.1 dB</div>
+                                            <div>
+                                                <strong class="text-sm text-gray-800 block">Fusão</strong>
+                                                <p class="text-xs text-gray-600">Uma emenda feita na máquina de fusão tem perda quase zero.</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <div class="bg-red-100 p-2 rounded text-red-600 font-bold text-xs w-16 text-center shrink-0">Variável</div>
+                                            <div>
+                                                <strong class="text-sm text-gray-800 block">Macrocurvatura (Dobra)</strong>
+                                                <p class="text-xs text-gray-600">Se dobrar a fibra em 90º apertado, a luz "vaza" pela curva. Pode gerar atenuação de -3 dB a perda total (LOS).</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- SPLITTERS -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-6 border-l-4 border-rose-500 pl-3">
+                                    A Matemática dos Splitters (Divisores Ópticos)
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-4">
+                                    Em redes GPON (RL NET), usamos splitters passivos para dividir o sinal. Cada vez que dividimos a luz, a potência cai pela metade (3 dB).
+                                </p>
+                                
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                                    <div class="bg-white p-4 rounded-lg shadow border-b-4 border-blue-500">
+                                        <div class="text-gray-400 text-xs uppercase font-bold mb-2">Splitter 1:2</div>
+                                        <i class="fa-solid fa-code-branch rotate-90 text-2xl text-blue-500 mb-2"></i>
+                                        <div class="text-xl font-black text-gray-800">- 3.5 dB</div>
+                                        <p class="text-[10px] text-gray-500">Perda Típica</p>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg shadow border-b-4 border-green-500">
+                                        <div class="text-gray-400 text-xs uppercase font-bold mb-2">Splitter 1:4</div>
+                                        <i class="fa-solid fa-code-branch rotate-90 text-2xl text-green-500 mb-2"></i>
+                                        <div class="text-xl font-black text-gray-800">- 7.5 dB</div>
+                                        <p class="text-[10px] text-gray-500">Perda Típica</p>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg shadow border-b-4 border-yellow-500">
+                                        <div class="text-gray-400 text-xs uppercase font-bold mb-2">Splitter 1:8</div>
+                                        <i class="fa-solid fa-code-branch rotate-90 text-2xl text-yellow-500 mb-2"></i>
+                                        <div class="text-xl font-black text-gray-800">- 10.5 dB</div>
+                                        <p class="text-[10px] text-gray-500">Perda Típica</p>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg shadow border-b-4 border-rose-500">
+                                        <div class="text-gray-400 text-xs uppercase font-bold mb-2">Splitter 1:16</div>
+                                        <i class="fa-solid fa-code-branch rotate-90 text-2xl text-rose-500 mb-2"></i>
+                                        <div class="text-xl font-black text-gray-800">- 14.0 dB</div>
+                                        <p class="text-[10px] text-gray-500">Perda Típica</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TABELA DE NÍVEIS DE SINAL -->
+                            <div class="bg-white border-2 border-gray-200 rounded-xl overflow-hidden shadow-lg">
+                                <div class="bg-[#003366] p-4 flex justify-between items-center">
+                                    <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                                        <i class="fa-solid fa-gauge-high"></i> Padrão de Sinal RL NET (Power Meter)
+                                    </h3>
+                                    <span class="bg-rose-600 text-white text-xs px-2 py-1 rounded font-bold">@ 1490nm</span>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm text-left">
+                                        <thead class="bg-gray-100 text-gray-600 uppercase text-xs font-bold">
+                                            <tr>
+                                                <th class="p-4">Faixa (dBm)</th>
+                                                <th class="p-4">Status</th>
+                                                <th class="p-4">Ação Técnica</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200">
+                                            <tr class="bg-red-50">
+                                                <td class="p-4 font-mono font-bold text-red-700">> -8 dBm</td>
+                                                <td class="p-4"><span class="bg-red-200 text-red-800 px-2 py-1 rounded text-xs font-bold">SATURAÇÃO</span></td>
+                                                <td class="p-4 text-gray-600 text-xs">Sinal muito forte. Pode queimar a ONU ou causar lentidão. Use um atenuador.</td>
+                                            </tr>
+                                            <tr class="bg-green-50">
+                                                <td class="p-4 font-mono font-bold text-green-700">-8 a -18 dBm</td>
+                                                <td class="p-4"><span class="bg-green-200 text-green-800 px-2 py-1 rounded text-xs font-bold">EXCELENTE</span></td>
+                                                <td class="p-4 text-gray-600 text-xs">Sinal perfeito. Instalação Aprovada.</td>
+                                            </tr>
+                                            <tr class="bg-green-50 border-l-4 border-green-500">
+                                                <td class="p-4 font-mono font-bold text-green-700">-18 a -25 dBm</td>
+                                                <td class="p-4"><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-bold">PADRÃO RL NET</span></td>
+                                                <td class="p-4 text-gray-600 text-xs">Faixa operacional ideal da maioria das redes. Instalação Aprovada.</td>
+                                            </tr>
+                                            <tr class="bg-yellow-50">
+                                                <td class="p-4 font-mono font-bold text-yellow-700">-25 a -27 dBm</td>
+                                                <td class="p-4"><span class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-xs font-bold">ALERTA</span></td>
+                                                <td class="p-4 text-gray-600 text-xs">Funciona, mas qualquer chuva ou dobra vai derrubar. Verifique conectores e curvas. Evite entregar assim.</td>
+                                            </tr>
+                                            <tr class="bg-red-50">
+                                                <td class="p-4 font-mono font-bold text-red-700">< -27 dBm</td>
+                                                <td class="p-4"><span class="bg-red-200 text-red-800 px-2 py-1 rounded text-xs font-bold">CRÍTICO / LOS</span></td>
+                                                <td class="p-4 text-gray-600 text-xs">ONU piscando LOS vermelho. Internet caindo. Refaça a conectorização ou verifique a CTO.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 4: A ARTE DA CONECTORIZAÇÃO -->
+                        <!-- ================================================================================= -->
+                        <section id="section4" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-rose-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">4</span>
+                                A Arte da Conectorização: Onde o Sinal Passa (ou Corta)
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Você pode ter a melhor fibra do mundo e o equipamento mais caro. Se o conector for mal feito, tudo foi em vão. 
+                                O <strong>Conector de Campo (Fast Connector)</strong> é o ponto mais sensível de toda a rede. Um técnico de excelência se conhece pelo acabamento do seu conector.
+                            </p>
+
+                            <!-- TIPOS DE CONECTOR (APC vs UPC) -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                                
+                                <!-- SC/APC (Verde) -->
+                                <div class="bg-green-50 border-t-4 border-green-500 p-6 rounded-xl shadow-sm relative overflow-hidden">
+                                    <div class="absolute -right-4 -top-4 text-6xl text-green-200 opacity-50 font-black">APC</div>
+                                    <div class="flex items-center gap-4 mb-4">
+                                        <div class="w-12 h-12 bg-green-500 rounded flex items-center justify-center text-white font-bold text-xl shadow">
+                                            <i class="fa-solid fa-plug"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-green-800 text-lg">SC/APC (Verde)</h3>
+                                            <p class="text-xs text-green-600 font-bold uppercase">Angled Physical Contact</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-700 mb-4">
+                                        É o <strong>PADRÃO OFICIAL RL NET</strong>. A ponta da fibra é polida em um ângulo de 8º.
+                                    </p>
+                                    <div class="bg-white p-3 rounded text-xs text-gray-600 border border-green-100">
+                                        <strong>Por que usamos?</strong> O ângulo faz com que a luz que reflete (volta) saia do núcleo e se perca na casca, evitando que ela volte para a OLT e cause ruído. Essencial para redes de alta velocidade (GPON) e vídeo.
+                                    </div>
+                                </div>
+
+                                <!-- SC/UPC (Azul) -->
+                                <div class="bg-blue-50 border-t-4 border-blue-500 p-6 rounded-xl shadow-sm relative overflow-hidden">
+                                    <div class="absolute -right-4 -top-4 text-6xl text-blue-200 opacity-50 font-black">UPC</div>
+                                    <div class="flex items-center gap-4 mb-4">
+                                        <div class="w-12 h-12 bg-blue-500 rounded flex items-center justify-center text-white font-bold text-xl shadow">
+                                            <i class="fa-solid fa-plug"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-blue-800 text-lg">SC/UPC (Azul)</h3>
+                                            <p class="text-xs text-blue-600 font-bold uppercase">Ultra Physical Contact</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-700 mb-4">
+                                        Padrão antigo ou específico. A ponta é levemente convexa (quase reta).
+                                    </p>
+                                    <div class="bg-white p-3 rounded text-xs text-gray-600 border border-blue-100">
+                                        <strong>Quando usar na RL NET?</strong> Apenas quando o equipamento onde você vai plugar (CTO ou ONU do cliente) for AZUL. Existem áreas antigas ou equipamentos legados que exigem este conector.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- A REGRA DE OURO: COR COM COR -->
+                            <div class="bg-gray-800 text-white p-8 rounded-xl shadow-lg mb-12 relative overflow-hidden">
+                                <div class="relative z-10 text-center">
+                                    <h3 class="text-2xl font-black text-yellow-400 mb-2 uppercase tracking-widest border-b-2 border-yellow-500 inline-block pb-1">Regra Universal</h3>
+                                    <p class="text-xl font-bold mt-4 mb-8">"COR COM COR. SEMPRE."</p>
+                                    
+                                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                        
+                                        <!-- VERDE + VERDE -->
+                                        <div class="bg-white/10 p-4 rounded-xl border border-green-500/50 flex flex-col items-center">
+                                            <div class="h-24 w-full flex items-center justify-center relative mb-4">
+                                                <!-- SVG Verde+Verde -->
+                                                <svg width="200" height="60" viewBox="0 0 200 60">
+                                                    <!-- Esquerda (Verde) -->
+                                                    <path d="M10,15 L90,15 L100,20 L100,40 L90,45 L10,45 Z" fill="#22c55e" stroke="none" />
+                                                    <!-- Direita (Verde) -->
+                                                    <path d="M190,15 L110,15 L100,20 L100,40 L110,45 L190,45 Z" fill="#22c55e" stroke="none" />
+                                                    <!-- Luz -->
+                                                    <line x1="10" y1="30" x2="190" y2="30" stroke="#ff0055" stroke-width="2" />
+                                                </svg>
+                                            </div>
+                                            <span class="text-green-400 font-bold text-lg mb-1"><i class="fa-solid fa-check mr-1"></i> Verde + Verde</span>
+                                            <span class="text-xs text-gray-300">Encaixe perfeito (8º com 8º). Perda mínima (~0.3dB).</span>
+                                        </div>
+
+                                        <!-- AZUL + AZUL -->
+                                        <div class="bg-white/10 p-4 rounded-xl border border-blue-500/50 flex flex-col items-center">
+                                            <div class="h-24 w-full flex items-center justify-center relative mb-4">
+                                                <!-- SVG Azul+Azul -->
+                                                <svg width="200" height="60" viewBox="0 0 200 60">
+                                                    <!-- Esquerda (Azul) -->
+                                                    <path d="M10,15 L95,15 Q100,15 100,30 Q100,45 95,45 L10,45 Z" fill="#3b82f6" stroke="none" />
+                                                    <!-- Direita (Azul) -->
+                                                    <path d="M190,15 L105,15 Q100,15 100,30 Q100,45 105,45 L190,45 Z" fill="#3b82f6" stroke="none" />
+                                                    <!-- Luz -->
+                                                    <line x1="10" y1="30" x2="190" y2="30" stroke="#ff0055" stroke-width="2" />
+                                                </svg>
+                                            </div>
+                                            <span class="text-blue-400 font-bold text-lg mb-1"><i class="fa-solid fa-check mr-1"></i> Azul + Azul</span>
+                                            <span class="text-xs text-gray-300">Encaixe perfeito (Plano com Plano). Perda mínima (~0.3dB).</span>
+                                        </div>
+
+                                        <!-- VERDE + AZUL (ERRO) -->
+                                        <div class="bg-red-600/20 p-4 rounded-xl border border-red-500 animate-pulse flex flex-col items-center">
+                                            <div class="h-24 w-full flex items-center justify-center relative mb-4">
+                                                <!-- SVG Verde+Azul -->
+                                                <svg width="200" height="60" viewBox="0 0 200 60">
+                                                    <!-- Esquerda (Verde - Pontudo) -->
+                                                    <path d="M10,15 L90,15 L100,20 L100,40 L90,45 L10,45 Z" fill="#22c55e" stroke="none" />
+                                                    <!-- Direita (Azul - Plano) -->
+                                                    <path d="M190,15 L105,15 Q100,15 100,30 Q100,45 105,45 L190,45 Z" fill="#3b82f6" stroke="none" />
+                                                    <!-- Luz (Refletindo) -->
+                                                    <line x1="10" y1="30" x2="98" y2="30" stroke="#ff0055" stroke-width="2" />
+                                                    <circle cx="100" cy="30" r="3" fill="#ff0055" class="animate-ping" />
+                                                    <!-- Gap text -->
+                                                    <text x="100" y="10" fill="white" font-size="10" text-anchor="middle">GAP DE AR</text>
+                                                    <line x1="100" y1="12" x2="100" y2="18" stroke="white" stroke-width="1" />
+                                                </svg>
+                                            </div>
+                                            <span class="text-red-400 font-bold text-lg mb-1"><i class="fa-solid fa-xmark mr-1"></i> Verde + Azul</span>
+                                            <span class="text-xs text-red-200 font-bold mb-1">CRIME TÉCNICO!</span>
+                                            <span class="text-[10px] text-gray-300">Cria um "gap" de ar (perda alta) e a ponta angular do verde arranha e destrói a ponta reta do azul. Dano permanente.</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PASSO A PASSO DA CONECTORIZAÇÃO -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-6 border-l-4 border-rose-500 pl-3">
+                                    O Ritual da Conectorização Perfeita
+                                </h3>
+                                
+                                <div class="space-y-6">
+                                    <!-- Passo 1 -->
+                                    <div class="flex gap-4">
+                                        <div class="flex flex-col items-center">
+                                            <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 font-bold flex items-center justify-center border border-rose-200">1</div>
+                                            <div class="h-full w-0.5 bg-rose-100 my-2"></div>
+                                        </div>
+                                        <div class="pb-6">
+                                            <h4 class="font-bold text-gray-800 text-sm">Preparação (A Bota Esquecida)</h4>
+                                            <p class="text-xs text-gray-600 mt-1 mb-2">
+                                                Parece óbvio, mas é o erro nº 1: <strong>Coloque a bota (rosca) no cabo ANTES de tudo.</strong> Se você fizer a fusão ou montar o conector e esquecer a bota, terá que cortar e refazer tudo.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Passo 2 -->
+                                    <div class="flex gap-4">
+                                        <div class="flex flex-col items-center">
+                                            <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 font-bold flex items-center justify-center border border-rose-200">2</div>
+                                            <div class="h-full w-0.5 bg-rose-100 my-2"></div>
+                                        </div>
+                                        <div class="pb-6">
+                                            <h4 class="font-bold text-gray-800 text-sm">Decapagem (O Descascar)</h4>
+                                            <p class="text-xs text-gray-600 mt-1 mb-2">
+                                                Use o alicate de 3 furos ou o decapador de drop. 
+                                                <br>1. Remova a capa preta/colorida externa.
+                                                <br>2. Remova o acrilato (a tinta colorida da fibra). O vidro deve ficar transparente.
+                                            </p>
+                                            <div class="text-[10px] bg-yellow-50 text-yellow-800 p-2 rounded border border-yellow-200 inline-block">
+                                                <i class="fa-solid fa-triangle-exclamation mr-1"></i> Se o alicate estiver desregulado, ele vai riscar o vidro e a fibra quebrará na hora da clivagem.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Passo 3 -->
+                                    <div class="flex gap-4">
+                                        <div class="flex flex-col items-center">
+                                            <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 font-bold flex items-center justify-center border border-rose-200">3</div>
+                                            <div class="h-full w-0.5 bg-rose-100 my-2"></div>
+                                        </div>
+                                        <div class="pb-6">
+                                            <h4 class="font-bold text-gray-800 text-sm">Limpeza (O Barulhinho)</h4>
+                                            <p class="text-xs text-gray-600 mt-1 mb-2">
+                                                Use lenço de papel que não solta fiapo umedecido em <strong>Álcool Isopropílico</strong>. Passe na fibra nua até ouvir o "squeak" (barulho de vidro cantando).
+                                            </p>
+                                            <p class="text-[10px] text-red-600 font-bold">
+                                                <i class="fa-solid fa-ban mr-1"></i> NUNCA ASSOPRE A FIBRA. Sua boca joga saliva e gordura no vidro.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Passo 4 -->
+                                    <div class="flex gap-4">
+                                        <div class="flex flex-col items-center">
+                                            <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 font-bold flex items-center justify-center border border-rose-200">4</div>
+                                            <div class="h-full w-0.5 bg-rose-100 my-2"></div>
+                                        </div>
+                                        <div class="pb-6">
+                                            <h4 class="font-bold text-gray-800 text-sm">Clivagem (O Corte de Diamante)</h4>
+                                            <p class="text-xs text-gray-600 mt-1 mb-2">
+                                                Este é o momento crítico. Coloque a fibra no clivador usando o gabarito (geralmente entre 10mm e 12mm, verifique o manual do conector).
+                                                <br>Corte suave. Não force. O corte deve ser reto (90º) e limpo.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Passo 5 -->
+                                    <div class="flex gap-4">
+                                        <div class="flex flex-col items-center">
+                                            <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 font-bold flex items-center justify-center border border-rose-200">5</div>
+                                            <div class="h-full w-0.5 bg-rose-100 my-2"></div>
+                                        </div>
+                                        <div class="pb-6">
+                                            <h4 class="font-bold text-gray-800 text-sm">Inserção e Travamento (A Barriga)</h4>
+                                            <p class="text-xs text-gray-600 mt-1 mb-2">
+                                                Insira a fibra clivada no Fast Connector com cuidado.
+                                                <br>Vá empurrando até sentir um "batente". Empurre um milímetro a mais para criar uma leve curvatura ("barriga") na fibra dentro do conector.
+                                                <br>Trave a trava amarela/preta e rosqueie a bota.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 5: DIAGNÓSTICO E REPARO -->
+                        <!-- ================================================================================= -->
+                        <section id="section5" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-rose-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">5</span>
+                                Diagnóstico e Reparo: O Doutor da Fibra
+                            </h2>
+                            
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                O cliente liga reclamando que "a internet está lenta" ou "caiu". O amador troca a ONU. O profissional diagnostica a fibra. Nesta seção, você aprenderá a ler os sinais vitais da rede e a realizar a cirurgia correta.
+                            </p>
+
+                            <!-- POWER METER vs ONU -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                                <div class="bg-white border rounded-xl p-6 shadow-sm">
+                                    <h3 class="font-bold text-[#003366] text-lg mb-4 flex items-center gap-2">
+                                        <i class="fa-solid fa-gauge-high text-rose-500"></i> Power Meter: O Juiz Supremo
+                                    </h3>
+                                    <p class="text-sm text-gray-600 mb-4">
+                                        Nunca confie cegamente no sinal mostrado na página da ONU. O Power Meter é o único instrumento calibrado e preciso.
+                                    </p>
+                                    <ul class="text-sm space-y-2 text-gray-700">
+                                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i> <strong>Sempre meça na ponta do drop:</strong> Antes de ligar na ONU.</li>
+                                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i> <strong>Limpe antes de medir:</strong> Um conector sujo pode falsificar a leitura em até 5dB.</li>
+                                    </ul>
+                                </div>
+
+                                <div class="bg-white border rounded-xl p-6 shadow-sm border-l-4 border-yellow-400">
+                                    <h3 class="font-bold text-[#003366] text-lg mb-4 flex items-center gap-2">
+                                        <i class="fa-solid fa-scale-unbalanced text-yellow-500"></i> Triangulação de Sinal
+                                    </h3>
+                                    <p class="text-sm text-gray-600 mb-2">
+                                        <strong>O Mistério do Gargalo:</strong> Digamos que no sistema a ONU mostra <span class="text-green-600 font-bold">-24dBm</span> (Aceitável). Você pensa: "Tá tudo ok".
+                                    </p>
+                                    <p class="text-sm text-gray-600 mb-4">
+                                        Mas ao medir na CTO ou na ponta do drop com Power Meter, dá <span class="text-green-600 font-bold">-19dBm</span>.
+                                    </p>
+                                    <div class="bg-red-50 p-3 rounded text-xs text-red-800 border border-red-200">
+                                        <strong>Onde foram parar esses 5dB?</strong><br>
+                                        Isso indica um <strong>gargalo físico</strong> entre a ponta do drop e o chip da ONU. Pode ser o conector mecânico mal feito, o acoplador da roseta sujo ou a porta da ONU com poeira. <strong>Sempre compare os 3 valores!</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- IDENTIFICAÇÃO VISUAL DE ROMPIMENTO -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-6 border-l-4 border-rose-500 pl-3">
+                                    CSI da Fibra: Identificando o Dano Visualmente
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    <!-- Stress Mark -->
+                                    <div class="bg-gray-50 p-4 rounded text-center border hover:shadow-md transition">
+                                        <div class="text-3xl text-gray-400 mb-2"><i class="fa-solid fa-eye"></i></div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-1">Marca de Estresse</h4>
+                                        <p class="text-xs text-gray-500">
+                                            Manchas brancas no cabo preto indicam que ele foi dobrado ou puxado violentamente. Provável ponto de atenuação.
+                                        </p>
+                                    </div>
+                                    <!-- Mordida -->
+                                    <div class="bg-gray-50 p-4 rounded text-center border hover:shadow-md transition">
+                                        <div class="text-3xl text-gray-400 mb-2"><i class="fa-solid fa-dog"></i></div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-1">Mordidas</h4>
+                                        <p class="text-xs text-gray-500">
+                                            <strong>Cães e Gatos</strong> adoram fibra. Procure por marcas de dentes ou capa mastigada nos drops baixos.
+                                        </p>
+                                    </div>
+                                    <!-- Cerol -->
+                                    <div class="bg-gray-50 p-4 rounded text-center border hover:shadow-md transition">
+                                        <div class="text-3xl text-gray-400 mb-2"><i class="fa-solid fa-scissors"></i></div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-1">Cerol / Linha</h4>
+                                        <p class="text-xs text-gray-500">
+                                            Cortes limpos e profundos no meio do vão entre postes. Comum em áreas residenciais.
+                                        </p>
+                                    </div>
+                                    <!-- Esmagamento -->
+                                    <div class="bg-gray-50 p-4 rounded text-center border hover:shadow-md transition">
+                                        <div class="text-3xl text-gray-400 mb-2"><i class="fa-solid fa-couch"></i></div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-1">Esmagamento</h4>
+                                        <p class="text-xs text-gray-500">
+                                            Dentro de casa: Pés de sofá, portas fechando sobre o cabo ou grampos de fixação muito apertados.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- REGRA DA TROCA COMPLETA -->
+                            <div class="bg-rose-50 border-l-4 border-rose-600 p-6 rounded-r-xl shadow-sm mb-12">
+                                <h3 class="font-bold text-rose-800 text-lg mb-2 flex items-center gap-2">
+                                    <i class="fa-solid fa-rotate"></i> Regra da Troca Completa
+                                </h3>
+                                <p class="text-gray-700 text-sm mb-4 leading-relaxed">
+                                    Na RL NET, prezamos pela qualidade a longo prazo. Se o drop estiver rompido no meio do vão (entre postes), <strong>NÃO FAÇA EMENDA NO MEIO DO CABO.</strong>
+                                </p>
+                                <div class="bg-white p-4 rounded border border-rose-100">
+                                    <strong class="text-rose-700 text-sm block mb-1">O Procedimento Correto:</strong>
+                                    <p class="text-xs text-gray-600">
+                                        Substitua o lance inteiro, da CTO até a PTO (ou até o ponto de ancoragem mais próximo se for muito longo e permitido pela supervisão). Emendas no meio do vão pegam chuva, sol e acabam gerando atenuação futura, obrigando outro técnico a voltar lá em 1 mês.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- SEGURANÇA E DESCARTE -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                <div class="bg-gray-800 text-white p-6 rounded-xl shadow-lg relative">
+                                    <div class="absolute top-4 right-4 text-gray-600"><i class="fa-solid fa-trash-can text-2xl"></i></div>
+                                    <h3 class="font-bold text-yellow-400 mb-3">Lixo de Fibra: Uma Arma Invisível</h3>
+                                    <p class="text-xs text-gray-300 mb-4 leading-relaxed">
+                                        Os pedacinhos de fibra cortada (cleavage shards) são vidro puro, afiados como bisturi e quase invisíveis. Se cair no tapete do cliente, pode entrar no pé de uma criança ou pata de animal e viajar pela corrente sanguínea.
+                                    </p>
+                                    <div class="bg-red-600/20 border border-red-500 p-3 rounded text-xs text-red-100 font-bold">
+                                        REGRA: Use sempre uma caixa de descarte (ou garrafa PET). NUNCA jogue restos de fibra no chão.
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 6: OTDR AVANÇADO (AJUSTE MODERNO) -->
+                        <!-- ================================================================================= -->
+                        <section id="section6" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-rose-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">6</span>
+                                OTDR Avançado: O Raio-X da Rede
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Quando o problema não está nas pontas, ele está no meio. Mas como achar um rompimento a 3km de distância sem olhar poste por poste? 
+                                Usamos o <strong>OTDR (Optical Time Domain Reflectometer)</strong>.
+                            </p>
+
+                            <!-- Analogia do Morcego -->
+                            <div class="bg-indigo-900 text-white p-8 rounded-xl shadow-lg mb-12 relative overflow-hidden">
+                                <div class="relative z-10">
+                                    <h3 class="text-xl font-bold text-indigo-300 mb-4 flex items-center gap-2">
+                                        <i class="fa-solid fa-bullseye"></i> Como funciona? (O Efeito Morcego)
+                                    </h3>
+                                    <p class="text-indigo-100 leading-relaxed mb-4">
+                                        Imagine que você está em um túnel escuro e grita. Se houver uma parede a 100 metros, o eco demora um tempo para voltar. Se a parede estiver a 200 metros, demora mais.
+                                        <br><br>
+                                        O OTDR faz a mesma coisa, mas com <strong>luz</strong>. Ele envia um pulso de laser e mede o "eco" (reflexão) que volta.
+                                    </p>
+                                </div>
+                                <i class="fa-solid fa-wifi rotate-90 absolute right-10 top-1/2 -translate-y-1/2 text-9xl text-white opacity-5"></i>
+                            </div>
+
+                            <!-- Lendo o Gráfico (MODERNIZADO) -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-6">Interpretando o Trace (Análise em Tempo Real)</h3>
+                                
+                                <div class="otdr-screen h-80 rounded-xl mb-6 shadow-2xl overflow-hidden border-4 border-slate-700">
+                                    <div class="absolute top-4 left-4 text-cyan-400 font-mono text-xs animate-pulse">STATUS: AQUISITION MODE... [1310nm]</div>
+                                    <div class="absolute top-4 right-4 text-xs font-mono text-slate-400">RANGE: 10KM | PULSE: 50ns</div>
+                                    
+                                    <!-- Barra de Escaneamento Vertical -->
+                                    <div class="scan-line"></div>
+
+                                    <!-- Eixos -->
+                                    <div class="absolute bottom-10 left-10 right-10 h-px bg-slate-600"></div>
+                                    <div class="absolute top-10 bottom-10 left-10 w-px bg-slate-600"></div>
+
+                                    <!-- Gráfico SVG Moderno -->
+                                    <svg viewBox="0 0 500 250" class="w-full h-full absolute top-0 left-0" style="padding: 40px;">
+                                        <!-- Definição de Gradiente para a Linha -->
+                                        <defs>
+                                            <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
+                                                <stop offset="0%" stop-color="#3b82f6" />
+                                                <stop offset="100%" stop-color="#60a5fa" />
+                                            </linearGradient>
+                                        </defs>
+
+                                        <!-- Linha do Trace (Azul Neon) -->
+                                        <path d="M0,50 L100,60 L100,20 L105,65 L250,85 L250,110 L255,110 L380,130 L380,230 L500,230" 
+                                              fill="none" stroke="url(#lineGradient)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="otdr-path" />
+                                        
+                                        <!-- Evento 1: Conector (Amarelo) -->
+                                        <circle cx="100" cy="20" r="4" fill="#fbbf24" stroke="#fff" stroke-width="2" class="otdr-point p1" />
+                                        <text x="80" y="10" font-size="10" fill="#fbbf24" class="otdr-point p1" font-weight="bold" font-family="monospace">EVT 1: REFLEXÃO</text>
+
+                                        <!-- Evento 2: Fusão (Laranja) -->
+                                        <circle cx="250" cy="110" r="4" fill="#f97316" stroke="#fff" stroke-width="2" class="otdr-point p2" />
+                                        <text x="230" y="135" font-size="10" fill="#f97316" class="otdr-point p2" font-weight="bold" font-family="monospace">EVT 2: PERDA (dB)</text>
+
+                                        <!-- Evento 3: Fim (Vermelho) -->
+                                        <circle cx="380" cy="230" r="4" fill="#ef4444" stroke="#fff" stroke-width="2" class="otdr-point p3" />
+                                        <text x="360" y="210" font-size="10" fill="#ef4444" class="otdr-point p3" font-weight="bold" font-family="monospace">EVT 3: FIM DE FIBRA</text>
+                                    </svg>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="bg-yellow-50 border border-yellow-200 p-3 rounded">
+                                        <strong class="text-yellow-800 text-sm block mb-1">Pico (Torre)</strong>
+                                        <p class="text-xs text-gray-600">
+                                            Indica um <strong>Conector</strong> ou emenda mecânica. A luz bateu no vidro polido e refletiu forte.
+                                        </p>
+                                    </div>
+                                    <div class="bg-orange-50 border border-orange-200 p-3 rounded">
+                                        <strong class="text-orange-800 text-sm block mb-1">Degrau (Queda)</strong>
+                                        <p class="text-xs text-gray-600">
+                                            Indica uma <strong>Fusão</strong> ou dobra. A luz passou, mas perdeu força (desceu o degrau) sem refletir muito.
+                                        </p>
+                                    </div>
+                                    <div class="bg-red-50 border border-red-200 p-3 rounded">
+                                        <strong class="text-red-800 text-sm block mb-1">Abismo (Ruído)</strong>
+                                        <p class="text-xs text-gray-600">
+                                            Fim da linha. A fibra acabou ou foi cortada. O gráfico cai para o chão (ruído).
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 7: CUIDADOS NA PASSAGEM INTERNA -->
+                        <!-- ================================================================================= -->
+                        <section id="section7" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-rose-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">7</span>
+                                Cuidados na Passagem Interna (A Estética e a Física)
+                            </h2>
+
+                            <div class="mb-8 p-6 bg-gradient-to-r from-gray-50 to-white border-l-4 border-rose-500 rounded shadow-sm">
+                                <p class="text-gray-700 italic text-lg mb-2">
+                                    "O cliente não entende de dBm ou atenuação. Ele julga a qualidade da internet pelo <strong>acabamento do fio na parede da sala</strong>."
+                                </p>
+                                <p class="text-sm text-gray-500 font-bold">- Mantra da Qualidade RL NET</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                                
+                                <!-- O Cabo Drop Interno (RL NET) -->
+                                <div>
+                                    <h3 class="font-bold text-[#003366] text-lg mb-4 border-b pb-2">O Material: Cabo Drop Padrão</h3>
+                                    <p class="text-sm text-gray-600 mb-4">
+                                        Na RL NET, a simplicidade e a robustez andam juntas. <strong>Utilizamos o mesmo cabo Drop da rede externa dentro da residência.</strong>
+                                    </p>
+                                    <ul class="space-y-3 text-sm text-gray-700">
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                                            <div>
+                                                <strong>Padronização Total:</strong> Não há troca de cabo na entrada. O cabo que vem do poste entra direto até a ONU, evitando emendas desnecessárias que geram perda de sinal.
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-triangle-exclamation text-rose-500 mt-1"></i>
+                                            <div>
+                                                <strong>Rigidez:</strong> Como é o mesmo cabo da rua (com mensageiro de aço), ele é mais rígido. Exige cuidado redobrado nas curvas internas para não ficar esteticamente feio ou desencostar da parede.
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-shield-halved text-blue-500 mt-1"></i>
+                                            <div>
+                                                <strong>Resistência:</strong> É muito mais resistente a pisões, móveis e mordidas de animais do que os cabos finos de fibra transparente.
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- O Inimigo: Cantos de Parede -->
+                                <div class="bg-red-50 border border-red-100 p-5 rounded-xl">
+                                    <h3 class="font-bold text-red-800 text-lg mb-3 flex items-center gap-2">
+                                        <i class="fa-solid fa-eject rotate-90"></i> O Vilão dos Cantos (90º)
+                                    </h3>
+                                    <p class="text-sm text-gray-700 mb-4">
+                                        O erro número 1 em instalações internas é "vincar" o cabo no canto da parede para ficar "bonito".
+                                    </p>
+                                    <div class="bg-white p-3 rounded text-center">
+                                        <div class="text-xs text-gray-500 mb-1">RAIO DE CURVATURA MÍNIMO</div>
+                                        <div class="w-12 h-12 rounded-full border-4 border-rose-500 mx-auto flex items-center justify-center font-bold text-rose-700 text-xs">
+                                            30mm
+                                        </div>
+                                        <p class="text-[10px] text-gray-400 mt-2">Tamanho de uma tampinha de garrafa</p>
+                                    </div>
+                                    <p class="text-xs text-red-700 mt-3 font-bold text-center">
+                                        Nunca dobre em "L" perfeito. Faça uma curva suave.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <!-- Fixação: Grampos e Cola -->
+                            <div class="mt-10">
+                                <h3 class="font-bold text-[#003366] text-lg mb-6">Fixação: Pregos vs Cola</h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <!-- Grampo Miguelão -->
+                                    <div class="bg-white border p-4 rounded-lg shadow-sm hover:shadow-md transition">
+                                        <div class="text-center mb-3">
+                                            <i class="fa-solid fa-hammer text-gray-400 text-3xl"></i>
+                                        </div>
+                                        <h4 class="font-bold text-gray-800 text-center mb-2">Grampo Miguelão</h4>
+                                        <p class="text-xs text-gray-600 text-center mb-2">
+                                            O mais seguro e durável.
+                                        </p>
+                                        <div class="bg-blue-50 text-blue-800 p-2 rounded text-[10px] font-bold">
+                                            DICA: Bata o martelo no prego, NÃO no plástico. Se amassar o plástico, esmaga a fibra (atenuação).
+                                        </div>
+                                    </div>
+
+                                    <!-- Cola Quente -->
+                                    <div class="bg-white border p-4 rounded-lg shadow-sm hover:shadow-md transition">
+                                        <div class="text-center mb-3">
+                                            <i class="fa-solid fa-fire-burner text-orange-400 text-3xl"></i>
+                                        </div>
+                                        <h4 class="font-bold text-gray-800 text-center mb-2">Cola Quente</h4>
+                                        <p class="text-xs text-gray-600 text-center mb-2">
+                                            Esteticamente limpo, mas perigoso.
+                                        </p>
+                                        <div class="bg-orange-50 text-orange-800 p-2 rounded text-[10px] font-bold">
+                                            CUIDADO: Não aplique a pistola fervendo direto no cabo. A temperatura deforma a casca da fibra. Faça "pontos" de cola na parede e encoste o cabo depois de 2 segundos.
+                                        </div>
+                                    </div>
+
+                                    <!-- Furo Passante -->
+                                    <div class="bg-white border p-4 rounded-lg shadow-sm hover:shadow-md transition">
+                                        <div class="text-center mb-3">
+                                            <i class="fa-solid fa-drill text-gray-600 text-3xl"></i>
+                                        </div>
+                                        <h4 class="font-bold text-gray-800 text-center mb-2">Furo Passante</h4>
+                                        <p class="text-xs text-gray-600 text-center mb-2">
+                                            Atravessar parede para o quarto.
+                                        </p>
+                                        <div class="bg-gray-100 text-gray-800 p-2 rounded text-[10px] font-bold">
+                                            REGRA: Sempre fure de dentro para fora (para não estourar o reboco da sala) e com leve inclinação para baixo (para água da chuva não entrar pelo fio).
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- SEÇÃO 8: FIXAÇÃO E ANCORAGEM (CONTEÚDO NOVO) -->
+                        <!-- ================================================================================= -->
+                        <section id="section8" class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-rose-600 text-white w-8 h-8 rounded text-lg flex items-center justify-center">8</span>
+                                Fixação e Ancoragem: A Arte de Esticar o Cabo
+                            </h2>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                A fibra pode ter sinal perfeito, mas se a ancoragem for frouxa, o cabo "barriga". Se for muito esticada, a fibra atenua. 
+                                Aprenda a diferença técnica entre os tipos de amarração e o padrão de isoladores da RL NET.
+                            </p>
+
+                            <!-- ANCORAGEM NO POSTE -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-6 border-l-4 border-rose-500 pl-3">
+                                    Na Rede Externa: O Poste
+                                </h3>
+                                
+                                <div class="bg-gray-800 text-white p-6 rounded-xl shadow-lg mb-8">
+                                    <div class="flex items-center gap-4 mb-4">
+                                        <div class="bg-rose-600 p-3 rounded-full"><i class="fa-solid fa-link text-2xl"></i></div>
+                                        <div>
+                                            <h4 class="text-xl font-bold">Padrão de Hardware RL NET</h4>
+                                            <p class="text-xs text-gray-300">Isolador Plástico + Alça Pré-formada</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-200 leading-relaxed mb-4">
+                                        Utilizamos exclusivamente a <strong>Alça Pré-formada</strong> para prender o cabo Drop no isolador (isolador plástico). 
+                                        A alça distribui a força de aperto por 20cm do cabo, evitando esmagar o núcleo (o que aconteceria se você usasse um nó ou arame liso).
+                                    </p>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <!-- Tipo 1: Encabeçamento -->
+                                    <div class="bg-white border-2 border-rose-100 rounded-xl p-5 hover:border-rose-300 transition shadow-sm">
+                                        <h4 class="font-bold text-rose-800 mb-2 flex items-center gap-2">
+                                            <i class="fa-solid fa-anchor"></i> 1. Encabeçamento (Fim de Linha)
+                                        </h4>
+                                        <div class="bg-gray-100 rounded mb-3 overflow-hidden border">
+                                            <img src="encabecamento.png" alt="Ancoragem de Encabeçamento" class="w-full h-48 object-cover hover:scale-105 transition duration-500">
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-3">
+                                            <strong>Quando usar?</strong> No primeiro e último poste do vão, ou quando o cabo faz uma curva de 90º (esquina).
+                                        </p>
+                                        <ul class="text-xs text-gray-700 space-y-1">
+                                            <li>• O cabo é totalmente tracionado.</li>
+                                            <li>• A alça pré-formada "abraça" o isolador e volta trançando no cabo.</li>
+                                            <li>• É onde o cabo "morre" ou "nasce".</li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Tipo 2: Passagem -->
+                                    <div class="bg-white border-2 border-blue-100 rounded-xl p-5 hover:border-blue-300 transition shadow-sm">
+                                        <h4 class="font-bold text-blue-800 mb-2 flex items-center gap-2">
+                                            <i class="fa-solid fa-arrow-right-long"></i> 2. Passagem (Tangente)
+                                        </h4>
+                                        <div class="bg-gray-100 rounded mb-3 overflow-hidden border">
+                                            <img src="passagem.png" alt="Ancoragem de Passagem" class="w-full h-48 object-cover hover:scale-105 transition duration-500">
+                                        </div>
+                                        <p class="text-xs text-gray-600 mb-3">
+                                            <strong>Quando usar?</strong> Nos postes do meio do caminho, onde o cabo segue reto.
+                                        </p>
+                                        <ul class="text-xs text-gray-700 space-y-1">
+                                            <li>• O cabo <strong>NÃO</strong> é cortado nem tracionado fortemente.</li>
+                                            <li>• Ele apenas apoia no isolador.</li>
+                                            <li>• <strong>Dica RL NET:</strong> Usamos uma alça pré-formada aplicada de forma "frouxa" ou laço específico para sustentar o peso sem travar o movimento longitudinal.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FIXAÇÃO NA FACHADA -->
+                            <div>
+                                <h3 class="font-bold text-[#003366] text-lg mb-6 border-l-4 border-rose-500 pl-3">
+                                    Na Casa do Cliente: A Fachada
+                                </h3>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 mb-3">O Gancho "S" e o Isolador</h4>
+                                        <p class="text-sm text-gray-600 mb-4">
+                                            Não amarre o cabo no portão ou na grade. Use o <strong>Isolador Plástico com Parafuso e Bucha</strong> na parede.
+                                        </p>
+                                        <div class="bg-yellow-50 p-4 rounded border-l-4 border-yellow-400">
+                                            <strong class="text-yellow-800 text-sm block mb-1">A "Pingadeira" (Drip Loop)</strong>
+                                            <p class="text-xs text-gray-700">
+                                                É a técnica <strong>mais importante</strong> para evitar queimar a ONU. Antes do cabo entrar no furo da parede, faça uma pequena barriga em forma de "U" (loop) para baixo.
+                                            </p>
+                                            <p class="text-xs text-gray-700 mt-2 font-bold">
+                                                <i class="fa-solid fa-droplet text-blue-500"></i> A água da chuva escorre pelo fio, chega na parte mais baixa do "U" e pinga no chão, em vez de entrar pelo furo e molhar a tomada ou a ONU.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Diagrama Pingadeira -->
+                                    <div class="bg-gray-50 p-6 rounded-xl border border-dashed border-gray-300 flex items-center justify-center">
+                                        <div class="text-center">
+                                            <i class="fa-solid fa-house-chimney-window text-6xl text-gray-300 mb-4"></i>
+                                            <p class="text-xs text-gray-400 font-mono">Visualização da Pingadeira</p>
+                                            <!-- SVG Simplificado de Pingadeira -->
+                                            <svg width="200" height="100" viewBox="0 0 200 100" class="mt-2 mx-auto">
+                                                <path d="M10,20 L50,20 Q70,20 70,50 Q70,80 90,80 Q110,80 110,50 Q110,20 130,20 L190,20" 
+                                                      fill="none" stroke="#000" stroke-width="3" />
+                                                <circle cx="90" cy="85" r="3" fill="#3b82f6" class="animate-bounce" />
+                                                <text x="90" y="98" font-size="8" text-anchor="middle" fill="#3b82f6">ÁGUA PINGA AQUI</text>
+                                                <rect x="140" y="10" width="10" height="40" fill="#ccc" /> <!-- Parede -->
+                                                <text x="160" y="40" font-size="8" fill="#666">PAREDE</text>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- CONCLUSÃO (CARD FINAL) -->
+                        <!-- ================================================================================= -->
+                        <div class="bg-[#003366] text-white p-8 rounded-xl text-center shadow-lg mt-12">
+                          <div class="inline-block bg-amber-500 p-4 rounded-full mb-6 shadow-lg animate-bounce">
+            <i class="fa-solid fa-trophy text-3xl text-white"></i>
+        </div>
+                            <h3 class="text-2xl font-bold mb-4">Você concluiu o Módulo de Fibra Óptica!</h3>
+                            <p class="text-rose-100 mb-6 max-w-2xl mx-auto">
+                                Agora você domina a espinha dorsal da RL NET. Você entende a física da luz, sabe diagnosticar problemas invisíveis e executar reparos com precisão cirúrgica.
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-4 text-sm font-bold">
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Física da Luz</span>
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Estrutura do Drop</span>
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Atenuação (dB)</span>
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Conectorização</span>
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Diagnóstico</span>
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> OTDR</span>
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Passagem Interna</span>
+                                <span class="bg-rose-800 px-4 py-2 rounded-full border border-rose-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Ancoragem</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="layout.js"></script>
+
+</body>
+</html>

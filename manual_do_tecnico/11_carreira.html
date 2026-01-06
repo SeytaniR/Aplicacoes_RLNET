@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 11 - Carreiras e Desenvolvimento | RL NET</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        
+        /* Padrão de fundo "Crescimento" (Setas para cima) */
+        .career-pattern {
+            background-color: #ecfdf5; /* Emerald-50 */
+            background-image: linear-gradient(135deg, #d1fae5 25%, transparent 25%), linear-gradient(225deg, #d1fae5 25%, transparent 25%), linear-gradient(45deg, #d1fae5 25%, transparent 25%), linear-gradient(315deg, #d1fae5 25%, transparent 25%);
+            background-position: 10px 0, 10px 0, 0 0, 0 0;
+            background-size: 20px 20px;
+            background-repeat: repeat;
+        }
+
+        /* Cores Temáticas: Emerald (Crescimento) */
+        .text-career-rl { color: #059669; } /* Emerald-600 */
+        .bg-career-rl { background-color: #059669; }
+        .border-career-rl { border-color: #059669; }
+        
+        /* Card Hover Effect */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="md:pl-64 flex flex-col min-h-screen transition-all duration-300">
+        <div id="app-layout" class="flex flex-col min-h-screen">
+            
+            <main class="flex-1 p-4 md:p-8 career-pattern">
+                
+                <!-- CARD PRINCIPAL DO MÓDULO -->
+                <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-career-rl">
+                    
+                    <div class="p-6 md:p-10">
+                        
+                        <!-- ================================================================================= -->
+                        <!-- CABEÇALHO (HERO) -->
+                        <!-- ================================================================================= -->
+                        <div class="flex flex-col md:flex-row items-center gap-6 mb-8 border-b pb-8">
+                            <!-- Ícone/Número do Módulo -->
+                            <div class="w-20 h-20 rounded-full bg-career-rl flex items-center justify-center text-white text-3xl font-bold shadow-lg shrink-0 border-4 border-white ring-2 ring-emerald-300 relative">
+                                11
+                            </div>
+                            <div class="text-center md:text-left flex-1">
+                                
+                                <h1 class="text-3xl md:text-4xl font-black text-[#003366] mb-2 uppercase">Carreira & Desenvolvimento</h1>
+                                <p class="text-gray-600 text-lg font-medium">O manual termina aqui, mas a sua jornada apenas começou.</p>
+                                
+                                <!-- FAIXA DE COMPETÊNCIAS (Tags) -->
+                                <div class="flex flex-wrap justify-center md:justify-start gap-2 mt-4">
+                                    <span class="bg-emerald-50 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold border border-emerald-200 flex items-center">
+                                        <i class="fa-solid fa-graduation-cap mr-2"></i> Educação
+                                    </span>
+                                    <span class="bg-emerald-50 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold border border-emerald-200 flex items-center">
+                                        <i class="fa-solid fa-certificate mr-2"></i> Certificações
+                                    </span>
+                                    <span class="bg-emerald-50 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold border border-emerald-200 flex items-center">
+                                        <i class="fa-solid fa-user-tie mr-2"></i> Liderança
+                                    </span>
+                                    <span class="bg-emerald-50 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold border border-emerald-200 flex items-center">
+                                        <i class="fa-solid fa-network-wired mr-2"></i> Redes Avançadas
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ================================================================================= -->
+                        <!-- 1. INTRODUÇÃO -->
+                        <!-- ================================================================================= -->
+                        <section id="intro" class="mb-12">
+                            <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-8 rounded-xl shadow-lg relative overflow-hidden">
+                                <div class="relative z-10">
+                                    <h3 class="text-xl font-bold mb-3 flex items-center gap-2">
+                                        <i class="fa-solid fa-rocket"></i> Construa seu Futuro
+                                    </h3>
+                                    <p class="text-emerald-50 leading-relaxed font-light text-lg">
+                                        O setor de telecomunicações é um dos que mais cresce no mundo. Mesmo sem um plano de carreira formal, cada profissional é CEO da sua própria trajetória. Este módulo é o mapa para você sair do básico e atingir a excelência técnica, gerencial ou acadêmica.
+                                    </p>
+                                </div>
+                                <i class="fa-solid fa-chart-line absolute -right-6 -bottom-6 text-9xl text-white opacity-10 rotate-12"></i>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 2. POR QUE SE DESENVOLVER? -->
+                        <!-- ================================================================================= -->
+                        <section id="section2" class="mb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-career-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">2</span>
+                                Por que se Desenvolver?
+                            </h2>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <!-- Card 1 -->
+                                <div class="bg-white border border-gray-200 p-5 rounded-xl hover-lift text-center">
+                                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-briefcase"></i></div>
+                                    <h4 class="font-bold text-gray-800 mb-1">Oportunidades</h4>
+                                    <p class="text-xs text-gray-500">Esteja preparado para futuras oportunidades internas.</p>
+                                </div>
+                                <!-- Card 2 -->
+                                <div class="bg-white border border-gray-200 p-5 rounded-xl hover-lift text-center">
+                                    <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-star"></i></div>
+                                    <h4 class="font-bold text-gray-800 mb-1">Qualidade Técnica</h4>
+                                    <p class="text-xs text-gray-500">Trabalhe menos e produza mais, com menos erros e retrabalho.</p>
+                                </div>
+                                <!-- Card 3 -->
+                                <div class="bg-white border border-gray-200 p-5 rounded-xl hover-lift text-center">
+                                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-user-tie"></i></div>
+                                    <h4 class="font-bold text-gray-800 mb-1">Responsabilidade</h4>
+                                    <p class="text-xs text-gray-500">Prepare-se para ser Líder, Supervisor ou Gerente.</p>
+                                </div>
+                                <!-- Card 4 -->
+                                <div class="bg-white border border-gray-200 p-5 rounded-xl hover-lift text-center">
+                                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-trophy"></i></div>
+                                    <h4 class="font-bold text-gray-800 mb-1">Diferencial</h4>
+                                    <p class="text-xs text-gray-500">Destaque-se da multidão. Seja a referência.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 3. TRILHAS DE CONHECIMENTO -->
+                        <!-- ================================================================================= -->
+                        <section id="section3" class="mb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-career-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">3</span>
+                                Trilhas de Conhecimento
+                            </h2>
+                            <p class="text-gray-600 mb-6">Escolha o caminho que mais combina com você. Você pode ser especialista em um ou generalista em todos.</p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                <!-- Trilha 1: TÉCNICA -->
+                                <div class="bg-white border-l-4 border-blue-500 rounded-r-xl p-6 shadow-sm hover:shadow-md transition">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="bg-blue-100 p-2 rounded text-blue-600"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                                        <h3 class="font-bold text-lg text-gray-800">3.1 Trilha Técnica (Infra)</h3>
+                                    </div>
+                                    <ul class="text-sm text-gray-600 space-y-2">
+                                        <li><i class="fa-solid fa-caret-right text-blue-400 mr-2"></i> Lançamento e ancoragem de cabos (Rede Externa).</li>
+                                        <li><i class="fa-solid fa-caret-right text-blue-400 mr-2"></i> Conectorização avançada e Fusão de fibra.</li>
+                                        <li><i class="fa-solid fa-caret-right text-blue-400 mr-2"></i> Interpretação de OTDR e Power Meter.</li>
+                                        <li><i class="fa-solid fa-caret-right text-blue-400 mr-2"></i> Interpretação de projetos de rede (Maps).</li>
+                                    </ul>
+                                </div>
+
+                                <!-- Trilha 2: LÓGICA -->
+                                <div class="bg-white border-l-4 border-cyan-500 rounded-r-xl p-6 shadow-sm hover:shadow-md transition">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="bg-cyan-100 p-2 rounded text-cyan-600"><i class="fa-solid fa-network-wired"></i></div>
+                                        <h3 class="font-bold text-lg text-gray-800">3.2 Trilha Lógica (NOC/TI)</h3>
+                                    </div>
+                                    <ul class="text-sm text-gray-600 space-y-2">
+                                        <li><i class="fa-solid fa-caret-right text-cyan-400 mr-2"></i> Protocolos IPv4, IPv6, DNS e Rotas.</li>
+                                        <li><i class="fa-solid fa-caret-right text-cyan-400 mr-2"></i> Configuração de VLAN, PPPoE e DHCP.</li>
+                                        <li><i class="fa-solid fa-caret-right text-cyan-400 mr-2"></i> Mikrotik, Huawei, Cisco (Troubleshooting).</li>
+                                        <li><i class="fa-solid fa-caret-right text-cyan-400 mr-2"></i> Segurança de Redes e Firewalls.</li>
+                                    </ul>
+                                </div>
+
+                                <!-- Trilha 3: ATENDIMENTO -->
+                                <div class="bg-white border-l-4 border-pink-500 rounded-r-xl p-6 shadow-sm hover:shadow-md transition">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="bg-pink-100 p-2 rounded text-pink-600"><i class="fa-solid fa-headset"></i></div>
+                                        <h3 class="font-bold text-lg text-gray-800">3.3 Trilha Humanizada (CX)</h3>
+                                    </div>
+                                    <ul class="text-sm text-gray-600 space-y-2">
+                                        <li><i class="fa-solid fa-caret-right text-pink-400 mr-2"></i> Comunicação assertiva e não-violenta.</li>
+                                        <li><i class="fa-solid fa-caret-right text-pink-400 mr-2"></i> Customer Experience (Experiência do Cliente).</li>
+                                        <li><i class="fa-solid fa-caret-right text-pink-400 mr-2"></i> Vendas consultivas e Upsell.</li>
+                                        <li><i class="fa-solid fa-caret-right text-pink-400 mr-2"></i> Resolução de conflitos.</li>
+                                    </ul>
+                                </div>
+
+                                <!-- Trilha 4: GESTÃO -->
+                                <div class="bg-white border-l-4 border-slate-500 rounded-r-xl p-6 shadow-sm hover:shadow-md transition">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="bg-slate-100 p-2 rounded text-slate-600"><i class="fa-solid fa-chart-line"></i></div>
+                                        <h3 class="font-bold text-lg text-gray-800">3.4 Trilha de Gestão</h3>
+                                    </div>
+                                    <ul class="text-sm text-gray-600 space-y-2">
+                                        <li><i class="fa-solid fa-caret-right text-slate-400 mr-2"></i> Análise de Indicadores (KPIs) e Metas.</li>
+                                        <li><i class="fa-solid fa-caret-right text-slate-400 mr-2"></i> Liderança de equipes e Feedback.</li>
+                                        <li><i class="fa-solid fa-caret-right text-slate-400 mr-2"></i> Planejamento estratégico e logística.</li>
+                                        <li><i class="fa-solid fa-caret-right text-slate-400 mr-2"></i> Controle de Qualidade e Processos.</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 4. e 5. RECURSOS (Conteúdos e Cursos) -->
+                        <!-- ================================================================================= -->
+                        <section id="section4" class="mb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <span class="bg-career-rl text-white w-8 h-8 rounded text-lg flex items-center justify-center">4</span>
+                                Onde Aprender? (Recursos)
+                            </h2>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                
+                                <!-- Conteúdo Gratuito -->
+                                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                                    <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                        <i class="fa-brands fa-youtube text-red-600 text-xl"></i> Conteúdo Gratuito (YouTube/Web)
+                                    </h3>
+                                    <ul class="space-y-3">
+                                        <li>
+  <a 
+    href="https://www.youtube.com/@cursoemvideo" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="flex items-center justify-between bg-white p-3 rounded shadow-sm w-full hover:bg-gray-50 transition-colors"
+  >
+    <span class="text-sm font-medium">Curso em Vídeo</span>
+    <i class="fa-solid fa-play text-gray-300 text-xs"></i>
+  </a>
+</li>
+                                        <li>
+  <a 
+    href="https://www.youtube.com/@manualdomundo" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="flex items-center justify-between bg-white p-3 rounded shadow-sm w-full hover:bg-gray-50 transition-colors"
+  >
+    <span class="text-sm font-medium">Manual do mundo</span>
+    <i class="fa-solid fa-play text-gray-300 text-xs"></i>
+  </a>
+</li>
+                                        <li>
+  <a 
+    href="https://www.youtube.com/@cafecomredes6493" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="flex items-center justify-between bg-white p-3 rounded shadow-sm w-full hover:bg-gray-50 transition-colors"
+  >
+    <span class="text-sm font-medium">Café com Redes</span>
+    <i class="fa-solid fa-play text-gray-300 text-xs"></i>
+  </a>
+</li>
+                                        <li>
+  <a 
+    href="https://www.netacad.com/pt/courses/networking-basics?courseLang=pt-BR" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="flex items-center justify-between bg-white p-3 rounded shadow-sm w-full hover:bg-gray-50 transition-colors"
+  >
+    <span class="text-sm font-medium">Cisco Networking Academy (Básico)
+</span>
+    <i class="fa-solid fa-play text-gray-300 text-xs"></i>
+  </a>
+</li>
+                                        <li>
+  <a 
+    href="https://www.udemy.com/" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="flex items-center justify-between bg-white p-3 rounded shadow-sm w-full hover:bg-gray-50 transition-colors"
+  >
+    <span class="text-sm font-medium">Udemy</span>
+    <i class="fa-solid fa-play text-gray-300 text-xs"></i>
+  </a>
+</li>
+                                    </ul>
+                                </div>
+
+                                <!-- Certificações Pagas -->
+                                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                                    <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                        <i class="fa-solid fa-certificate text-yellow-600 text-xl"></i> Certificações & Cursos Pagos
+                                    </h3>
+                                    <div class="space-y-4">
+                                        <div>
+                                            <strong class="text-xs uppercase text-gray-500 block mb-1">Fibra Óptica</strong>
+                                            <div class="flex flex-wrap gap-2">
+                                                <a 
+  href="https://furukawa.fontouraeducation.com.br/" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  class="px-2 py-1 bg-white border rounded text-xs hover:bg-gray-100 hover:text-blue-600 transition-colors"
+>
+  Furukawa Academy
+</a>
+<a 
+  href="https://br.prysmian.com/pt" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  class="px-2 py-1 bg-white border rounded text-xs hover:bg-gray-100 hover:text-blue-600 transition-colors"
+>
+  Prysmian
+<a 
+  href="https://www.senairs.org.br/" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  class="px-2 py-1 bg-white border rounded text-xs hover:bg-gray-100 hover:text-blue-600 transition-colors"
+>
+  Senai
+</a>                                            </div>
+                                        </div>
+                                        <div>
+                                            <strong class="text-xs uppercase text-gray-500 block mb-1">Redes Lógicas</strong>
+                                            <div class="flex flex-wrap gap-2">
+<a 
+  href="https://mikrotik.com/training/about" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  class="px-2 py-1 bg-white border rounded text-xs hover:bg-gray-100 hover:text-blue-600 transition-colors"
+>
+  Mikrotik
+<a 
+  href="https://www.netacad.com/pt/courses/ccna-introduction-networks?courseLang=pt-BR" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  class="px-2 py-1 bg-white border rounded text-xs hover:bg-gray-100 hover:text-blue-600 transition-colors"
+>
+  Cisco CCNA
+<a 
+  href="https://www.comptia.org/en-em/certifications/network/" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  class="px-2 py-1 bg-white border rounded text-xs hover:bg-gray-100 hover:text-blue-600 transition-colors"
+>
+  CompTIA Network+
+</a>                                            </div>
+                                        </div>
+                                        <div>
+                                            <strong class="text-xs uppercase text-gray-500 block mb-1">Gestão & CX</strong>
+                                            <div class="flex flex-wrap gap-2">
+<a 
+  href="https://www.senacrs.com.br/" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  class="px-2 py-1 bg-white border rounded text-xs hover:bg-gray-100 hover:text-blue-600 transition-colors"
+>
+  Senac RS
+<a 
+  href="https://www.espm.br/cursos/dynamic/cursos-de-ferias/gestao-agil-de-projetos-com-scrum/?utm_campaign=POA-AWARENESS-2025_2-PMAX-TECNOLOGOS&utm_medium=ppc&utm_source=adwords&utm_term=&hsa_mt=&hsa_net=adwords&hsa_ver=3&hsa_kw=&hsa_acc=2499614682&hsa_grp=&hsa_tgt=&hsa_src=x&hsa_ad=&hsa_cam=23102159014&gad_source=1&gad_campaignid=23092100790&gbraid=0AAAAAC3eHrjLuJc4rKKXTUIo7lUmIR_L8&gclid=Cj0KCQiAosrJBhD0ARIsAHebCNoPLBWmwRZIVor_XKVcXw02Q0D0H4rMNuYBWQ4-u4TGF7KWDkaK_74aAhgXEALw_wcB" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  class="px-2 py-1 bg-white border rounded text-xs hover:bg-gray-100 hover:text-blue-600 transition-colors"
+>
+  Gestão Ágil
+<a 
+  href="https://ebaconline.com.br/lideranca?utm_source=google&utm_medium=cpc&utm_campaign=course_0_all_google_perf-max_all_conversions_purchase-4&utm_content=c_22382917420|adg_|ad_|ph_|key_|dev_c|pst_|rgnid_9102409|placement_&gad_source=1&gad_campaignid=22382919589&gbraid=0AAAAAClW61Cjl-dijK2jtm1H15iIfk0zy&gclid=Cj0KCQiAosrJBhD0ARIsAHebCNp_iWJ0DR-Uke-Ve3fdRRM-FeemBGayPfKcnS76muOvlMi1UYyPijYaApiLEALw_wcB" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  class="px-2 py-1 bg-white border rounded text-xs hover:bg-gray-100 hover:text-blue-600 transition-colors"
+>
+  Liderança de Equipes
+</a>                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 6. EDUCAÇÃO FORMAL -->
+                        <!-- ================================================================================= -->
+                        <section id="section6" class="mb-12 border-t border-gray-200 pt-8">
+                            <h2 class="text-xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <i class="fa-solid fa-school text-emerald-500"></i> Educação Formal (O Salto Acadêmico)
+                            </h2>
+
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <!-- Técnicos -->
+                                <div class="flex-1 bg-blue-50 p-5 rounded-xl border border-blue-100">
+                                    <h4 class="font-bold text-blue-900 mb-3 text-lg">Cursos Técnicos (18-24 meses)</h4>
+                                    <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
+                                        <li>Técnico em Telecomunicações</li>
+                                        <li>Técnico em Redes de Computadores</li>
+                                        <li>Técnico em Eletrotécnica</li>
+                                        <li>Técnico em Eletrônica</li>
+                                    </ul>
+                                </div>
+                                <!-- Graduação -->
+                                <div class="flex-1 bg-emerald-50 p-5 rounded-xl border border-emerald-100">
+                                    <h4 class="font-bold text-emerald-900 mb-3 text-lg">Graduação / Superior (3-5 anos)</h4>
+                                    <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
+                                        <li>Engenharia de Telecomunicações</li>
+                                        <li>Engenharia Elétrica</li>
+                                        <li>Sistemas de Informação / Ciência da Computação</li>
+                                        <li>Gestão da Tecnologia da Informação (Tecnólogo)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 7. PLANO DE EVOLUÇÃO -->
+                        <!-- ================================================================================= -->
+                        <section id="section7" class="mb-12">
+                            <div class="bg-gray-800 text-white rounded-xl p-8 shadow-lg">
+                                <h2 class="text-2xl font-bold text-emerald-400 mb-6">
+                                    7. Como Criar seu Plano?
+                                </h2>
+                                <div class="space-y-6">
+                                    <div class="flex items-start gap-4">
+                                        <div class="bg-emerald-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-white shrink-0">1</div>
+                                        <div>
+                                            <h4 class="font-bold">Escolha uma Trilha Principal</h4>
+                                            <p class="text-sm text-gray-300">Não tente aprender tudo de uma vez. Foque (ex: "Vou virar especialista em Redes").</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4">
+                                        <div class="bg-emerald-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-white shrink-0">2</div>
+                                        <div>
+                                            <h4 class="font-bold">Defina Metas Trimestrais</h4>
+                                            <p class="text-sm text-gray-300">Ex: "Até Março vou terminar o curso de Mikrotik" ou "Até Junho vou tirar minha NR10".</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4">
+                                        <div class="bg-emerald-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-white shrink-0">3</div>
+                                        <div>
+                                            <h4 class="font-bold">Mantenha o Currículo Vivo</h4>
+                                            <p class="text-sm text-gray-300">Fez um curso? Atualize o LinkedIn e avise seu supervisor. Mostre que está evoluindo.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4">
+                                        <div class="bg-emerald-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-white shrink-0">4</div>
+                                        <div>
+                                            <h4 class="font-bold">Busque Mentoria</h4>
+                                            <p class="text-sm text-gray-300">Cole nos profissionais mais experientes. Pergunte, observe e aprenda com os melhores.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 8. CONCLUSÃO FINAL -->
+                        <!-- ================================================================================= -->
+                        <div class="bg-[#003366] text-white rounded-xl shadow-lg mt-12 overflow-hidden relative print:hidden">
+                            <!-- Fundo -->
+                            <div class="absolute top-0 right-0 opacity-10 transform translate-x-1/4 -translate-y-1/4">
+                                <i class="fa-solid fa-flag-checkered text-[150px]"></i>
+                            </div>
+                            
+                            <div class="p-10 text-center relative z-10">
+                                <div class="inline-block bg-emerald-500 p-4 rounded-full mb-6 shadow-lg animate-pulse border-4 border-white">
+                                    <i class="fa-solid fa-graduation-cap text-3xl text-white"></i>
+                                </div>
+
+                                <h3 class="text-3xl font-black mb-4 uppercase tracking-wide">
+                                    Parabéns, Técnico!
+                                </h3>
+                                
+                                <p class="text-emerald-100 text-lg mb-8 max-w-3xl mx-auto font-light leading-relaxed">
+                                    "A evolução profissional em telecom não é uma corrida de 100 metros, é uma maratona. Dominar técnicas, redes, atendimento e gestão abre portas que você nem imagina. <br><br><strong>O conhecimento ninguém tira de você.</strong> Sucesso na sua jornada!"
+                                </p>
+                                
+                                <a href="index.html" class="inline-block bg-white text-[#003366] px-8 py-3 rounded-full font-bold shadow hover:bg-emerald-50 transition transform hover:-translate-y-1">
+                                    <i class="fa-solid fa-home mr-2"></i> Voltar ao Início
+                                </a>
+                            </div>
+                            <div class="bg-gradient-to-r from-emerald-600 via-emerald-400 to-emerald-600 h-2 w-full"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="layout.js"></script>
+</body>
+</html>

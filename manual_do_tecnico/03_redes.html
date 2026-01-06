@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 03 - Redes e Conectividade | RL NET</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .network-grid {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        /* Padrão de cores dos fios */
+        .wire-w-green { background: linear-gradient(90deg, white 50%, #22c55e 50%); }
+        .wire-green { background-color: #22c55e; }
+        .wire-w-orange { background: linear-gradient(90deg, white 50%, #f97316 50%); }
+        .wire-orange { background-color: #f97316; }
+        .wire-blue { background-color: #2563eb; }
+        .wire-w-blue { background: linear-gradient(90deg, white 50%, #2563eb 50%); }
+        .wire-w-brown { background: linear-gradient(90deg, white 50%, #78350f 50%); }
+        .wire-brown { background-color: #78350f; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="md:pl-64 flex flex-col min-h-screen transition-all duration-300">
+        <div id="app-layout" class="flex flex-col min-h-screen">
+            
+            <main class="flex-1 p-4 md:p-8">
+                <!-- Card Principal -->
+                <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-[#003366]">
+                    
+                    <div class="p-6 md:p-10">
+                        <!-- Cabeçalho do Módulo -->
+                        <div class="flex flex-col md:flex-row items-center gap-6 mb-10 border-b pb-8">
+                            <div class="w-20 h-20 rounded-full bg-cyan-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg shrink-0 border-4 border-white ring-2 ring-cyan-100">
+                                03
+                            </div>
+                            <div class="text-center md:text-left">
+                                <h1 class="text-3xl md:text-4xl font-black text-[#003366] mb-2 uppercase">Redes e Conectividade</h1>
+                                <p class="text-gray-600 text-lg font-medium">Fundamentos Essenciais: WAN/LAN, IP, Modos, Diagnóstico, Cabeamento e Segurança</p>
+                              <div class="flex flex-wrap justify-center md:justify-start gap-2 mt-4">
+
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-earth-americas mr-2"></i> WAN
+    </span>
+
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-house-laptop mr-2"></i> LAN
+    </span>
+
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-hashtag mr-2"></i> IPv4
+    </span>
+
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-code mr-2"></i> IPv6
+    </span>
+
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-user-lock mr-2"></i> PPPoE
+    </span>
+
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-server mr-2"></i> DHCP
+    </span>
+
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-arrows-left-right mr-2"></i> Bridge
+    </span>
+
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-map-pin mr-2"></i> IP Estático
+    </span>
+
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-terminal mr-2"></i> ipconfig
+    </span>
+
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-network-wired mr-2"></i> ping
+    </span>
+    
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-route mr-2"></i> tracert
+    </span>
+
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-diagram-project mr-2"></i> Topologias
+    </span>
+
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-cubes mr-2"></i> Cabeamento Estruturado
+    </span>
+
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-person-shelter mr-2"></i> Acesso Remoto
+    </span>
+
+    <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200 flex items-center">
+        <i class="fa-solid fa-fingerprint mr-2"></i> Segurança
+    </span>
+
+</div>
+                            </div>
+                        </div>
+
+                        <!-- ================================================================================= -->
+                        <!-- 1. CONCEITOS WAN E LAN (CONTEÚDO COMPLETO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-16 border-b pb-12">
+                            <h2 class="text-2xl font-bold text-[#003366] mb-6 flex items-center gap-2">
+                                <i class="fa-solid fa-sitemap text-cyan-600"></i> 1. Entendendo a Estrutura: WAN vs LAN
+                            </h2>
+                            
+                            <div class="mb-8 bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg shadow-sm">
+                                <p class="text-gray-800 font-medium">
+                                    <i class="fa-solid fa-lightbulb text-yellow-600 mr-2"></i> Por que isso é vital?
+                                </p>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    90% dos erros de diagnóstico acontecem porque o técnico não sabe diferenciar um problema de <strong>Chegada (WAN)</strong> de um problema de <strong>Distribuição (LAN)</strong>. Se a WAN cai, é culpa da RL NET (ou rompimento). Se a LAN trava, geralmente é equipamento ou uso do cliente.
+                                </p>
+                            </div>
+
+                            <!-- Diagrama Visual -->
+                            <div class="network-grid bg-gray-50 border rounded-xl p-6 mb-8 relative overflow-hidden">
+                                <div class="absolute top-2 right-2 text-xs text-gray-400 font-mono">Topologia Simplificada</div>
+                                
+                                <div class="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0 relative z-10">
+                                    
+                                    <!-- LADO WAN -->
+                                    <div class="flex-1 flex flex-col items-center text-center p-4 bg-white/80 rounded-lg border-2 border-blue-200 shadow-sm w-full">
+                                        <div class="text-xs font-bold text-blue-600 tracking-widest mb-2">EXTERNO (RUA)</div>
+                                        <i class="fa-solid fa-cloud text-6xl text-blue-500 mb-3"></i>
+                                        <h3 class="text-xl font-bold text-[#003366]">WAN</h3>
+                                        <p class="text-xs text-gray-500 mb-2">Wide Area Network</p>
+                                        <div class="w-full bg-blue-100 p-2 rounded text-xs text-left space-y-1">
+                                            <p><strong>Responsável:</strong> RL NET</p>
+                                            <p><strong>Caminho:</strong> OLT → Fibra → CTO → ONU</p>
+                                            <p><strong>IP:</strong> Público ou CGNAT</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- O ROTEADOR (A FRONTEIRA) -->
+                                    <div class="flex flex-col items-center px-4">
+                                        <i class="fa-solid fa-arrow-right-arrow-left text-gray-400 text-2xl animate-pulse hidden md:block"></i>
+                                        <i class="fa-solid fa-arrow-down-up text-gray-400 text-2xl animate-pulse md:hidden my-2"></i>
+                                        
+                                        <div class="bg-gray-800 text-white p-4 rounded-lg shadow-xl z-20 w-48 text-center my-2 border-b-4 border-cyan-500">
+                                            <i class="fa-solid fa-router text-3xl mb-2"></i>
+                                            <div class="font-bold">ROTEADOR</div>
+                                            <div class="text-[10px] text-gray-400 mt-1">Gateway / Fronteira</div>
+                                            <div class="mt-2 text-[9px] bg-gray-700 rounded px-1 py-0.5">Faz o NAT (Tradução)</div>
+                                        </div>
+
+                                        <i class="fa-solid fa-arrow-right-arrow-left text-gray-400 text-2xl animate-pulse hidden md:block"></i>
+                                        <i class="fa-solid fa-arrow-down-up text-gray-400 text-2xl animate-pulse md:hidden my-2"></i>
+                                    </div>
+
+                                    <!-- LADO LAN -->
+                                    <div class="flex-1 flex flex-col items-center text-center p-4 bg-white/80 rounded-lg border-2 border-green-200 shadow-sm w-full">
+                                        <div class="text-xs font-bold text-green-600 tracking-widest mb-2">INTERNO (CLIENTE)</div>
+                                        <div class="flex gap-2 mb-3">
+                                            <i class="fa-solid fa-laptop text-4xl text-green-600"></i>
+                                            <i class="fa-solid fa-mobile-screen text-4xl text-green-500"></i>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-green-800">LAN</h3>
+                                        <p class="text-xs text-gray-500 mb-2">Local Area Network</p>
+                                        <div class="w-full bg-green-50 p-2 rounded text-xs text-left space-y-1">
+                                            <p><strong>Responsável:</strong> Cliente / Técnico (Config)</p>
+                                            <p><strong>Caminho:</strong> Roteador → Cabo/Wi-Fi → Dispositivo</p>
+                                            <p><strong>IP:</strong> Privado (192.168.x.x)</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- DETALHAMENTO TÉCNICO -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                
+                                <!-- WAN DETALHADO -->
+                                <div>
+                                    <h3 class="font-bold text-[#003366] text-lg mb-3 border-b-2 border-blue-500 inline-block">1.1 O Lado WAN (A Chegada)</h3>
+                                    <p class="text-sm text-gray-700 mb-4 leading-relaxed">
+                                        A WAN é a "porta da rua". É onde a internet chega da RL NET. O equipamento principal aqui é a <strong>ONU</strong>.
+                                    </p>
+                                    
+                                    <div class="space-y-3">
+                                        <div class="bg-white p-3 rounded shadow-sm border-l-4 border-purple-500">
+                                            <h4 class="font-bold text-sm text-purple-800">PPPoE (O Carteiro)</h4>
+                                            <p class="text-xs text-gray-600 mt-1">
+                                                A WAN da RL NET usa o protocolo PPPoE. Ele autentica o cliente na nossa central. Sem usuário e senha corretos na interface WAN do roteador, a "cancela" não abre e não há internet.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- LAN DETALHADO -->
+                                <div>
+                                    <h3 class="font-bold text-green-800 text-lg mb-3 border-b-2 border-green-500 inline-block">1.2 O Lado LAN (A Casa)</h3>
+                                    <p class="text-sm text-gray-700 mb-4 leading-relaxed">
+                                        A LAN começa <strong>depois</strong> do roteador. Aqui, quem manda é o servidor DHCP interno do roteador.
+                                    </p>
+
+                                    <div class="space-y-3">
+                                        <div class="bg-white p-3 rounded shadow-sm border-l-4 border-orange-500">
+                                            <h4 class="font-bold text-sm text-orange-800">NAT (O Tradutor)</h4>
+                                            <p class="text-xs text-gray-600 mt-1">
+                                                Como 10 celulares navegam usando apenas 1 conexão de fibra? O <strong>NAT</strong>. O roteador recebe os pedidos dos 10 celulares (LAN), troca a etiqueta pelo IP da RL NET (WAN) e busca na internet.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 2. IPV4 E IPV6 (CONTEÚDO COMPLETO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-16 border-b pb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-cyan-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">2</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">IPv4 e IPv6: A Linguagem da Rede</h2>
+                            </div>
+
+                            <div class="bg-white border-l-4 border-cyan-500 shadow-sm p-6 mb-10 rounded-r-lg">
+                                <h3 class="font-bold text-gray-800 text-lg mb-2">Analogia da Cidade</h3>
+                                <p class="text-gray-600 leading-relaxed text-sm">
+                                    Imagine o <strong>Endereço IP</strong> como o endereço de uma casa.
+                                    <br><br>
+                                    O <strong>IPv4</strong> é como uma cidade antiga onde os números das casas acabaram. Tivemos que criar "condomínios" (NAT/CGNAT) para caber todo mundo.
+                                    <br>
+                                    O <strong>IPv6</strong> é uma cidade nova, planejada, onde cada grão de areia pode ter seu próprio número.
+                                    <br><br>
+                                    Na RL NET, usamos <strong>Dual Stack</strong>: entregamos os dois endereços para o cliente. É como se a casa dele tivesse uma entrada na rua antiga e outra na rua nova.
+                                </p>
+                            </div>
+
+                            <!-- IPV4 EM DETALHES -->
+                            <div class="mb-10">
+                                <h3 class="text-xl font-bold text-[#003366] mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-cube text-orange-500"></i> 2.1 IPv4 (Protocolo de Internet versão 4)
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                    <!-- Estrutura Técnica -->
+                                    <div class="bg-orange-50/50 p-5 rounded-xl border border-orange-200">
+                                        <h4 class="font-bold text-orange-800 mb-3 text-sm uppercase tracking-wider">Estrutura</h4>
+                                        <div class="font-mono text-center text-xl bg-white border border-orange-300 rounded p-3 text-orange-600 shadow-sm mb-2">
+                                            192.168.15.10
+                                        </div>
+                                        <p class="text-xs text-center text-gray-500 mb-4">4 blocos (octetos) de 0 a 255</p>
+
+                                        <ul class="text-sm space-y-3 text-gray-700">
+                                            <li class="flex items-start gap-2">
+                                                <i class="fa-solid fa-layer-group text-orange-500 mt-1"></i>
+                                                <div>
+                                                    <strong>Máscara de Sub-rede (/24):</strong>
+                                                    <p class="text-xs text-gray-500">Define o tamanho da rede. Na RL NET, usamos muito <code>255.255.255.0</code>. Isso significa que os 3 primeiros números (192.168.15) são a "rua" e o último (.10) é a "casa".</p>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <i class="fa-solid fa-door-open text-orange-500 mt-1"></i>
+                                                <div>
+                                                    <strong>Gateway Padrão:</strong>
+                                                    <p class="text-xs text-gray-500">É o IP do Roteador (ex: 192.168.15.1). É a porta de saída. Se o computador não souber o gateway, ele não sai para a internet.</p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Tipos de IP IPv4 -->
+                                    <div class="space-y-3">
+                                        <div class="border rounded-lg p-3 hover:bg-gray-50 transition">
+                                            <div class="flex items-center justify-between">
+                                                <span class="font-bold text-blue-700 text-sm">IP Público</span>
+                                                <span class="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded">Raro</span>
+                                            </div>
+                                            <p class="text-xs text-gray-600 mt-1">Válido na internet mundial. Permite acesso remoto direto (câmeras, servidores).</p>
+                                        </div>
+                                        <div class="border rounded-lg p-3 hover:bg-gray-50 transition">
+                                            <div class="flex items-center justify-between">
+                                                <span class="font-bold text-green-700 text-sm">IP Privado (LAN)</span>
+                                                <span class="text-[10px] bg-green-100 text-green-800 px-2 py-0.5 rounded">Comum</span>
+                                            </div>
+                                            <p class="text-xs text-gray-600 mt-1">Só funciona dentro de casa. Faixas: <code>192.168.x.x</code>, <code>10.x.x.x</code>, <code>172.16.x.x</code>.</p>
+                                        </div>
+                                        <div class="border rounded-lg p-3 hover:bg-gray-50 transition border-l-4 border-l-yellow-400">
+                                            <div class="flex items-center justify-between">
+                                                <span class="font-bold text-yellow-700 text-sm">CGNAT (100.64.x.x)</span>
+                                                <span class="text-[10px] bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">Padrão Provedor</span>
+                                            </div>
+                                            <p class="text-xs text-gray-600 mt-1">É um IP Privado que funciona na WAN do provedor. Compartilha 1 IP Público com vários clientes. <strong>Atenção:</strong> Câmeras e DVRs antigos sofrem com isso.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- IPV6 EM DETALHES -->
+                            <div class="mb-8">
+                                <h3 class="text-xl font-bold text-[#003366] mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-globe text-green-600"></i> 2.2 IPv6 (O Sucessor)
+                                </h3>
+
+                                <div class="bg-green-50/50 p-5 rounded-xl border border-green-200 mb-6">
+                                    <h4 class="font-bold text-green-800 mb-3 text-sm uppercase tracking-wider text-center">Estrutura Hexadecimal</h4>
+                                    <div class="font-mono text-center text-sm md:text-base bg-white border border-green-300 rounded p-3 text-green-700 shadow-sm mb-2 break-all">
+                                        2804:14d:5c32:8a00:0000:0000:0000:0001
+                                    </div>
+                                    <div class="text-center mb-4">
+                                        <i class="fa-solid fa-arrow-down text-gray-400"></i>
+                                    </div>
+                                    <div class="font-mono text-center text-sm md:text-base bg-green-100 border border-green-300 rounded p-3 text-green-800 shadow-sm mb-2 break-all">
+                                        2804:14d:5c32:8a00::1
+                                    </div>
+                                    <p class="text-xs text-center text-gray-500">O "::" resume todos os zeros. Muito mais eficiente.</p>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                                        <h4 class="font-bold text-green-800 mb-2 text-sm">Vantagens para o Cliente</h4>
+                                        <ul class="space-y-2 text-sm text-gray-600">
+                                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i><strong>Fim do NAT:</strong> Conexão direta ponta-a-ponta.</li>
+                                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i><strong>Melhor para Games:</strong> Consoles modernos (PS5, Xbox) preferem IPv6 para evitar "NAT Estrito".</li>
+                                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i><strong>Segurança:</strong> Já nasce com padrões de segurança mais altos.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-gray-800 text-white p-4 rounded-lg shadow-sm font-mono text-xs">
+                                        <p class="text-gray-400 mb-2">// Como saber se está funcionando?</p>
+                                        <p class="mb-1">> ipconfig</p>
+                                        <p class="text-green-400">IPv6 Address . . . : 2804:xxxx... (Global)</p>
+                                        <p class="text-yellow-400">Link-local IPv6 . : fe80::xxxx... (Local)</p>
+                                        <p class="mt-2 text-gray-300 italic">
+                                            Se tiver "2804", está navegando. <br>
+                                            Se tiver só "fe80", o IPv6 está fora.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 3. MODOS DE OPERAÇÃO (CONTEÚDO COMPLETO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-16 border-b pb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-cyan-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">3</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Modos de Operação do Roteador</h2>
+                            </div>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                O roteador é como um camaleão: ele pode se comportar de formas diferentes dependendo da configuração. 
+                                Escolher o modo errado pode gerar <strong>loop de rede</strong>, <strong>conflito de IP</strong> ou simplesmente fazer a internet parar. 
+                                Na RL NET, padronizamos para evitar problemas.
+                            </p>
+
+                            <!-- CARD DESTAQUE: PPPoE (PADRÃO) -->
+                            <div class="bg-blue-600 text-white p-8 rounded-xl shadow-xl mb-10 relative overflow-hidden transform hover:scale-[1.01] transition-transform">
+                                <div class="absolute -right-10 -top-10 opacity-10 rotate-12">
+                                    <i class="fa-solid fa-key text-[150px]"></i>
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="bg-white text-blue-600 font-bold px-3 py-1 rounded text-sm shadow">PADRÃO RL NET</div>
+                                        <h3 class="text-2xl font-bold">Modo PPPoE</h3>
+                                    </div>
+                                    <p class="text-blue-100 mb-6 max-w-2xl text-lg">
+                                        Protocolo Ponto-a-Ponto sobre Ethernet. É o método de autenticação da sua conexão. 
+                                        O roteador "bate na porta" da RL NET, apresenta o <strong>Usuário e Senha</strong> do cliente e, se aprovado, recebe a internet.
+                                    </p>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div class="bg-blue-700/50 p-4 rounded-lg border border-blue-500">
+                                            <h4 class="font-bold text-sm mb-2 text-blue-200 flex items-center gap-2"><i class="fa-solid fa-thumbs-up"></i> Vantagens</h4>
+                                            <ul class="text-sm space-y-1 text-blue-100">
+                                                <li>• Segurança e controle de acesso.</li>
+                                                <li>• Permite entregar IP Público fixo (se contratado).</li>
+                                                <li>• Facilita identificação do cliente no sistema.</li>
+                                            </ul>
+                                        </div>
+                                        <div class="bg-blue-800/50 p-4 rounded-lg border border-blue-500">
+                                            <h4 class="font-bold text-sm mb-2 text-yellow-300 flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> Atenção Técnica</h4>
+                                            <p class="text-sm text-blue-100">
+                                                Se você resetar o roteador (furinho atrás), ele perde a configuração PPPoE e volta para o modo Dinâmico (fábrica). <strong>Resultado: O cliente fica sem internet.</strong>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- OUTROS MODOS EM CARDS -->
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                
+                                <!-- IP Dinâmico / DHCP -->
+                                <div class="bg-gray-50 border p-6 rounded-xl hover:shadow-md transition">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="bg-gray-200 p-2 rounded-full"><i class="fa-solid fa-bolt text-gray-600"></i></div>
+                                        <h4 class="font-bold text-gray-700">IP Dinâmico (DHCP)</h4>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-4 h-20">O roteador apenas pluga e recebe IP automaticamente, sem senha. É o padrão de fábrica da maioria dos roteadores.</p>
+                                    <div class="text-xs font-bold text-red-500 bg-red-50 p-2 rounded border border-red-100">
+                                        <i class="fa-solid fa-ban mr-1"></i> Quase nunca usado na WAN da RL NET.
+                                    </div>
+                                </div>
+
+                                <!-- Bridge / Access Point -->
+                                <div class="bg-green-50 border border-green-100 p-6 rounded-xl hover:shadow-md transition">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="bg-green-200 p-2 rounded-full"><i class="fa-solid fa-link text-green-700"></i></div>
+                                        <h4 class="font-bold text-green-800">Bridge (Ponto de Acesso)</h4>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-4 h-20">Desativa o "cérebro" (DHCP/NAT) do roteador. Ele vira apenas uma extensão do cabo e do Wi-Fi.</p>
+                                    <div class="text-xs font-bold text-green-700 bg-green-100 p-2 rounded border border-green-200">
+                                        <i class="fa-solid fa-check mr-1"></i> Ideal para roteadores secundários (ampliar sinal).
+                                    </div>
+                                </div>
+
+                                <!-- IP Estático -->
+                                <div class="bg-purple-50 border border-purple-100 p-6 rounded-xl hover:shadow-md transition">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <div class="bg-purple-200 p-2 rounded-full"><i class="fa-solid fa-thumbtack text-purple-700"></i></div>
+                                        <h4 class="font-bold text-purple-800">IP Estático</h4>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-4 h-20">Você digita manualmente o IP, Máscara, Gateway e DNS. Nada muda automaticamente.</p>
+                                    <div class="text-xs font-bold text-purple-700 bg-purple-100 p-2 rounded border border-purple-200">
+                                        <i class="fa-solid fa-building mr-1"></i> Apenas para empresas com servidores locais específicos.
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- CENÁRIOS DE USO (TABELA PRÁTICA) -->
+                            <div class="mt-10">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4">Guia Rápido de Decisão</h3>
+                                <div class="overflow-x-auto rounded-lg border shadow-sm">
+                                    <table class="w-full text-sm text-left">
+                                        <thead class="bg-gray-100 text-gray-700 font-bold uppercase text-xs">
+                                            <tr>
+                                                <th class="px-6 py-3">Cenário do Cliente</th>
+                                                <th class="px-6 py-3">Modo Recomendado</th>
+                                                <th class="px-6 py-3">Por que?</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200 bg-white">
+                                            <tr>
+                                                <td class="px-6 py-4 font-medium">Instalação Residencial Comum</td>
+                                                <td class="px-6 py-4 text-blue-600 font-bold">PPPoE</td>
+                                                <td class="px-6 py-4 text-gray-500">Padrão de autenticação e segurança da rede.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-6 py-4 font-medium">Cliente quer um 2º roteador no fundo da casa (via cabo)</td>
+                                                <td class="px-6 py-4 text-green-600 font-bold">Bridge / Access Point</td>
+                                                <td class="px-6 py-4 text-gray-500">Evita "NAT Duplo" (que atrapalha jogos) e mantém a rede unificada. O roteador principal continua mandando os IPs.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-6 py-4 font-medium">Empresa com Servidor de Câmeras Local</td>
+                                                <td class="px-6 py-4 text-purple-600 font-bold">IP Estático (LAN) ou DMZ</td>
+                                                <td class="px-6 py-4 text-gray-500">Garante que o IP do servidor nunca mude, mantendo o acesso externo funcionando.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 4. DIAGNÓSTICO TÉCNICO (CONTEÚDO COMPLETO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-16 border-b pb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-cyan-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">4</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Diagnóstico Técnico: Pare de Adivinhar</h2>
+                            </div>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Um técnico da RL NET não trabalha com "acho que é o cabo". Ele trabalha com dados. 
+                                O Windows possui ferramentas poderosas no Prompt de Comando (CMD) que dizem exatamente onde está o problema. 
+                                Aprenda a interpretar o que a rede está te dizendo.
+                            </p>
+
+                            <!-- PARTE 4.1: O PODER DO CMD -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-6 border-l-4 border-cyan-500 pl-3">
+                                    4.1 As Ferramentas do Investigador (CMD)
+                                </h3>
+
+                                <div class="space-y-8">
+                                    <!-- COMANDO 1: IPCONFIG -->
+                                    <div class="bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-700">
+                                        <div class="bg-gray-900 px-4 py-2 flex items-center justify-between border-b border-gray-700">
+                                            <span class="text-gray-400 font-mono text-xs">C:\Windows\system32\cmd.exe</span>
+                                            <span class="bg-gray-700 text-gray-300 text-[10px] px-2 py-0.5 rounded">PASSO 1</span>
+                                        </div>
+                                        <div class="p-6 font-mono text-sm">
+                                            <p class="text-white mb-2">> ipconfig</p>
+                                            <div class="text-gray-300 space-y-1">
+                                                <p>Adaptador Ethernet Ethernet:</p>
+                                                <p class="pl-4 text-green-400">Endereço IPv4. . . . . . . .  : 192.168.15.10 <span class="text-gray-500">// O PC pegou IP? Sim.</span></p>
+                                                <p class="pl-4">Máscara de Sub-rede . . . . . : 255.255.255.0</p>
+                                                <p class="pl-4 text-yellow-400">Gateway Padrão. . . . . . . . : 192.168.15.1 <span class="text-gray-500">// Quem é o Roteador?</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="bg-yellow-50 p-4 border-t border-gray-200">
+                                            <p class="text-xs text-yellow-900">
+                                                <strong>O que procurar?</strong> Se o IP começar com <code>169.254...</code>, significa que o PC não encontrou o roteador (DHCP falhou ou cabo rompido). Se o Gateway estiver vazio, não haverá navegação.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- COMANDO 2: PING -->
+                                    <div class="bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-700">
+                                        <div class="bg-gray-900 px-4 py-2 flex items-center justify-between border-b border-gray-700">
+                                            <span class="text-gray-400 font-mono text-xs">C:\Windows\system32\cmd.exe</span>
+                                            <span class="bg-gray-700 text-gray-300 text-[10px] px-2 py-0.5 rounded">PASSO 2</span>
+                                        </div>
+                                        <div class="p-6 font-mono text-sm">
+                                            <p class="text-white mb-2">> ping 8.8.8.8 -t</p>
+                                            <div class="text-gray-300 space-y-1">
+                                                <p>Disparando 8.8.8.8 com 32 bytes de dados:</p>
+                                                <p>Resposta de 8.8.8.8: bytes=32 tempo=12ms TTL=115 <span class="text-green-500 font-bold">[ÓTIMO]</span></p>
+                                                <p>Resposta de 8.8.8.8: bytes=32 tempo=14ms TTL=115 <span class="text-green-500 font-bold">[ÓTIMO]</span></p>
+                                                <p class="text-red-400 font-bold">Esgotado o tempo limite do pedido. <span class="text-gray-500 font-normal">[PERDA DE PACOTE]</span></p>
+                                                <p class="text-yellow-400 font-bold">Resposta de 8.8.8.8: bytes=32 tempo=450ms TTL=115 <span class="text-gray-500 font-normal">[LENTIDÃO/LAG]</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="bg-blue-50 p-4 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <h5 class="font-bold text-xs text-blue-900 mb-1">Como interpretar o Tempo (ms)?</h5>
+                                                <ul class="text-[10px] text-blue-800 space-y-1">
+                                                    <li><i class="fa-solid fa-check text-green-500"></i> <strong>1ms a 30ms:</strong> Conexão Fibra Excelente.</li>
+                                                    <li><i class="fa-solid fa-triangle-exclamation text-yellow-600"></i> <strong>100ms+:</strong> Lento. Cliente vai sentir travadas.</li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h5 class="font-bold text-xs text-red-900 mb-1">Perda de Pacote (Esgotado)</h5>
+                                                <p class="text-[10px] text-red-800">
+                                                    Se aparecer "Esgotado", a internet cortou por um instante. 
+                                                    <br><strong>Causa comum:</strong> Wi-Fi instável, conector mal crimpado ou sinal de fibra ruim (LOS).
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- COMANDO 3: TRACERT -->
+                                    <div class="bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-700">
+                                        <div class="bg-gray-900 px-4 py-2 flex items-center justify-between border-b border-gray-700">
+                                            <span class="text-gray-400 font-mono text-xs">C:\Windows\system32\cmd.exe</span>
+                                            <span class="bg-gray-700 text-gray-300 text-[10px] px-2 py-0.5 rounded">PASSO 3</span>
+                                        </div>
+                                        <div class="p-6 font-mono text-sm">
+                                            <p class="text-white mb-2">> tracert google.com</p>
+                                            <div class="text-gray-300 space-y-1">
+                                                <p>Rastreando a rota para google.com:</p>
+                                                <p class="group hover:bg-white/10 p-1 rounded"><span class="text-cyan-400 font-bold">1</span>    <1 ms    <1 ms    <1 ms  192.168.15.1 <span class="text-green-400 text-xs ml-2"><-- ROTEADOR DO CLIENTE (LAN)</span></p>
+                                                <p class="group hover:bg-white/10 p-1 rounded"><span class="text-cyan-400 font-bold">2</span>     4 ms     3 ms     4 ms  177.xx.xx.xx <span class="text-blue-400 text-xs ml-2"><-- GATEWAY RL NET (WAN)</span></p>
+                                                <p class="group hover:bg-white/10 p-1 rounded"><span class="text-cyan-400 font-bold">3</span>     * * * Esgotado     <span class="text-red-400 text-xs ml-2"><-- ONDE PAROU?</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="bg-green-50 p-4 border-t border-gray-200">
+                                            <p class="text-xs text-green-900">
+                                                <strong>A Lógica do Tracert:</strong> Se o teste falha na linha 1, o problema é <strong>dentro da casa</strong> (Roteador travado/Cabo ruim). Se passa da linha 1 e falha na 2, o problema é na <strong>RL NET</strong> (Fibra/Externo). Se passa da 2 e falha na 8, o problema é no site/destino.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PARTE 4.2: VELOCIDADE DA PLACA DE REDE -->
+                            <div class="mb-12">
+                                <h3 class="font-bold text-[#003366] text-lg mb-6 border-l-4 border-cyan-500 pl-3">
+                                    4.2 O "Mistério" da Velocidade (100Mbps vs 1Gbps)
+                                </h3>
+
+                                <div class="flex flex-col md:flex-row gap-6 items-center bg-white border rounded-xl p-6 shadow-sm">
+                                    <div class="flex-1">
+                                        <p class="text-gray-700 mb-4">
+                                            <strong>Cenário:</strong> O cliente contratou <strong>400 MEGA</strong>, mas o teste de velocidade crava em <strong>90-95 MEGA</strong>. O cliente acha que a RL NET está limitando.
+                                        </p>
+                                        <p class="text-gray-700 mb-4">
+                                            <strong>Diagnóstico:</strong> Isso é o gargalo físico de 100 Mbps (Fast Ethernet).
+                                        </p>
+                                        <div class="space-y-2 text-sm">
+                                            <div class="flex items-center gap-2 text-red-600">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                                <span>Cabo mal crimpado (apenas 2 pares funcionando).</span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-red-600">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                                <span>Cabo de má qualidade (não é 100% cobre).</span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-red-600">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                                <span>Placa de rede antiga ou driver desatualizado.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="w-full md:w-1/3 bg-gray-100 p-4 rounded text-center border">
+                                        <p class="text-xs text-gray-500 mb-2 font-bold uppercase">Como verificar no Windows</p>
+                                        <i class="fa-solid fa-ethernet text-4xl text-gray-400 mb-2"></i>
+                                        <p class="text-xs text-gray-600 mb-2">Status da Ethernet > Velocidade</p>
+                                        <div class="text-sm font-mono bg-white border p-1 rounded text-red-500 mb-1">100,0 Mbps <span class="text-[10px]">(RUIM)</span></div>
+                                        <div class="text-sm font-mono bg-white border p-1 rounded text-green-600">1,0 Gbps <span class="text-[10px]">(BOM)</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 5. CABEAMENTO ESTRUTURADO (CONTEÚDO COMPLETO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-16 border-b pb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-cyan-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">5</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Cabeamento Estruturado e Padrões</h2>
+                            </div>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                A rede sem fio é cômoda, mas o cabo é rei. O técnico de excelência sabe que <strong>o melhor Wi-Fi é aquele que não precisa ser usado</strong>. 
+                                Entenda a física por trás do cabo UTP e por que um conector mal feito pode derrubar a performance de um cliente de 500 Mega para 90 Mega.
+                            </p>
+
+                            <!-- CARD 1: CATEGORIAS DE CABO -->
+                            <div class="mb-10 bg-white border rounded-xl p-6 shadow-sm">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-layer-group text-cyan-600"></i> Categorias de Cabo (Cat5e vs Cat6)
+                                </h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <!-- Cat5e -->
+                                    <div class="relative bg-blue-50/50 p-5 rounded-lg border border-blue-100">
+                                        <div class="absolute -top-3 -right-3 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">PADRÃO RL NET</div>
+                                        <h4 class="font-bold text-blue-800 mb-2 text-lg">Cat5e (Enhanced)</h4>
+                                        <p class="text-sm text-gray-600 mb-3">
+                                            O "arroz com feijão" bem feito. Suporta tráfego Gigabit (1000 Mbps) tranquilamente em distâncias de até 100 metros.
+                                        </p>
+                                        <ul class="text-sm space-y-1 text-gray-700">
+                                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i> Flexível e fácil de passar.</li>
+                                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i> Ideal para residências.</li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Cat6 -->
+                                    <div class="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                                        <h4 class="font-bold text-gray-800 mb-2 text-lg">Cat6 (Performance)</h4>
+                                        <p class="text-sm text-gray-600 mb-3">
+                                            Possui um "separador plástico" (spline) no meio que isola os pares, reduzindo interferência. Suporta 10 Gbps em curtas distâncias.
+                                        </p>
+                                        <ul class="text-sm space-y-1 text-gray-700">
+                                            <li><i class="fa-solid fa-plus text-blue-500 mr-2"></i> Menor interferência (Crosstalk).</li>
+                                            <li><i class="fa-solid fa-triangle-exclamation text-orange-500 mr-2"></i> Mais rígido e difícil de crimpar.</li>
+                                            <li><i class="fa-solid fa-building text-gray-500 mr-2"></i> Recomendado para empresas/gamers.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-red-500 mt-4 font-bold bg-red-50 p-2 rounded inline-block">
+                                    <i class="fa-solid fa-ban mr-1"></i> Cat5 (sem o "e") é obsoleto e limita a 100 Mbps. Se encontrar em cliente antigo, troque!
+                                </p>
+                            </div>
+
+                            <!-- CARD 2: PADRÃO DE CRIMPAGEM (VISUAL) -->
+                            <div class="mb-10 bg-gray-800 text-white p-8 rounded-xl shadow-lg relative overflow-hidden">
+                                <div class="absolute top-0 right-0 p-4 opacity-5">
+                                    <i class="fa-solid fa-ethernet text-9xl"></i>
+                                </div>
+
+                                <h3 class="font-bold text-white text-xl mb-2">Padrão de Crimpagem T568A</h3>
+                                <p class="text-gray-400 text-sm mb-6 max-w-xl">
+                                    Na RL NET, padronizamos o uso do <strong>T568A</strong>. Seguir o padrão garante que qualquer técnico que venha depois de você entenda o que foi feito. 
+                                </p>
+
+                                <!-- Visualização dos Fios -->
+                                <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-600 inline-block">
+                                    <div class="flex gap-2 md:gap-3">
+                                        <!-- Par Verde (O segredo do T568A: O Verde vem primeiro) -->
+                                        <div class="flex flex-col items-center gap-2 group">
+                                            <div class="w-4 h-24 md:w-5 md:h-32 wire-w-green rounded shadow-md ring-1 ring-white/20"></div>
+                                            <span class="text-xs font-mono text-gray-400">1</span>
+                                            <span class="text-[10px] text-gray-500 hidden md:block">Br/Vd</span>
+                                        </div>
+                                        <div class="flex flex-col items-center gap-2">
+                                            <div class="w-4 h-24 md:w-5 md:h-32 wire-green rounded shadow-md ring-1 ring-white/20"></div>
+                                            <span class="text-xs font-mono text-gray-400">2</span>
+                                            <span class="text-[10px] text-gray-500 hidden md:block">Vd</span>
+                                        </div>
+                                        
+                                        <!-- Par Laranja (Dividido) -->
+                                        <div class="flex flex-col items-center gap-2">
+                                            <div class="w-4 h-24 md:w-5 md:h-32 wire-w-orange rounded shadow-md ring-1 ring-white/20"></div>
+                                            <span class="text-xs font-mono text-gray-400">3</span>
+                                            <span class="text-[10px] text-gray-500 hidden md:block">Br/La</span>
+                                        </div>
+
+                                        <!-- Par Azul (No meio) -->
+                                        <div class="flex flex-col items-center gap-2">
+                                            <div class="w-4 h-24 md:w-5 md:h-32 wire-blue rounded shadow-md ring-1 ring-white/20"></div>
+                                            <span class="text-xs font-mono text-gray-400">4</span>
+                                            <span class="text-[10px] text-gray-500 hidden md:block">Az</span>
+                                        </div>
+                                        <div class="flex flex-col items-center gap-2">
+                                            <div class="w-4 h-24 md:w-5 md:h-32 wire-w-blue rounded shadow-md ring-1 ring-white/20"></div>
+                                            <span class="text-xs font-mono text-gray-400">5</span>
+                                            <span class="text-[10px] text-gray-500 hidden md:block">Br/Az</span>
+                                        </div>
+
+                                        <!-- Volta Laranja -->
+                                        <div class="flex flex-col items-center gap-2">
+                                            <div class="w-4 h-24 md:w-5 md:h-32 wire-orange rounded shadow-md ring-1 ring-white/20"></div>
+                                            <span class="text-xs font-mono text-gray-400">6</span>
+                                            <span class="text-[10px] text-gray-500 hidden md:block">La</span>
+                                        </div>
+
+                                        <!-- Par Marrom (Sempre no final) -->
+                                        <div class="flex flex-col items-center gap-2">
+                                            <div class="w-4 h-24 md:w-5 md:h-32 wire-w-brown rounded shadow-md ring-1 ring-white/20"></div>
+                                            <span class="text-xs font-mono text-gray-400">7</span>
+                                            <span class="text-[10px] text-gray-500 hidden md:block">Br/Ma</span>
+                                        </div>
+                                        <div class="flex flex-col items-center gap-2">
+                                            <div class="w-4 h-24 md:w-5 md:h-32 wire-brown rounded shadow-md ring-1 ring-white/20"></div>
+                                            <span class="text-xs font-mono text-gray-400">8</span>
+                                            <span class="text-[10px] text-gray-500 hidden md:block">Ma</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CARD 3: ERROS FATAIS -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <!-- Erro 1 -->
+                                <div class="bg-red-50 border border-red-100 p-4 rounded-lg">
+                                    <div class="flex items-center gap-2 mb-2 text-red-800 font-bold text-sm">
+                                        <i class="fa-solid fa-scissors"></i> Decapar Muito
+                                    </div>
+                                    <p class="text-xs text-gray-600 mb-2">
+                                        <strong>O Erro:</strong> Deixar os fios expostos fora do conector RJ45.
+                                    </p>
+                                    <p class="text-xs text-gray-600">
+                                        <strong>Consequência:</strong> A capa azul do cabo serve para travar o cabo no conector. Sem ela, qualquer puxão rompe os fios internos.
+                                    </p>
+                                </div>
+
+                                <!-- Erro 2 -->
+                                <div class="bg-red-50 border border-red-100 p-4 rounded-lg">
+                                    <div class="flex items-center gap-2 mb-2 text-red-800 font-bold text-sm">
+                                        <i class="fa-solid fa-dna"></i> Destrançar (Crosstalk)
+                                    </div>
+                                    <p class="text-xs text-gray-600 mb-2">
+                                        <strong>O Erro:</strong> Destrançar os pares muito antes de entrar no conector.
+                                    </p>
+                                    <p class="text-xs text-gray-600">
+                                        <strong>Consequência:</strong> Os fios são trançados para cancelar interferência magnética. Se destrançar, gera ruído (Crosstalk) e perda de pacotes.
+                                    </p>
+                                </div>
+
+                                <!-- Erro 3 -->
+                                <div class="bg-red-50 border border-red-100 p-4 rounded-lg">
+                                    <div class="flex items-center gap-2 mb-2 text-red-800 font-bold text-sm">
+                                        <i class="fa-solid fa-coins"></i> Cabo CCA (Alumínio)
+                                    </div>
+                                    <p class="text-xs text-gray-600 mb-2">
+                                        <strong>O Erro:</strong> Usar cabo barato "Copper Clad Aluminum" (Alumínio banhado a cobre).
+                                    </p>
+                                    <p class="text-xs text-gray-600">
+                                        <strong>Consequência:</strong> O alumínio quebra fácil, oxida rápido e tem alta resistência elétrica (o PoE das câmeras não funciona direito).
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- 6. SEGURANÇA BÁSICA (CONTEÚDO NOVO) -->
+                        <!-- ================================================================================= -->
+                        <section class="mb-12">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="bg-cyan-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow">6</span>
+                                <h2 class="text-2xl font-bold text-[#003366]">Segurança Básica de Redes</h2>
+                            </div>
+
+                            <p class="text-gray-600 mb-8 leading-relaxed">
+                                Segurança não é "frescura", é proteção. Um roteador mal configurado pode permitir que vizinhos roubem Wi-Fi, que hackers invadam câmeras ou que o cliente perca totalmente o acesso.
+                            </p>
+
+                            <!-- TOPIC 1: SENHAS E ACESSO -->
+                            <div class="mb-10 bg-white border-l-4 border-red-500 rounded-r-xl shadow-sm p-6">
+                                <h3 class="font-bold text-red-700 text-lg mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-lock"></i> Regra de Ouro: Senhas
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-2">Senha Padrão RL NET (Admin)</h4>
+                                        <p class="text-sm text-gray-600 mb-3">
+                                            A senha de acesso às configurações do roteador (WAN, VLAN, PPPoE) é de uso <strong>exclusivo técnico</strong>.
+                                        </p>
+                                        <div class="bg-red-50 border border-red-200 p-3 rounded text-red-800 text-xs font-bold flex items-center gap-2">
+                                            <i class="fa-solid fa-ban text-lg"></i>
+                                            NUNCA informe esta senha ao cliente. Se ele alterar a VLAN ou o PPPoE, a internet para e gera uma visita técnica desnecessária.
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 text-sm mb-2">Senha do Wi-Fi do Cliente</h4>
+                                        <p class="text-sm text-gray-600 mb-3">
+                                            Essa senha é do cliente. Configure algo seguro (letras + números) mas fácil de lembrar para ele.
+                                        </p>
+                                        <div class="bg-green-50 border border-green-200 p-3 rounded text-green-800 text-xs font-bold flex items-center gap-2">
+                                            <i class="fa-solid fa-check text-lg"></i>
+                                            Anote a senha na Ordem de Serviço e no adesivo embaixo do roteador (se autorizado).
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TOPIC 2: ACESSO REMOTO -->
+                            <div class="mb-10 bg-blue-50 border border-blue-200 rounded-xl p-6">
+                                <h3 class="font-bold text-[#003366] text-lg mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-headset"></i> Acesso Remoto (Gerenciamento)
+                                </h3>
+                                <p class="text-sm text-gray-700 mb-4">
+                                    Permite que o Suporte Técnico ajude o cliente (trocar senha do Wi-Fi, verificar sinal) sem enviar um técnico na casa. Isso economiza tempo e dinheiro.
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="bg-white p-4 rounded shadow-sm">
+                                        <div class="text-blue-600 font-bold text-sm mb-1">Porta Padrão</div>
+                                        <div class="font-mono text-gray-800 bg-gray-100 p-1 rounded inline-block text-xs">8080</div>
+                                    </div>
+                                    <div class="bg-white p-4 rounded shadow-sm">
+                                        <div class="text-blue-600 font-bold text-sm mb-1">Ação Obrigatória</div>
+                                        <div class="text-xs text-gray-600">Sempre <strong>habilitar</strong> o acesso remoto na WAN durante a instalação.</div>
+                                    </div>
+                                    <div class="bg-white p-4 rounded shadow-sm border-l-4 border-yellow-400">
+                                        <div class="text-yellow-700 font-bold text-sm mb-1">Validação</div>
+                                        <div class="text-xs text-gray-600">Antes de finalizar, peça ao <strong>Apoio Operacional</strong> para testar se conseguem acessar o roteador.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TOPIC 3: VULNERABILIDADES E FIREWALL -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                                <!-- WPS -->
+                                <div class="bg-white border rounded-xl p-6 shadow-sm">
+                                    <h3 class="font-bold text-red-600 text-lg mb-3 flex items-center gap-2">
+                                        <i class="fa-solid fa-unlock"></i> O Perigo do WPS
+                                    </h3>
+                                    <p class="text-sm text-gray-600 mb-3">
+                                        WPS (Wi-Fi Protected Setup) é aquele botão para conectar sem senha. <strong>É extremamente inseguro.</strong> Hackers usam apps de celular para descobrir a senha do Wi-Fi em segundos através do WPS.
+                                    </p>
+                                    <div class="bg-red-100 text-red-800 px-3 py-2 rounded text-xs font-bold text-center">
+                                        PADRÃO RL NET: Desativar WPS Sempre!
+                                    </div>
+                                </div>
+
+                                <!-- Firewall e Portas -->
+                                <div class="bg-white border rounded-xl p-6 shadow-sm">
+                                    <h3 class="font-bold text-green-700 text-lg mb-3 flex items-center gap-2">
+                                        <i class="fa-solid fa-shield-halved"></i> Firewall e Portas
+                                    </h3>
+                                    <ul class="text-sm text-gray-600 space-y-3">
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-door-closed text-green-600 mt-1"></i>
+                                            <span><strong>Firewall:</strong> É o porteiro. Ele bloqueia acessos indesejados. Mantenha sempre <strong>ATIVO</strong>.</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-door-open text-orange-500 mt-1"></i>
+                                            <span><strong>Abertura de Portas (Forwarding):</strong> Só faça se o cliente pedir (ex: câmeras, jogos). Nunca abra portas sem necessidade ("abrir tudo").</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- TOPIC 4: DMZ -->
+                            <div class="bg-gray-800 text-white rounded-xl p-6 shadow-lg">
+                                <h3 class="font-bold text-yellow-400 text-lg mb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-biohazard"></i> DMZ (Zona Desmilitarizada)
+                                </h3>
+                                <p class="text-sm text-gray-300 mb-4">
+                                    DMZ é uma configuração que deixa <strong>um dispositivo totalmente exposto</strong> à internet, ignorando o Firewall. É como tirar o portão da frente da casa.
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="bg-gray-700 p-3 rounded border border-gray-600">
+                                        <span class="text-green-400 font-bold text-xs uppercase mb-1 block">Quando usar?</span>
+                                        <p class="text-xs">Apenas para Consoles de Videogame (PS5/Xbox) que não conseguem conectar no modo normal ou Servidores específicos que possuem firewall próprio.</p>
+                                    </div>
+                                    <div class="bg-gray-700 p-3 rounded border border-gray-600">
+                                        <span class="text-red-400 font-bold text-xs uppercase mb-1 block">Risco</span>
+                                        <p class="text-xs">Nunca coloque um PC com Windows na DMZ sem proteção extra. Ele será invadido rapidamente.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ================================================================================= -->
+                        <!-- RESUMO FINAL DO MÓDULO -->
+                        <!-- ================================================================================= -->
+                        <div class="bg-[#003366] text-white p-8 rounded-xl text-center shadow-lg mt-12">
+                          <div class="inline-block bg-amber-500 p-4 rounded-full mb-6 shadow-lg animate-bounce">
+            <i class="fa-solid fa-trophy text-3xl text-white"></i>
+        </div>
+                            <h3 class="text-2xl font-bold mb-4">Você concluiu o Módulo de Redes!</h3>
+                            <p class="text-blue-100 mb-6 max-w-2xl mx-auto">
+                                Agora você domina a infraestrutura de rede, sabe diagnosticar problemas com precisão e conhece as normas de segurança vitais para proteger o cliente e a RL NET.
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-4 text-sm font-bold">
+                                <span class="bg-blue-800 px-4 py-2 rounded-full border border-blue-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> WAN vs LAN</span>
+                                <span class="bg-blue-800 px-4 py-2 rounded-full border border-blue-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> IPv4 e IPv6</span>
+                                <span class="bg-blue-800 px-4 py-2 rounded-full border border-blue-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> PPPoE</span>
+                                <span class="bg-blue-800 px-4 py-2 rounded-full border border-blue-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Diagnóstico CMD</span>
+                                <span class="bg-blue-800 px-4 py-2 rounded-full border border-blue-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> T568A</span>
+                                <span class="bg-blue-800 px-4 py-2 rounded-full border border-blue-500"><i class="fa-solid fa-check text-green-400 mr-2"></i> Segurança</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="layout.js"></script>
+
+</body>
+</html>
