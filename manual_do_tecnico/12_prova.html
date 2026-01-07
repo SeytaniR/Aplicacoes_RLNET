@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+
     <style>
         body { font-family: 'Roboto', sans-serif; }
         .font-mono { font-family: 'Fira Code', monospace; }
@@ -30,11 +32,32 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-slide-in { animation: slideIn 0.3s ease-out forwards; }
+
+        /* Estilo do Certificado para Impressão */
+        @media print {
+            body * { visibility: hidden; }
+            #certificate-container, #certificate-container * { visibility: visible; }
+            #certificate-container { 
+                position: absolute; 
+                left: 0; 
+                top: 0; 
+                width: 100%; 
+                height: 100%; 
+                margin: 0; 
+                padding: 0;
+                border: none;
+                box-shadow: none;
+            }
+            .no-print { display: none !important; }
+        }
+
+        .cert-font-title { font-family: 'Cinzel', serif; }
+        .cert-font-script { font-family: 'Pinyon Script', cursive; }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-    <div class="md:pl-64 flex flex-col min-h-screen transition-all duration-300">
+    <div class="md:pl-64 flex flex-col min-h-screen transition-all duration-300 no-print">
         <div id="app-layout" class="flex flex-col min-h-screen">
             
             <main class="flex-1 p-4 md:p-8 exam-pattern">
@@ -50,33 +73,33 @@
                 <!-- ÁREA DO QUIZ -->
                 <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-[#003366] min-h-[400px]">
                     
-                    <!-- TELA INICIAL (Instruções) -->
+                    <!-- TELA INICIAL (Identificação) -->
                     <div id="start-screen" class="p-8 text-center animate-slide-in">
                         <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <i class="fa-solid fa-file-signature text-4xl text-[#003366]"></i>
+                            <i class="fa-solid fa-user-lock text-4xl text-[#003366]"></i>
                         </div>
-                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Instruções da Prova</h2>
-                        <ul class="text-left max-w-lg mx-auto space-y-3 mb-8 text-gray-600">
-                            <li class="flex items-start gap-3">
-                                <i class="fa-solid fa-check-circle text-green-500 mt-1"></i>
-                                <span>A prova contém <strong>66 questões</strong> de múltipla escolha.</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fa-solid fa-check-circle text-green-500 mt-1"></i>
-                                <span>Abrange todos os módulos e procedimentos padrão da RL NET.</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fa-solid fa-check-circle text-green-500 mt-1"></i>
-                                <span>A pontuação mínima para aprovação é de <strong>70%</strong>.</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <i class="fa-solid fa-check-circle text-green-500 mt-1"></i>
-                                <span>Leia atentamente cada pergunta antes de responder.</span>
-                            </li>
-                        </ul>
-                        <button onclick="startQuiz()" class="bg-[#003366] hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all transform hover:scale-105">
-                            Iniciar Avaliação
-                        </button>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Identificação do Técnico</h2>
+                        <p class="text-gray-600 mb-8">Preencha seus dados para liberar o início da avaliação.</p>
+
+                        <div class="max-w-md mx-auto space-y-4 text-left">
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-1">Nome Completo</label>
+                                <input type="text" id="user-name" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#003366] outline-none uppercase" placeholder="SEU NOME COMPLETO">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-1">CPF</label>
+                                <input type="text" id="user-cpf" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#003366] outline-none" placeholder="000.000.000-00">
+                            </div>
+                            <div id="login-error" class="hidden text-red-500 text-sm font-bold text-center mt-2">
+                                <i class="fa-solid fa-circle-exclamation"></i> Preencha todos os campos corretamente.
+                            </div>
+                        </div>
+
+                        <div class="mt-8">
+                            <button onclick="startQuiz()" class="bg-[#003366] hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all transform hover:scale-105 w-full md:w-auto">
+                                Iniciar Avaliação <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- TELA DA QUESTÃO (Oculta inicialmente) -->
@@ -120,31 +143,39 @@
 
                     <!-- TELA DE RESULTADOS (Oculta inicialmente) -->
                     <div id="result-screen" class="hidden p-8 text-center animate-slide-in">
-                        <div id="result-icon-container" class="mb-6">
-                            <!-- Ícone injetado via JS -->
-                        </div>
-                        
-                        <h2 id="result-title" class="text-3xl font-bold mb-2"></h2>
-                        <p id="result-message" class="text-gray-600 mb-8"></p>
-
-                        <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-8">
-                            <div class="bg-gray-50 p-4 rounded-lg border">
-                                <div class="text-sm text-gray-500">Sua Nota</div>
-                                <div id="final-score" class="text-3xl font-bold text-[#003366]">0%</div>
-                            </div>
-                            <div class="bg-gray-50 p-4 rounded-lg border">
-                                <div class="text-sm text-gray-500">Acertos</div>
-                                <div id="final-correct" class="text-3xl font-bold text-green-600">0/66</div>
-                            </div>
+                        <div id="loading-results" class="hidden mb-6">
+                            <i class="fa-solid fa-circle-notch fa-spin text-4xl text-[#003366]"></i>
+                            <p class="text-sm text-gray-500 mt-2">Enviando resultados para o CQI...</p>
                         </div>
 
-                        <div id="action-buttons" class="space-x-4">
-                            <button onclick="location.reload()" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-300">
-                                Refazer Prova
-                            </button>
-                            <button id="btn-print" onclick="window.print()" class="hidden bg-[#003366] text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-800">
-                                <i class="fa-solid fa-print mr-2"></i> Imprimir Resultado
-                            </button>
+                        <div id="result-content">
+                            <div id="result-icon-container" class="mb-6">
+                                <!-- Ícone injetado via JS -->
+                            </div>
+                            
+                            <h2 id="result-title" class="text-3xl font-bold mb-2"></h2>
+                            <p id="result-message" class="text-gray-600 mb-8"></p>
+
+                            <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-8">
+                                <div class="bg-gray-50 p-4 rounded-lg border">
+                                    <div class="text-sm text-gray-500">Sua Nota</div>
+                                    <div id="final-score" class="text-3xl font-bold text-[#003366]">0%</div>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-lg border">
+                                    <div class="text-sm text-gray-500">Acertos</div>
+                                    <div id="final-correct" class="text-3xl font-bold text-green-600">0/66</div>
+                                </div>
+                            </div>
+
+                            <div id="action-buttons" class="flex flex-col md:flex-row justify-center gap-4">
+                                <button onclick="location.reload()" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-300">
+                                    Refazer Prova
+                                </button>
+                                <!-- Botão Certificado (Só aparece se aprovado) -->
+                                <button id="btn-cert" onclick="showCertificate()" class="hidden bg-amber-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-amber-600 shadow-lg border-b-4 border-amber-700 active:border-b-0 active:mt-1">
+                                    <i class="fa-solid fa-certificate mr-2"></i> Emitir Certificado
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -153,8 +184,68 @@
         </div>
     </div>
 
-    <!-- Dados das Questões e Lógica -->
+    <!-- CERTIFICADO (Oculto até aprovação) -->
+    <div id="certificate-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 overflow-y-auto no-print">
+        <div class="relative w-full max-w-5xl">
+            <button onclick="closeCertificate()" class="absolute -top-10 right-0 text-white hover:text-gray-300 text-xl font-bold">
+                <i class="fa-solid fa-xmark"></i> Fechar
+            </button>
+            
+            <!-- Container do Certificado -->
+            <div id="certificate-container" class="bg-white p-2 md:p-10 text-center relative shadow-2xl mx-auto" style="width: 1123px; height: 794px; background-image: url('https://img.freepik.com/free-vector/elegant-white-certificate-template_23-2148403399.jpg'); background-size: cover; background-position: center;">
+                
+                <!-- Logo RL NET -->
+                <div class="absolute top-12 left-1/2 transform -translate-x-1/2">
+                    <img src="https://i.imgur.com/UMaBvqq.png" alt="Logo RL NET" style="height: 80px;">
+                </div>
+
+                <div class="pt-40">
+                    <h1 class="cert-font-title text-5xl text-[#003366] font-bold tracking-widest uppercase mb-4">Certificado</h1>
+                    <h2 class="text-xl text-gray-500 tracking-wider uppercase mb-12">de Aprovação Técnica</h2>
+
+                    <p class="text-lg text-gray-600 mb-2">Certificamos que</p>
+                    <h3 id="cert-name" class="cert-font-script text-6xl text-[#003366] mb-8">Nome do Técnico</h3>
+
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed mb-12">
+                        Concluiu com êxito a avaliação de conhecimentos teóricos e procedimentos operacionais da RL NET, demonstrando aptidão técnica para atuar em campo conforme os padrões de qualidade e segurança (NR10/NR35).
+                    </p>
+
+                    <div class="flex justify-center items-end gap-20 mt-16">
+                        <div class="text-center">
+                            <p id="cert-date" class="text-gray-600 border-t border-gray-400 pt-2 px-8">Data</p>
+                        </div>
+                        <div class="text-center relative">
+                            <!-- Assinatura -->
+                            <img src="https://i.imgur.com/pWW79zF.png" alt="Assinatura" class="absolute -top-16 left-1/2 transform -translate-x-1/2" style="height: 80px; opacity: 0.9;">
+                            <div class="pt-2 border-t border-gray-400 px-8">
+                                <p class="font-bold text-[#003366]">Filipe Cruz</p>
+                                <p class="text-xs text-gray-500 uppercase">Setor de Controle de Qualidade (CQI)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão Imprimir Flutuante -->
+            <div class="text-center mt-6">
+                <button onclick="window.print()" class="bg-green-600 text-white font-bold py-3 px-10 rounded-full shadow-xl hover:bg-green-700 transition-transform hover:scale-105">
+                    <i class="fa-solid fa-print mr-2"></i> Imprimir / Salvar PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dados e Lógica -->
     <script>
+        // --- VARIÁVEIS DO USUÁRIO ---
+        let userData = {
+            name: "",
+            cpf: ""
+        };
+
+        // --- GOOGLE APPS SCRIPT URL ---
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx12yijQtjyLpAR7Z-g3ZkhRQDRSvNvYy5w5fyef1M9Tqb-1yWneh257tyvIMilhlXwRQ/exec';
+
         // --- BANCO DE QUESTÕES REFORMULADO ---
         const quizData = [
             { q: "Qual opção melhor representa a identidade da RL NET?", options: ["Velocidade, Preço Baixo e Lucro.", "Qualidade, Humanização, Transparência e Confiança.", "Tecnologia, Frieza e Resultados.", "Vendas, Metas e Cobrança."], correct: 1, rationale: "Esses são os pilares fundamentais da nossa cultura." },
@@ -279,7 +370,21 @@
         const currentQNum = document.getElementById('current-q-num');
         const totalQNum = document.getElementById('total-q-num');
 
+        // VALIDAÇÃO E INÍCIO
         function startQuiz() {
+            const nameInput = document.getElementById('user-name').value.trim();
+            const cpfInput = document.getElementById('user-cpf').value.trim();
+            const errorMsg = document.getElementById('login-error');
+
+            if (nameInput.length < 3 || cpfInput.length < 11) {
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            userData.name = nameInput.toUpperCase();
+            userData.cpf = cpfInput;
+            
+            errorMsg.classList.add('hidden');
             startScreen.classList.add('hidden');
             questionScreen.classList.remove('hidden');
             totalQNum.innerText = quizData.length;
@@ -385,14 +490,16 @@
             
             const percentage = Math.round((score / quizData.length) * 100);
             const passed = percentage >= 70; 
-
+            const status = passed ? "APROVADO" : "REPROVADO";
+            
+            // Exibição na tela
             document.getElementById('final-score').innerText = `${percentage}%`;
             document.getElementById('final-correct').innerText = `${score}/${quizData.length}`;
 
             const iconContainer = document.getElementById('result-icon-container');
             const title = document.getElementById('result-title');
             const message = document.getElementById('result-message');
-            const btnPrint = document.getElementById('btn-print');
+            const btnCert = document.getElementById('btn-cert');
 
             if (passed) {
                 iconContainer.innerHTML = `
@@ -402,7 +509,15 @@
                 title.innerText = "Parabéns! Você foi Aprovado.";
                 title.className = "text-3xl font-bold mb-2 text-green-700";
                 message.innerText = "Você demonstrou excelente conhecimento teórico dos procedimentos da RL NET. Sua certificação foi validada.";
-                btnPrint.classList.remove('hidden');
+                
+                // Habilitar Certificado
+                btnCert.classList.remove('hidden');
+                
+                // Preencher Certificado
+                const today = new Date().toLocaleDateString('pt-BR');
+                document.getElementById('cert-name').innerText = userData.name;
+                document.getElementById('cert-date').innerText = today;
+
             } else {
                 iconContainer.innerHTML = `
                     <div class="inline-block p-6 rounded-full bg-red-100 mb-4">
@@ -412,11 +527,62 @@
                 title.className = "text-3xl font-bold mb-2 text-red-700";
                 message.innerText = "Você não atingiu a pontuação mínima de 70%. Recomendamos revisar os módulos de treinamento e tentar novamente.";
             }
+
+            // Enviar para Google Sheets
+            sendToSheets(status);
         }
+
+        // --- FUNÇÃO DE INTEGRAÇÃO GOOGLE SHEETS ---
+        function sendToSheets(status) {
+            // Mostrar loading
+            const loading = document.getElementById('loading-results');
+            const content = document.getElementById('result-content');
+            loading.classList.remove('hidden');
+            content.classList.add('opacity-50');
+
+            const errors = quizData.length - score;
+            const date = new Date().toLocaleString('pt-BR');
+
+            // Preparar dados como formulário (para evitar CORS preflight complexo em alguns casos, mas POST é padrão)
+            const formData = new FormData();
+            formData.append('data', date);
+            formData.append('nome', userData.name);
+            formData.append('acertos', score);
+            formData.append('erros', errors);
+            formData.append('status', status);
+
+            // Fetch mode: 'no-cors' envia os dados mas não lê a resposta (evita erro de CORS do Google)
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'
+            })
+            .then(() => {
+                console.log('Dados enviados com sucesso.');
+            })
+            .catch(error => {
+                console.error('Erro ao enviar dados:', error);
+            })
+            .finally(() => {
+                // Restaurar UI
+                loading.classList.add('hidden');
+                content.classList.remove('opacity-50');
+            });
+        }
+
+        // --- FUNÇÕES DO CERTIFICADO ---
+        function showCertificate() {
+            document.getElementById('certificate-modal').classList.remove('hidden');
+        }
+
+        function closeCertificate() {
+            document.getElementById('certificate-modal').classList.add('hidden');
+        }
+
     </script>
     
     <script src="layout.js"></script>
-    <script src="https://static.app/js/static.js" type="text/javascript"></script>
+   
 
 </body>
 </html>
