@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Agenda - RL NET</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .header-rl { background: linear-gradient(135deg, #0056b3 0%, #004494 100%); color: white; padding: 15px; text-align: center; border-radius: 0 0 20px 20px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative;}
+        .hidden { display: none; }
+        .logo-header { max-height: 35px; filter: brightness(0) invert(1); margin-bottom: 5px; }
+        .logo-login { max-height: 60px; margin-bottom: 20px; }
+        
+        /* Card de Agenda Compacto */
+        .card-agenda { background: white; border-radius: 8px; padding: 10px; margin-bottom: 10px; border-left: 4px solid #6c757d; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: transform 0.1s; }
+        .card-agenda:active { transform: scale(0.98); }
+        
+        /* Cores por Status */
+        .status-ag { border-left-color: #0d6efd; } 
+        .status-f { border-left-color: #198754; opacity: 0.9; background-color: #f8fff9; } 
+        .status-an { border-left-color: #ffc107; }
+
+        /* Utilitários de Texto */
+        .text-xs { font-size: 0.75rem; }
+        .fw-600 { font-weight: 600; }
+        
+        /* Histórico Expansível */
+        .table-hist th { background-color: #f8f9fa; font-size: 0.75rem; text-transform: uppercase; color: #6c757d; }
+        .hist-row { cursor: pointer; transition: background 0.2s; }
+        .hist-row:hover { background-color: #f1f1f1; }
+        .hist-details { background-color: #f8f9fa; border-top: 1px solid #dee2e6; }
+        
+        .desc-box { background-color: white; padding: 8px; border: 1px solid #dee2e6; border-radius: 4px; font-size: 0.8rem; white-space: pre-wrap; word-wrap: break-word; color: #555; }
+        
+        .user-welcome { position: absolute; top: 15px; right: 15px; font-size: 0.8rem; color: rgba(255,255,255,0.8); }
+    </style>
+</head>
+<body>
+
+    <div class="header-rl">
+        <img src="/static/logo.png" alt="RL NET" class="logo-header">
+        <h6 class="mb-0 fw-bold">Técnico Mobile</h6>
+        <div id="user-display" class="user-welcome hidden">
+            <i class="bi bi-person-circle"></i> <span id="span-user-name">...</span>
+            <button onclick="logout()" class="btn btn-sm text-white p-0 ms-2"><i class="bi bi-box-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <div class="container" style="max-width: 600px;"> <!-- Container mais estreito para focar mobile -->
+        
+        <!-- TELA DE LOGIN -->
+        <div id="tela-login" class="card p-4 mx-auto shadow-sm border-0" style="max-width: 400px; border-radius: 15px;">
+            <div class="text-center mb-4">
+                <img src="/static/logo.png" class="logo-login" onerror="this.style.display='none'">
+                <h5 class="fw-bold text-primary">Acesso Restrito</h5>
+                <p class="text-muted small">Use sua conta do Nexus</p>
+            </div>
+            <div class="mb-3">
+                <input type="text" id="login-user" class="form-control" placeholder="ID do Técnico">
+            </div>
+            <div class="mb-3">
+                <input type="password" id="login-pass" class="form-control" placeholder="Senha">
+            </div>
+            <button onclick="fazerLogin()" id="btn-login" class="btn btn-primary w-100 fw-bold">Acessar</button>
+        </div>
+
+        <!-- TELA: MINHAS O.S DE HOJE -->
+        <div id="tela-agenda" class="hidden">
+            <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                <h6 class="fw-bold text-secondary mb-0"><i class="bi bi-calendar-event me-1"></i>Agenda de Hoje</h6>
+                <button onclick="carregarAgenda()" class="btn btn-sm btn-outline-primary py-0"><i class="bi bi-arrow-clockwise"></i></button>
+            </div>
+            
+            <div id="loading-agenda" class="text-center py-5">
+                <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+                <p class="text-muted mt-2 small">Sincronizando...</p>
+            </div>
+
+            <div id="lista-agenda"></div>
+            
+            <div id="msg-sem-agenda" class="alert alert-warning text-center hidden mt-3 shadow-sm border-0">
+                <i class="bi bi-check2-all mb-1 d-block text-warning" style="font-size: 1.5rem;"></i>
+                <span class="small fw-bold">Tudo limpo por hoje!</span>
+            </div>
+        </div>
+
+        <!-- TELA: HISTÓRICO -->
+        <div id="tela-historico" class="hidden">
+            <div class="d-flex justify-content-between align-items-center mb-3 bg-white p-2 rounded shadow-sm">
+                <h6 class="mb-0 fw-bold text-primary small"><i class="bi bi-clock-history"></i> Histórico do Cliente</h6>
+                <button onclick="voltarParaAgenda()" class="btn btn-sm btn-secondary py-0 small">Voltar</button>
+            </div>
+
+            <div id="loading-hist" class="text-center py-5 hidden">
+                <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+                <p class="mt-2 text-muted small">Buscando...</p>
+            </div>
+
+            <div class="card border-0 shadow-sm overflow-hidden">
+                <table class="table table-borderless mb-0 table-hist">
+                    <thead>
+                        <tr>
+                            <th class="ps-3">Resumo dos Atendimentos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-hist"></tbody>
+                </table>
+            </div>
+            <div id="msg-sem-hist" class="alert alert-info text-center hidden small mt-2">
+                Sem histórico recente para este contrato.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDQ0ktmyTcDvaqFlR9bA7OKpg77kqiOjiE",
+            authDomain: "rephero-project.firebaseapp.com",
+            projectId: "rephero-project",
+            storageBucket: "rephero-project.firebasestorage.app",
+            messagingSenderId: "76261125810",
+            appId: "1:76261125810:web:5936f87834c40a8a4923ab"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.fazerLogin = async function() {
+            const id = document.getElementById('login-user').value.trim();
+            const pass = document.getElementById('login-pass').value.trim();
+            const btn = document.getElementById('btn-login');
+
+            if(!id || !pass) return alert("Preencha ID e Senha.");
+            btn.innerHTML = '...'; btn.disabled = true;
+
+            try {
+                const docRef = doc(db, "technicians", id);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists() && docSnap.data().senha === pass) {
+                    const user = { id: docSnap.id, ...docSnap.data() };
+                    localStorage.setItem('rl_user', JSON.stringify(user));
+                    initApp(user);
+                } else {
+                    alert("Dados inválidos.");
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Erro de conexão.");
+            } finally {
+                btn.innerHTML = 'Acessar'; btn.disabled = false;
+            }
+        };
+    </script>
+
+    <script>
+        const API_URL = ""; 
+        let currentUser = null;
+
+        window.onload = () => {
+            const saved = localStorage.getItem('rl_user');
+            if(saved) initApp(JSON.parse(saved));
+        };
+
+        function initApp(user) {
+            currentUser = user;
+            document.getElementById('span-user-name').innerText = user.nome.split(' ')[0];
+            document.getElementById('user-display').classList.remove('hidden');
+            document.getElementById('tela-login').classList.add('hidden');
+            document.getElementById('tela-agenda').classList.remove('hidden');
+            carregarAgenda();
+        }
+
+        function logout() {
+            localStorage.removeItem('rl_user');
+            location.reload();
+        }
+
+        async function carregarAgenda() {
+            const divLista = document.getElementById('lista-agenda');
+            const loading = document.getElementById('loading-agenda');
+            const msgEmpty = document.getElementById('msg-sem-agenda');
+            
+            divLista.innerHTML = '';
+            msgEmpty.classList.add('hidden');
+            loading.classList.remove('hidden');
+
+            try {
+                const res = await fetch(`${API_URL}/api/minhas_os_hoje`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({id_tecnico: currentUser.id})
+                });
+                const lista = await res.json();
+
+                if(lista.length === 0) {
+                    msgEmpty.classList.remove('hidden');
+                } else {
+                    lista.sort((a,b) => a.horario.localeCompare(b.horario));
+
+                    lista.forEach(os => {
+                        let statusClass = 'status-ag'; 
+                        let badgeClass = 'bg-primary';
+                        if(os.status_code === 'F') { statusClass = 'status-f'; badgeClass = 'bg-success'; }
+                        else if(os.status_code === 'AN') { statusClass = 'status-an'; badgeClass = 'bg-warning text-dark'; }
+
+                        // CARD COMPACTO (Sem mensagem, apenas essencial)
+                        const card = `
+                            <div class="card-agenda ${statusClass}">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="fs-5 fw-bold text-dark lh-1">${os.horario}</span>
+                                        <span class="badge ${badgeClass}" style="font-size: 0.65rem;">${os.status_label}</span>
+                                    </div>
+                                    <span class="text-muted small">#${os.id}</span>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-end">
+                                    <div class="overflow-hidden pe-2 w-75">
+                                        <div class="fw-600 text-dark text-truncate" style="font-size: 0.9rem;">${os.cliente}</div>
+                                        <div class="text-muted text-truncate small" style="font-size: 0.75rem;">
+                                            <i class="bi bi-geo-alt-fill me-1"></i>${os.endereco}
+                                        </div>
+                                        <div class="text-primary fw-600 text-truncate mt-1" style="font-size: 0.8rem;">
+                                            ${os.assunto}
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <button onclick="verHistorico('${os.id_contrato}')" class="btn btn-outline-dark btn-sm py-1 px-2 border-0 bg-light" style="font-size: 0.8rem;">
+                                            <i class="bi bi-clock-history fs-6"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        divLista.innerHTML += card;
+                    });
+                }
+            } catch(e) {
+                console.error(e);
+                alert('Erro ao carregar agenda.');
+            } finally {
+                loading.classList.add('hidden');
+            }
+        }
+
+        async function verHistorico(idContrato) {
+            if(!idContrato || idContrato == '0' || idContrato == 'None') return alert("O.S não vinculada a contrato válido.");
+
+            document.getElementById('tela-agenda').classList.add('hidden');
+            document.getElementById('tela-historico').classList.remove('hidden');
+            document.getElementById('loading-hist').classList.remove('hidden');
+            const tbody = document.getElementById('tabela-hist');
+            tbody.innerHTML = '';
+            document.getElementById('msg-sem-hist').classList.add('hidden');
+
+            try {
+                const res = await fetch(`${API_URL}/api/buscar_historico`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({id_contrato: idContrato})
+                });
+                const lista = await res.json();
+
+                if(lista.length === 0) {
+                    document.getElementById('msg-sem-hist').classList.remove('hidden');
+                } else {
+                    lista.forEach((os, idx) => {
+                        const rowId = `row-${idx}`;
+                        const iconId = `icon-${idx}`;
+                        
+                        // NOVO: Bloco de endereço adicionado nos detalhes
+                        const item = `
+                            <tr class="hist-row border-bottom" onclick="toggleDetalhes('${rowId}', '${iconId}')">
+                                <td class="p-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="fw-bold text-primary small">#${os.id}</span>
+                                            <span class="mx-1 text-muted small">|</span>
+                                            <span class="small fw-600 text-dark">${os.data}</span>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border fw-normal" style="font-size: 0.65rem;">${os.setor}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-1">
+                                        <span class="small fw-600 text-dark text-truncate w-75">${os.assunto}</span>
+                                        <i id="${iconId}" class="bi bi-chevron-down text-muted small"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr id="${rowId}" class="hidden hist-details">
+                                <td class="p-3">
+                                    <div class="small">
+                                        <div class="mb-2">
+                                            <span class="text-muted fw-bold d-block" style="font-size: 0.7rem;">ENDEREÇO</span>
+                                            <span class="text-dark small"><i class="bi bi-geo-alt-fill me-1"></i>${os.endereco || '-'}</span>
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <span class="text-muted fw-bold d-block" style="font-size: 0.7rem;">PROBLEMA REPORTADO</span>
+                                            <div class="desc-box">${os.mensagem || '-'}</div>
+                                        </div>
+                                        
+                                        <div class="mb-2">
+                                            <span class="text-muted fw-bold d-block" style="font-size: 0.7rem;">DIAGNÓSTICO</span>
+                                            <span class="text-dark">${os.diagnostico}</span>
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <span class="text-success fw-bold d-block" style="font-size: 0.7rem;">SOLUÇÃO TÉCNICA</span>
+                                            <div class="text-success bg-white p-2 border border-success-subtle rounded text-break">${os.solucao || '-'}</div>
+                                        </div>
+                                        
+                                        <div class="text-end fst-italic text-secondary" style="font-size: 0.7rem;">
+                                            Técnico: ${os.colaborador}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += item;
+                    });
+                }
+            } catch(e) {
+                alert('Erro ao buscar histórico.');
+                voltarParaAgenda();
+            } finally {
+                document.getElementById('loading-hist').classList.add('hidden');
+            }
+        }
+
+        function toggleDetalhes(rowId, iconId) {
+            const row = document.getElementById(rowId);
+            const icon = document.getElementById(iconId);
+            
+            if (row.classList.contains('hidden')) {
+                row.classList.remove('hidden');
+                icon.classList.remove('bi-chevron-down');
+                icon.classList.add('bi-chevron-up');
+            } else {
+                row.classList.add('hidden');
+                icon.classList.remove('bi-chevron-up');
+                icon.classList.add('bi-chevron-down');
+            }
+        }
+
+        function voltarParaAgenda() {
+            document.getElementById('tela-historico').classList.add('hidden');
+            document.getElementById('tela-agenda').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

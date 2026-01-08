@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico O.S - RL NET</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card { border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: none; margin-bottom: 20px; }
+        .header-rl { background: linear-gradient(135deg, #0056b3 0%, #004494 100%); color: white; padding: 20px; text-align: center; border-radius: 0 0 20px 20px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .hidden { display: none; }
+        
+        /* Estilos da Tabela */
+        .table-os { font-size: 0.85rem; vertical-align: top; } /* Alinhamento ao topo para leitura melhor */
+        .table-os th { font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; background-color: #f8f9fa; border-bottom: 2px solid #dee2e6; color: #495057; }
+        .badge-sector { font-size: 0.7rem; font-weight: 500; }
+        
+        /* Detalhes nas células */
+        .os-id { font-size: 1rem; font-weight: 700; color: #0d6efd; }
+        .os-date { font-size: 0.75rem; color: #6c757d; display: block; }
+        
+        /* Caixas de Texto Longo (Mensagem e Solução) */
+        .desc-box { 
+            background-color: #f8f9fa; 
+            border-left: 3px solid #dee2e6; 
+            padding: 8px; 
+            margin-top: 6px; 
+            font-style: italic; 
+            color: #555; 
+            font-size: 0.8rem; 
+            border-radius: 0 4px 4px 0;
+            
+            /* Tratamento de Texto Longo */
+            white-space: pre-wrap;       /* Respeita as quebras de linha do banco */
+            word-wrap: break-word;       /* Quebra palavras muito longas */
+            max-height: 200px;           /* Limite de altura */
+            overflow-y: auto;            /* Barra de rolagem se exceder */
+        }
+        
+        .sol-box { 
+            margin-top: 6px; 
+            color: #198754; 
+            font-size: 0.8rem; 
+        }
+
+        .sol-text {
+            /* Tratamento de Texto Longo para Solução */
+            white-space: pre-wrap;       /* Respeita as quebras de linha */
+            word-wrap: break-word;       /* Quebra palavras muito longas */
+            max-height: 200px;           /* Limite de altura */
+            overflow-y: auto;            /* Barra de rolagem se exceder */
+            display: block;              /* Garante comportamento de bloco */
+        }
+
+        .tec-name { font-weight: 600; color: #343a40; }
+    </style>
+</head>
+<body>
+
+    <div class="header-rl">
+        <h4 class="mb-0 fw-bold">RL NET - Técnico</h4>
+        <small style="opacity: 0.8">Consulta Rápida de Histórico</small>
+    </div>
+
+    <div class="container" style="max-width: 900px;">
+        
+        <!-- TELA DE LOGIN -->
+        <div id="tela-login" class="card p-4 mx-auto" style="max-width: 400px;">
+            <div class="text-center mb-4">
+                <i class="bi bi-shield-lock text-primary" style="font-size: 2rem;"></i>
+                <h5 class="mt-2">Acesso Restrito</h5>
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Usuário" value="tecnico">
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" placeholder="Senha" value="123">
+            </div>
+            <button onclick="fazerLogin()" class="btn btn-primary w-100 fw-bold">Entrar no Sistema</button>
+        </div>
+
+        <!-- TELA DE BUSCA -->
+        <div id="tela-busca" class="hidden">
+            <div class="card p-4">
+                <h5 class="mb-3 text-center text-primary fw-bold">Nova Consulta</h5>
+                <label class="form-label text-muted small">Informe o número da O.S que você vai atender:</label>
+                <div class="input-group input-group-lg mb-2">
+                    <span class="input-group-text bg-light"><i class="bi bi-hash"></i></span>
+                    <input type="number" id="input-os-id" class="form-control" placeholder="Ex: 54321">
+                    <button class="btn btn-success px-4" onclick="buscarOS()">
+                        <i class="bi bi-search me-2"></i>Buscar
+                    </button>
+                </div>
+                <div class="text-center mt-2">
+                    <small class="text-muted">O sistema buscará o histórico do contrato vinculado.</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELA DE CONFIRMAÇÃO -->
+        <div id="tela-confirmacao" class="hidden card p-4 border-warning border-2">
+            <div class="text-center mb-3">
+                <i class="bi bi-check-circle-fill text-warning" style="font-size: 2rem;"></i>
+                <h6 class="text-muted mt-2">Confirme os dados do cliente</h6>
+            </div>
+            
+            <div class="bg-light p-3 rounded mb-3 text-center">
+                <h4 id="conf-razao" class="text-dark fw-bold mb-1">Carregando...</h4>
+                <p class="mb-0 text-secondary"><i class="bi bi-geo-alt-fill me-1"></i><span id="conf-endereco">-</span></p>
+            </div>
+
+            <div class="d-flex justify-content-between px-3 mb-4 text-muted small">
+                <span><strong>O.S Atual:</strong> <span id="conf-os">0000</span></span>
+                <span><strong>Contrato:</strong> <span id="conf-contrato">00</span></span>
+            </div>
+            
+            <div class="d-flex gap-2">
+                <button onclick="cancelar()" class="btn btn-outline-danger w-50">
+                    <i class="bi bi-x-lg me-2"></i>Não é esse
+                </button>
+                <button onclick="confirmarEBuscarHistorico()" class="btn btn-primary w-50">
+                    <i class="bi bi-check-lg me-2"></i>Confirmar
+                </button>
+            </div>
+        </div>
+
+        <!-- TELA DE RESULTADO -->
+        <div id="tela-resultado" class="hidden">
+            <div class="d-flex justify-content-between align-items-center mb-3 px-2">
+                <h6 class="mb-0 fw-bold text-primary"><i class="bi bi-clock-history me-2"></i>Últimos atendimentos (Instalação e Reparo)</h6>
+                <button onclick="novaBusca()" class="btn btn-sm btn-outline-secondary">Voltar</button>
+            </div>
+
+            <div id="loading" class="text-center py-5 hidden">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-2 text-muted">Consultando histórico no IXC...</p>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-hover table-os bg-white rounded shadow-sm overflow-hidden">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 15%">O.S / Data</th>
+                            <th style="width: 40%">Problema Informado</th>
+                            <th style="width: 30%">Resolução Técnica</th>
+                            <th style="width: 15%">Técnico</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-corpo">
+                        <!-- Linhas preenchidas via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="msg-sem-dados" class="alert alert-info text-center hidden mt-3">
+                Nenhum histórico recente encontrado para os setores selecionados.
+            </div>
+
+            <button onclick="novaBusca()" class="btn btn-secondary w-100 mt-4 mb-5 p-3 fw-bold">
+                <i class="bi bi-arrow-counterclockwise me-2"></i>Realizar Nova Consulta
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        let dadosOSAtual = {};
+        
+        // Deixe vazio para usar a URL relativa atual
+        const API_URL = ""; 
+
+        function fazerLogin() {
+            document.getElementById('tela-login').classList.add('hidden');
+            document.getElementById('tela-busca').classList.remove('hidden');
+        }
+
+        async function buscarOS() {
+            const id = document.getElementById('input-os-id').value;
+            if(!id) return alert('Por favor, digite o número da O.S.');
+
+            // Feedback visual no botão
+            const btn = document.querySelector('#tela-busca button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Buscando...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`${API_URL}/api/validar_os`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({os_id: id})
+                });
+                const data = await res.json();
+
+                if(res.ok) {
+                    dadosOSAtual = data;
+                    document.getElementById('conf-razao').innerText = data.razao_social || 'Cliente sem nome';
+                    document.getElementById('conf-endereco').innerText = data.endereco || 'Endereço não cadastrado';
+                    document.getElementById('conf-os').innerText = data.os_id;
+                    document.getElementById('conf-contrato').innerText = data.id_contrato || 'N/A';
+                    
+                    document.getElementById('tela-busca').classList.add('hidden');
+                    document.getElementById('tela-confirmacao').classList.remove('hidden');
+                } else {
+                    alert(data.erro || 'Erro ao buscar O.S.');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Erro de conexão. Verifique se o servidor backend está rodando.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function cancelar() {
+            document.getElementById('tela-confirmacao').classList.add('hidden');
+            document.getElementById('tela-busca').classList.remove('hidden');
+            document.getElementById('input-os-id').value = '';
+            document.getElementById('input-os-id').focus();
+        }
+
+        async function confirmarEBuscarHistorico() {
+            document.getElementById('tela-confirmacao').classList.add('hidden');
+            document.getElementById('tela-resultado').classList.remove('hidden');
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('tabela-corpo').innerHTML = '';
+            document.getElementById('msg-sem-dados').classList.add('hidden');
+
+            try {
+                const res = await fetch(`${API_URL}/api/buscar_historico`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({id_contrato: dadosOSAtual.id_contrato})
+                });
+                const lista = await res.json();
+                
+                const tbody = document.getElementById('tabela-corpo');
+                tbody.innerHTML = '';
+
+                if (lista.length === 0) {
+                    document.getElementById('msg-sem-dados').classList.remove('hidden');
+                } else {
+                    lista.forEach(os => {
+                        // Não trunca mais a mensagem. O CSS cuida disso agora.
+                        const mensagem = os.mensagem || '-';
+                        const solucao = os.solucao || '-';
+                        
+                        const row = `
+                            <tr>
+                                <td class="border-end">
+                                    <span class="os-id">#${os.id}</span><br>
+                                    <span class="badge bg-secondary mb-1">${os.setor}</span><br>
+                                    <span class="os-date"><i class="bi bi-calendar3 me-1"></i>${os.data}</span>
+                                </td>
+                                <td>
+                                    <strong class="text-primary">${os.assunto}</strong>
+                                    <div class="desc-box">${mensagem}</div>
+                                </td>
+                                <td>
+                                    <div class="mb-1">
+                                        <small class="text-muted fw-bold text-uppercase">Diagnóstico:</small><br>
+                                        <span>${os.diagnostico}</span>
+                                    </div>
+                                    <div class="sol-box border-top pt-1">
+                                        <small class="fw-bold text-uppercase" style="color:#198754">Solução:</small><br>
+                                        <span class="sol-text">${solucao}</span>
+                                    </div>
+                                </td>
+                                <td class="text-center bg-light">
+                                    <div class="tec-name">${os.colaborador}</div>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += row;
+                    });
+                }
+
+            } catch (e) {
+                console.error(e);
+                alert('Erro ao buscar histórico. Tente novamente.');
+                novaBusca();
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+            }
+        }
+
+        function novaBusca() {
+            document.getElementById('tela-resultado').classList.add('hidden');
+            document.getElementById('tela-busca').classList.remove('hidden');
+            document.getElementById('input-os-id').value = '';
+            document.getElementById('tabela-corpo').innerHTML = '';
+            document.getElementById('msg-sem-dados').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
