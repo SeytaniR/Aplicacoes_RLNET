@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus - Performance e KPIs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .card-gradient { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+        .hidden { display: none; }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .pulse-border { animation: pulse-purple 2s infinite; }
+        @keyframes pulse-purple {
+            0% { box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(147, 51, 234, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(147, 51, 234, 0); }
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="text-gray-800 h-screen flex flex-col overflow-hidden">
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" class="fixed inset-0 z-50 bg-slate-900 flex flex-col items-center justify-center p-4 fade-in">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm text-center">
+            <img src="logo.png" onerror="this.src='https://placehold.co/150x50?text=RL+NET'" alt="RL NET" class="h-12 mx-auto mb-6">
+            <h1 class="text-2xl font-bold text-slate-800 mb-2">Nexus</h1>
+            <p class="text-slate-500 mb-6 text-sm">Performance do Setor de Reparos</p>
+            <input type="text" id="login-id" placeholder="ID do Técnico" class="w-full bg-gray-100 border border-gray-300 rounded-lg p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="password" id="login-pass" placeholder="Senha" class="w-full bg-gray-100 border border-gray-300 rounded-lg p-3 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="app.login()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition shadow-lg mb-4">Entrar</button>
+            <button onclick="window.location.href='../index.html'" class="flex items-center justify-center w-full text-slate-500 hover:text-slate-700 py-2"><i class="fas fa-home mr-2"></i> Launcher</button>
+            <p class="text-xs text-gray-400 mt-4">v2.2 | Dev. Filipe Cruz</p>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="main-app" class="flex-1 flex flex-col hidden fade-in h-full">
+        <!-- HEADER FIXO -->
+        <div class="bg-white shadow-md p-3 flex justify-between items-center z-10">
+            <div class="flex items-center space-x-2">
+                <img id="user-avatar" src="" class="w-9 h-9 rounded-full border border-blue-500 object-cover">
+                <div class="flex flex-col">
+                    <h2 id="user-name" class="font-bold text-sm leading-tight mb-1">...</h2>
+                    <div class="flex items-center bg-gray-50 rounded border px-1">
+                        <span class="text-[9px] text-gray-400 mr-1 whitespace-nowrap">Período:</span>
+                        <select id="period-selector" onchange="app.changePeriod()" class="text-xs bg-transparent text-gray-600 focus:outline-none font-semibold">
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="text-right mr-2 hidden sm:block">
+                    <div class="text-xs text-gray-500">Meticuloso</div>
+                    <div id="user-score" class="font-bold text-blue-600">0 pts</div>
+                </div>
+                <button onclick="window.location.href='../index.html'" class="p-2 bg-gray-100 rounded-full text-gray-600"><i class="fas fa-home"></i></button>
+                <button onclick="app.logout()" class="p-2 bg-red-50 text-red-500 rounded-full"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </div>
+
+        <!-- CONTENT AREA -->
+        <div id="content-area" class="flex-1 overflow-y-auto p-4 pb-24 space-y-4"></div>
+
+        <!-- BOTTOM NAV -->
+        <div class="bg-white border-t border-gray-200 p-2 flex justify-around items-center fixed bottom-0 w-full pb-4 z-20 overflow-x-auto">
+            <button onclick="app.nav('profile')" class="nav-btn flex flex-col items-center p-2 text-blue-600 min-w-[60px]"><i class="fas fa-user mb-1"></i><span class="text-[10px]">Perfil</span></button>
+            <button onclick="app.nav('ranking')" class="nav-btn flex flex-col items-center p-2 text-gray-400 hover:text-blue-600 min-w-[60px]"><i class="fas fa-trophy mb-1"></i><span class="text-[10px]">Ranking</span></button>
+            <button onclick="app.nav('production')" class="nav-btn flex flex-col items-center p-2 text-gray-400 hover:text-blue-600 min-w-[60px]"><i class="fas fa-chart-pie mb-1"></i><span class="text-[10px]">Produção</span></button>
+            
+            <!-- NOVO MENU HISTÓRICO -->
+            <button onclick="app.nav('historico')" class="nav-btn flex flex-col items-center p-2 text-gray-400 hover:text-blue-600 min-w-[60px]"><i class="fas fa-history mb-1"></i><span class="text-[10px]">Histórico</span></button>
+            
+            <button id="btn-gestao" onclick="app.nav('gestao')" class="nav-btn flex flex-col items-center p-2 text-gray-400 hover:text-blue-600 min-w-[60px] hidden"><i class="fas fa-cog mb-1"></i><span class="text-[10px]">Gestão</span></button>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot, query, where, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDQ0ktmyTcDvaqFlR9bA7OKpg77kqiOjiE",
+            authDomain: "rephero-project.firebaseapp.com",
+            projectId: "rephero-project",
+            storageBucket: "rephero-project.firebasestorage.app",
+            messagingSenderId: "76261125810",
+            appId: "1:76261125810:web:5936f87834c40a8a4923ab"
+        };
+
+        const fbApp = initializeApp(firebaseConfig);
+        const db = getFirestore(fbApp);
+        const CHART_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#6366f1'];
+
+        window.appData = {
+            currentUser: null,
+            viewingUserId: null,
+            currentPeriod: new Date().toISOString().slice(0, 7),
+            currentView: 'profile',
+            kpiLabels: {
+                'meticuloso': { label: 'Meticuloso', icon: 'fa-gem', color: 'text-purple-600', desc: 'Score Geral: Soma dos positivos menos penalidades.' },
+                'executor': { label: 'Executor', icon: 'fa-hammer', color: 'text-blue-500', desc: 'Quantidade total de O.S. executadas.' },
+                'lancador': { label: 'Lançador', icon: 'fa-network-wired', color: 'text-cyan-500', desc: 'O.S. com troca de Cabo Drop.' },
+                'amigavel': { label: 'Amigável', icon: 'fa-smile', color: 'text-green-500', desc: 'Serviços internos e SAC.' },
+                'nortenho': { label: 'Nortenho', icon: 'fa-compass', color: 'text-indigo-500', desc: 'Atendimentos na rota Norte.' },
+                'corporativo': { label: 'Corporativo', icon: 'fa-briefcase', color: 'text-slate-600', desc: 'Atendimentos a clientes PJ (CNPJ).' },
+                'preventor': { label: 'Preventor', icon: 'fa-shield-alt', color: 'text-emerald-600', desc: 'Diagnósticos de Problema na Infraestrutura.' },
+                'salvador': { label: 'Salvador', icon: 'fa-life-ring', color: 'text-orange-500', desc: 'Atendimentos de "Sem Acesso".' },
+                'lagartixo': { label: 'Lagartixo', icon: 'fa-bug', color: 'text-red-500', desc: 'Emendas Mecânicas/Conectores (Penalidade).' }
+            },
+            monthNames: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+        };
+
+        window.app = {
+            async login() {
+                const id = document.getElementById('login-id').value.trim();
+                const pass = document.getElementById('login-pass').value.trim();
+                if(!id || !pass) return alert("Preencha todos os campos");
+                try {
+                    const docSnap = await getDoc(doc(db, "technicians", id));
+                    if (docSnap.exists() && docSnap.data().senha === pass) {
+                        const userObj = { id: docSnap.id, ...docSnap.data() };
+                        localStorage.setItem('nexus_user', JSON.stringify(userObj));
+                        window.appData.currentUser = userObj;
+                        window.appData.viewingUserId = userObj.id; 
+                        this.initApp();
+                    } else alert("Credenciais inválidas.");
+                } catch (e) { alert("Erro de conexão."); }
+            },
+
+            logout() {
+                localStorage.removeItem('nexus_user');
+                location.reload();
+            },
+
+            checkSession() {
+                const saved = localStorage.getItem('nexus_user');
+                if (saved) {
+                    try { 
+                        window.appData.currentUser = JSON.parse(saved); 
+                        window.appData.viewingUserId = window.appData.currentUser.id;
+                        this.initApp(); 
+                    } catch(e) { this.logout(); }
+                }
+            },
+
+            async initApp() {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
+                const user = window.appData.currentUser;
+                
+                document.getElementById('user-name').innerText = (user.nome || 'Tec').split(' ')[0];
+                document.getElementById('user-avatar').src = user.foto || 'https://placehold.co/50';
+                if(user.role === 'gestor') document.getElementById('btn-gestao').classList.remove('hidden');
+                
+                await this.populatePeriods();
+                this.nav('profile');
+            },
+            
+            formatPeriod(yyyy_mm) {
+                try {
+                    const [year, month] = yyyy_mm.split('-');
+                    const monthIndex = parseInt(month, 10) - 1;
+                    const name = window.appData.monthNames[monthIndex] || month;
+                    return `${name} / ${year}`;
+                } catch(e) { return yyyy_mm; }
+            },
+
+            async populatePeriods() {
+                const sel = document.getElementById('period-selector');
+                try {
+                    const docSnap = await getDoc(doc(db, "metadata", "periods"));
+                    if(docSnap.exists() && docSnap.data().available) {
+                        const periods = docSnap.data().available.sort().reverse();
+                        sel.innerHTML = periods.map(p => `<option value="${p}">${this.formatPeriod(p)}</option>`).join('');
+                        
+                        if(periods.includes(window.appData.currentPeriod)) {
+                            sel.value = window.appData.currentPeriod;
+                        } else if(periods.length > 0) {
+                            sel.value = periods[0];
+                            window.appData.currentPeriod = periods[0];
+                        }
+                    } else {
+                        sel.innerHTML = `<option value="${window.appData.currentPeriod}">${this.formatPeriod(window.appData.currentPeriod)}</option>`;
+                    }
+                } catch(e) { console.log("Erro periods", e); }
+            },
+
+            changePeriod() {
+                window.appData.currentPeriod = document.getElementById('period-selector').value;
+                this.nav(window.appData.currentView);
+                this.loadUserStats();
+            },
+
+            loadUserStats() {
+                const user = window.appData.currentUser;
+                if (!user) return;
+                const docId = `${window.appData.currentPeriod}_${user.id}`;
+                onSnapshot(doc(db, "monthly_stats", docId), (doc) => {
+                    const score = (doc.exists() && doc.data().kpis?.meticuloso) ? doc.data().kpis.meticuloso : 0;
+                    document.getElementById('user-score').innerText = `${score} pts`;
+                });
+            },
+
+            nav(view) {
+                if(view === 'profile' && event && event.currentTarget.classList.contains('nav-btn')) {
+                    window.appData.viewingUserId = window.appData.currentUser.id;
+                }
+                
+                window.appData.currentView = view;
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.replace('text-blue-600', 'text-gray-400'));
+                
+                // Mapeamento de índices para destaque
+                const btnMap = {'profile': 0, 'ranking': 1, 'production': 2, 'historico': 3, 'gestao': 4};
+                const btns = document.querySelectorAll('.nav-btn');
+                if(btns[btnMap[view]]) btns[btnMap[view]].classList.replace('text-gray-400', 'text-blue-600');
+                
+                const area = document.getElementById('content-area');
+                
+                // Se for Histórico, remove padding e mostra iframe direto
+                if(view === 'historico') {
+                    area.innerHTML = '';
+                    this.renderHistoricoView();
+                    return;
+                }
+
+                // Default loading for others
+                area.innerHTML = '<div class="flex justify-center p-10"><i class="fas fa-spinner fa-spin text-2xl text-blue-600"></i></div>';
+
+                if (view === 'profile') this.renderProfileView();
+                if (view === 'ranking') this.renderRankingView();
+                if (view === 'production') this.renderProductionView();
+                if (view === 'gestao') this.renderGestaoView();
+            },
+
+            // --- PERFIL PESSOAL ---
+            async renderProfileView() {
+                const targetId = window.appData.viewingUserId;
+                const isSelf = targetId === window.appData.currentUser.id;
+                const docId = `${window.appData.currentPeriod}_${targetId}`;
+                let data = null;
+                let userData = null;
+
+                try {
+                    const statSnap = await getDoc(doc(db, "monthly_stats", docId));
+                    data = statSnap.exists() ? statSnap.data() : null;
+                    if(!isSelf) {
+                        const uSnap = await getDoc(doc(db, "technicians", targetId));
+                        userData = uSnap.exists() ? uSnap.data() : { nome: 'Desconhecido' };
+                    }
+                } catch(e) {}
+
+                const area = document.getElementById('content-area');
+                let html = '<div class="space-y-4 fade-in">';
+                
+                if(!isSelf) {
+                    html += `
+                        <button onclick="window.appData.viewingUserId = window.appData.currentUser.id; app.nav('ranking')" class="mb-2 text-sm text-blue-600 font-bold flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i> Voltar para Ranking
+                        </button>
+                        <div class="bg-blue-100 p-2 rounded text-blue-800 text-center font-bold text-sm">
+                            Visualizando: ${userData.nome}
+                        </div>
+                    `;
+                }
+
+                if (!data) {
+                    html += `<div class="text-center mt-10 p-6 bg-white rounded-xl shadow-sm"><p class="text-gray-500">Sem dados processados para ${this.formatPeriod(window.appData.currentPeriod)}.</p></div>`;
+                    area.innerHTML = html + '</div>';
+                    return;
+                }
+
+                const comissao = data.financeiro ? data.financeiro.comissao_prevista : 0;
+                html += `
+                    <div class="card-gradient rounded-xl p-5 text-white shadow-lg relative overflow-hidden">
+                        <div class="relative z-10">
+                            <p class="text-gray-300 text-sm">Comissão Prevista</p>
+                            <h2 class="text-3xl font-bold mt-1">R$ ${comissao.toFixed(2)}</h2>
+                            <p class="text-[10px] text-gray-400 mt-2">*Valor aproximado. Consulte seu supervisor para detalhes finais.</p>
+                        </div>
+                        <i class="fas fa-coins absolute right-4 bottom-4 text-6xl text-white opacity-10"></i>
+                    </div>
+                `;
+
+                html += '<div class="grid grid-cols-2 gap-3">';
+                Object.entries(window.appData.kpiLabels).forEach(([key, info]) => {
+                    const val = (data.kpis && data.kpis[key] !== undefined) ? data.kpis[key] : 0;
+                    const colorClass = info.color || 'text-blue-600';
+                    html += `
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center text-center">
+                            <i class="fas ${info.icon} ${colorClass} text-xl mb-2"></i>
+                            <span class="text-2xl font-bold text-gray-800">${val}</span>
+                            <span class="text-[10px] text-gray-500 uppercase tracking-wide">${info.label}</span>
+                        </div>`;
+                });
+                html += '</div>';
+
+                html += `
+                    <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                        <div class="p-3 border-b bg-gray-50 font-bold text-sm text-gray-700">Histórico de O.S. (${this.formatPeriod(window.appData.currentPeriod)})</div>
+                        <div class="max-h-60 overflow-y-auto">
+                `;
+                if(data.history && data.history.length > 0) {
+                    data.history.forEach(os => {
+                        html += `
+                            <div class="p-3 border-b border-gray-100 text-xs hover:bg-gray-50">
+                                <div class="flex justify-between font-bold text-gray-700">
+                                    <span>OS ${os.id}</span>
+                                    <span>${os.data}</span>
+                                </div>
+                                <div class="text-gray-500 mt-1 truncate">${os.assunto}</div>
+                                <div class="flex justify-between mt-1">
+                                    <span class="text-blue-600 truncate w-1/2" title="${os.cliente}">${os.cliente}</span>
+                                    <span class="text-gray-400 truncate w-1/2 text-right" title="${os.diag}">${os.diag}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<div class="p-4 text-center text-xs text-gray-400">Nenhum histórico salvo.</div>';
+                }
+                html += '</div></div></div>';
+                area.innerHTML = html;
+            },
+
+            // --- RANKING ---
+            async renderRankingView() {
+                const area = document.getElementById('content-area');
+                try {
+                    const q = query(collection(db, "monthly_stats"), where("periodo", "==", window.appData.currentPeriod));
+                    const snapshot = await getDocs(q);
+                    const techsSnap = await getDocs(collection(db, "technicians"));
+                    const techsMap = {};
+                    techsSnap.forEach(d => techsMap[d.id] = d.data());
+
+                    let stats = [];
+                    snapshot.forEach(doc => {
+                        const d = doc.data();
+                        const techInfo = techsMap[d.tech_id];
+                        if(techInfo && techInfo.role === 'tecnico') {
+                            stats.push({
+                                ...d,
+                                techName: techInfo.nome || "Desconhecido",
+                                techPhoto: techInfo.foto || "https://placehold.co/50",
+                                role: techInfo.role
+                            });
+                        }
+                    });
+
+                    if(stats.length === 0) {
+                        area.innerHTML = `<p class="text-center mt-10 text-gray-500">Nenhum técnico pontuou em ${this.formatPeriod(window.appData.currentPeriod)}.</p>`;
+                        return;
+                    }
+
+                    // Cards
+                    let cardsHtml = '<div class="flex space-x-3 overflow-x-auto no-scrollbar pb-2 mb-2 p-1">';
+                    Object.keys(window.appData.kpiLabels).forEach(cat => {
+                        stats.sort((a,b) => (b.kpis[cat]||0) - (a.kpis[cat]||0));
+                        const top1 = stats[0];
+                        const label = window.appData.kpiLabels[cat].label;
+                        const icon = window.appData.kpiLabels[cat].icon;
+                        const colorClass = window.appData.kpiLabels[cat].color || 'text-blue-500';
+                        const isMeticuloso = cat === 'meticuloso';
+                        const extraClass = isMeticuloso ? 'min-w-[140px] pulse-border shadow-purple-200' : 'min-w-[130px]';
+                        const iconSize = isMeticuloso ? 'text-3xl' : 'text-2xl';
+
+                        cardsHtml += `
+                            <div onclick="app.filterRanking('${cat}')" data-category="${cat}" class="ranking-card ${extraClass} rounded-xl p-3 border border-gray-100 bg-white shadow-sm flex flex-col items-center justify-center cursor-pointer relative h-32 flex-shrink-0 transition-all duration-300">
+                                <div class="mb-1 ${iconSize} ${colorClass}"><i class="fas ${icon}"></i></div>
+                                <span class="text-[10px] text-gray-500 uppercase font-bold text-center mb-1">${label}</span>
+                                <span class="text-xs font-bold text-gray-800 text-center truncate w-full px-1">${top1.techName.split(' ')[0]}</span>
+                                <span class="text-sm font-bold ${colorClass}">${top1.kpis[cat]||0}</span>
+                                <div class="absolute top-1 right-1 w-6 h-6 rounded-full border border-white shadow overflow-hidden">
+                                    <img src="${top1.techPhoto}" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                        `;
+                    });
+                    cardsHtml += '</div>';
+
+                    let listHtml = `<div id="ranking-list" class="bg-white rounded-xl shadow-sm overflow-hidden"></div>`;
+                    area.innerHTML = `<div class="fade-in">${cardsHtml}${listHtml}</div>`;
+                    this.filterRanking('meticuloso', stats);
+                    window.currentStatsData = stats;
+
+                } catch(e) { console.error(e); area.innerHTML = '<p class="text-center text-red-500">Erro ranking.</p>'; }
+            },
+
+            filterRanking(category, providedStats) {
+                const stats = providedStats || window.currentStatsData;
+                const container = document.getElementById('ranking-list');
+                const label = window.appData.kpiLabels[category].label;
+                const desc = window.appData.kpiLabels[category].desc;
+                const isGestor = window.appData.currentUser.role === 'gestor';
+
+                document.querySelectorAll('.ranking-card').forEach(el => {
+                    const isTarget = el.dataset.category === category;
+                    const baseClass = "ranking-card rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer relative h-32 flex-shrink-0 transition-all duration-300";
+                    const widthClass = el.classList.contains('min-w-[140px]') ? 'min-w-[140px]' : 'min-w-[130px]';
+                    const pulseClass = el.classList.contains('pulse-border') ? 'pulse-border shadow-purple-200' : '';
+
+                    if (isTarget) {
+                        el.className = `${baseClass} ${widthClass} ${pulseClass} border-2 border-blue-500 bg-blue-50 shadow-md scale-105 z-10`;
+                    } else {
+                        el.className = `${baseClass} ${widthClass} ${pulseClass} border border-gray-100 bg-white shadow-sm opacity-75 hover:opacity-100 hover:scale-105`;
+                    }
+                });
+
+                stats.sort((a,b) => (b.kpis[category]||0) - (a.kpis[category]||0));
+
+                let html = `
+                    <div class="p-3 bg-gray-50 border-b">
+                        <div class="flex justify-between text-xs font-bold text-gray-500 uppercase">
+                            <span>Ranking ${label}</span>
+                            <span>Pontos</span>
+                        </div>
+                        <p class="text-[10px] text-gray-400 font-normal mt-1">${desc}</p>
+                    </div>
+                `;
+                
+                stats.forEach((s, idx) => {
+                    const isMe = s.tech_id === window.appData.currentUser.id;
+                    const val = s.kpis[category] || 0;
+                    const clickAttr = isGestor ? `onclick="app.viewUserProfile('${s.tech_id}')"` : '';
+                    const cursorClass = isGestor ? 'cursor-pointer hover:bg-blue-50' : '';
+                    const bgClass = isMe ? 'bg-blue-50' : 'bg-white';
+
+                    html += `
+                        <div ${clickAttr} class="${bgClass} ${cursorClass} p-3 border-b border-gray-100 flex items-center justify-between transition">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-gray-400 font-bold w-6 text-center text-sm">#${idx+1}</span>
+                                <img src="${s.techPhoto}" class="w-8 h-8 rounded-full bg-gray-200 object-cover">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-semibold truncate max-w-[150px]">${s.techName}</span>
+                                    ${isGestor ? '<span class="text-[9px] text-blue-400">Ver Perfil</span>' : ''}
+                                </div>
+                            </div>
+                            <span class="font-bold text-gray-800">${val}</span>
+                        </div>`;
+                });
+                container.innerHTML = html;
+            },
+
+            // --- PRODUÇÃO ---
+            async renderProductionView() {
+                const user = window.appData.currentUser;
+                const docId = `${window.appData.currentPeriod}_${user.id}`;
+                try {
+                    const snap = await getDoc(doc(db, "monthly_stats", docId));
+                    const data = snap.exists() ? snap.data() : null;
+                    const area = document.getElementById('content-area');
+                    
+                    if (!data) { area.innerHTML = `<p class="text-center mt-10 text-gray-500">Sem dados para ${this.formatPeriod(window.appData.currentPeriod)}.</p>`; return; }
+
+                    const total = data.kpis.executor || 0;
+                    const pj = data.kpis.corporativo || 0;
+                    const pf = total - pj;
+
+                    area.innerHTML = `
+                        <div class="space-y-4 fade-in">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-blue-500">
+                                    <p class="text-xs text-gray-500 uppercase">Total O.S.</p>
+                                    <p class="text-2xl font-bold text-gray-800">${total}</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-purple-500">
+                                    <p class="text-xs text-gray-500 uppercase">Clientes</p>
+                                    <div class="flex justify-between items-end">
+                                        <span class="text-sm font-semibold text-gray-600">PF: ${pf}</span>
+                                        <span class="text-sm font-semibold text-gray-600">PJ: ${pj}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl shadow-sm">
+                                <h3 class="font-bold text-gray-700 mb-4 text-xs uppercase border-b pb-2">Diagnósticos (Top 5)</h3>
+                                <div class="h-48"><canvas id="chartDiags"></canvas></div>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl shadow-sm">
+                                <h3 class="font-bold text-gray-700 mb-4 text-xs uppercase border-b pb-2">Assuntos (Top 5)</h3>
+                                <div class="h-48"><canvas id="chartAssuntos"></canvas></div>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl shadow-sm">
+                                <h3 class="font-bold text-gray-700 mb-4 text-xs uppercase border-b pb-2">Bairros (Top 5)</h3>
+                                <div class="h-48"><canvas id="chartBairros"></canvas></div>
+                            </div>
+                        </div>`;
+                    
+                    if(data.dashboard) {
+                        this.renderChart('chartDiags', data.dashboard.diagnosticos || {}, 'doughnut');
+                        this.renderChart('chartAssuntos', data.dashboard.assuntos || {}, 'bar');
+                        this.renderChart('chartBairros', data.dashboard.bairros || {}, 'bar');
+                    }
+                } catch(e) { console.error(e); }
+            },
+
+            renderChart(id, mapData, type) {
+                const ctx = document.getElementById(id).getContext('2d');
+                const sorted = Object.entries(mapData).sort((a,b) => b[1] - a[1]).slice(0, 5);
+                new Chart(ctx, {
+                    type: type,
+                    data: {
+                        labels: sorted.map(i => i[0].substring(0, 15) + (i[0].length>15?'...':'')),
+                        datasets: [{
+                            data: sorted.map(i => i[1]),
+                            backgroundColor: CHART_COLORS,
+                            borderWidth: 0
+                        }]
+                    },
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        plugins: { legend: { position: type==='doughnut'?'right':'top', labels: { boxWidth: 10, font:{size:10} } } },
+                        scales: type === 'bar' ? { y: { beginAtZero: true } } : {}
+                    }
+                });
+            },
+
+            // --- HISTÓRICO (IFRAME) ---
+            renderHistoricoView() {
+                const area = document.getElementById('content-area');
+                area.innerHTML = `
+                    <div class="h-full w-full fade-in bg-white rounded-xl shadow-sm overflow-hidden flex flex-col">
+                        <iframe src="https://unfurrowed-nonesthetically-zachery.ngrok-free.dev/"
+                                class="w-full flex-1 border-0"
+                                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                                title="Histórico Externo">
+                        </iframe>
+                    </div>
+                `;
+            },
+
+            // --- GESTÃO ---
+            async renderGestaoView() {
+                document.getElementById('content-area').innerHTML = `
+                    <div class="space-y-4 fade-in">
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h3 class="font-bold mb-3 text-gray-700">Ações Rápidas</h3>
+                            <button onclick="app.actionManageUsers()" class="w-full bg-blue-50 text-blue-700 py-3 rounded-lg mb-2 font-semibold text-sm text-left px-4"><i class="fas fa-user-edit w-6"></i> Usuários</button>
+                            <button onclick="app.actionManageCommissions()" class="w-full bg-gray-50 text-gray-700 py-3 rounded-lg mb-2 font-semibold text-sm text-left px-4"><i class="fas fa-dollar-sign w-6"></i> Comissões</button>
+                            <button onclick="app.actionWipeDB()" class="w-full border border-red-200 text-red-500 py-3 rounded-lg font-semibold text-sm text-left px-4"><i class="fas fa-trash-alt w-6"></i> WIPE DATA</button>
+                        </div>
+                    </div>`;
+            },
+            
+            async actionManageCommissions() {
+                try {
+                    const metaDoc = await getDoc(doc(db, "metadata", "subjects"));
+                    const configDoc = await getDoc(doc(db, "settings", "commissions"));
+                    
+                    const subjects = metaDoc.exists() ? metaDoc.data().items : {};
+                    const values = configDoc.exists() ? configDoc.data().values : {};
+                    
+                    let rows = '';
+                    const sorted = Object.entries(subjects).sort((a,b) => a[1].localeCompare(b[1]));
+                    
+                    sorted.forEach(([id, nome]) => {
+                        rows += `
+                            <div class="flex justify-between items-center text-xs border-b py-2">
+                                <span class="w-2/3 truncate" title="${nome}">${nome}</span>
+                                <div class="flex items-center"><span class="mr-1">R$</span><input class="comm-input w-16 border rounded p-1 text-right" data-id="${id}" type="number" step="0.1" value="${values[id]||0}"></div>
+                            </div>
+                        `;
+                    });
+
+                    const html = `
+                        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 fade-in">
+                            <div class="bg-white w-full max-w-md rounded-xl shadow-lg flex flex-col max-h-[80vh]">
+                                <div class="p-4 border-b flex justify-between"><b>Comissões (Assuntos)</b><button onclick="this.closest('.fixed').remove()">X</button></div>
+                                <div class="p-4 overflow-y-auto">${rows||'<p class="text-gray-400">Nenhum assunto registrado.</p>'}</div>
+                                <div class="p-4 border-t"><button onclick="app.saveCommissions()" class="w-full bg-blue-600 text-white py-2 rounded font-bold">Salvar</button></div>
+                            </div>
+                        </div>`;
+                    document.body.insertAdjacentHTML('beforeend', html);
+                } catch(e) { alert("Erro ao carregar comissões."); console.error(e); }
+            },
+
+            async saveCommissions() {
+                const values = {};
+                document.querySelectorAll('.comm-input').forEach(i => { if(i.value > 0) values[i.dataset.id] = parseFloat(i.value); });
+                try {
+                    await updateDoc(doc(db, "settings", "commissions"), { values: values });
+                    alert("Comissões atualizadas!");
+                    document.querySelector('.fixed').remove();
+                } catch(e) { alert("Erro ao salvar."); }
+            },
+
+            async actionManageUsers() {
+                 const techsSnap = await getDocs(collection(db, "technicians"));
+                 let rows = '';
+                 techsSnap.forEach(t => {
+                     const d = t.data();
+                     const safeName = (d.nome||'').replace(/'/g, "\\'");
+                     const safeFoto = (d.foto||'').replace(/'/g, "\\'");
+                     rows += `<div class="flex justify-between p-2 border-b text-xs items-center"><div><b>${d.nome}</b><br>ID: ${t.id} (${d.role})</div><div><button onclick="app.editUser('${t.id}', '${safeName}', '${d.senha}', '${safeFoto}', '${d.role}')" class="text-blue-500 mr-2"><i class="fas fa-pen"></i></button><button onclick="app.deleteUser('${t.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></div></div>`;
+                 });
+                 const html = `<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"><div class="bg-white w-full max-w-md rounded-xl shadow-lg flex flex-col max-h-[90vh]"><div class="p-4 border-b flex justify-between"><b>Usuários</b><button onclick="this.closest('.fixed').remove()">X</button></div><div class="p-4 overflow-y-auto"><div class="bg-blue-50 p-3 rounded mb-3"><input id="new-id" placeholder="ID" class="w-full mb-2 p-1 border"><input id="new-name" placeholder="Nome" class="w-full mb-2 p-1 border"><input id="new-pass" placeholder="Senha" class="w-full mb-2 p-1 border"><input id="new-foto" placeholder="URL Foto" class="w-full mb-2 p-1 border"><select id="new-role" class="w-full mb-2 p-1 border"><option value="tecnico">Técnico</option><option value="gestor">Gestor</option><option value="visualizador">Visualizador</option></select><button onclick="app.saveUser()" id="btn-save-user" class="w-full bg-blue-600 text-white p-1 rounded">Salvar</button></div><div>${rows}</div></div></div></div>`;
+                 document.body.insertAdjacentHTML('beforeend', html);
+            },
+            
+            editUser(id, n, s, f, r) {
+                document.getElementById('new-id').value = id; document.getElementById('new-id').disabled=true;
+                document.getElementById('new-name').value = n; document.getElementById('new-pass').value = s;
+                document.getElementById('new-foto').value = f;
+                document.getElementById('new-role').value = r; document.getElementById('btn-save-user').innerText = "Atualizar";
+            },
+            
+            async saveUser() {
+                const id = document.getElementById('new-id').value;
+                const data = { 
+                    nome: document.getElementById('new-name').value, 
+                    senha: document.getElementById('new-pass').value,
+                    foto: document.getElementById('new-foto').value,
+                    role: document.getElementById('new-role').value 
+                };
+                if(id && data.nome) { await setDoc(doc(db, "technicians", id), data, {merge:true}); alert("Salvo!"); document.querySelector('.fixed').remove(); this.actionManageUsers(); }
+            },
+            
+            async deleteUser(id) { if(confirm("Deletar?")) { await deleteDoc(doc(db, "technicians", id)); document.querySelector('.fixed').remove(); this.actionManageUsers(); } },
+            
+            async actionWipeDB() { 
+                if(confirm("ATENÇÃO: Isso não apaga dados do servidor, apenas limpa visualizações locais ou requer permissão admin. Contate o suporte para limpeza total.")) {
+                    alert("Função restrita ao Backend por segurança.");
+                }
+            }
+        };
+
+        window.addEventListener('load', () => app.checkSession());
+    </script>
+</body>
+</html>
