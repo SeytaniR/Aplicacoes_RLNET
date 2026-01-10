@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Coletas - RL NET</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
+        .glass-effect { background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(8px); }
+        
+        /* Transições de Rotação para as setas */
+        .chevron { transition: transform 0.3s ease; }
+        .rotate-180 { transform: rotate(180deg); }
+        
+        /* Animação de entrada */
+        .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Estilo da barra de rolagem fina */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-10">
+
+    <!-- CABEÇALHO -->
+    <header class="bg-slate-900 p-4 sticky top-0 z-50 shadow-xl border-b border-slate-800">
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+                <img src="logorlnet.png" alt="RL NET" class="h-8 w-auto object-contain" onerror="this.src='https://i.imgur.com/qndtfM0.png'">
+                <h1 class="text-lg font-bold text-blue-400 border-l border-slate-700 pl-3 ml-1">Histórico</h1>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <a href="coletacto.html" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded text-xs font-bold border border-slate-700 transition flex items-center gap-2">
+                    <i class="fas fa-arrow-left"></i> <span class="hidden sm:inline">VOLTAR</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="bg-slate-900 rounded-lg p-3 border border-slate-800 shadow-inner">
+            <div class="flex justify-between items-center mb-2">
+                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                    <i class="fas fa-filter text-blue-500"></i> Filtros
+                </h2>
+                <div class="text-[10px] text-slate-400">
+                    <span id="contadorResultados" class="text-white font-bold text-lg">0</span> registros
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+                <input type="text" id="filterData" oninput="aplicarFiltros()" placeholder="Data" class="bg-slate-800 border border-slate-700 rounded px-2 py-2 text-xs text-white focus:border-blue-500 outline-none placeholder-slate-500 transition">
+                <input type="text" id="filterTecnico" oninput="aplicarFiltros()" placeholder="Técnico" class="bg-slate-800 border border-slate-700 rounded px-2 py-2 text-xs text-white focus:border-blue-500 outline-none placeholder-slate-500 transition">
+                <input type="text" id="filterOperador" oninput="aplicarFiltros()" placeholder="Operador" class="bg-slate-800 border border-slate-700 rounded px-2 py-2 text-xs text-white focus:border-purple-500 outline-none placeholder-slate-500 transition border-l-2 border-l-purple-500/50">
+                <input type="text" id="filterCto" oninput="aplicarFiltros()" placeholder="CTO" class="bg-slate-800 border border-slate-700 rounded px-2 py-2 text-xs text-white focus:border-blue-500 outline-none placeholder-slate-500 transition">
+                <input type="text" id="filterOs" oninput="aplicarFiltros()" placeholder="O.S." class="bg-slate-800 border border-slate-700 rounded px-2 py-2 text-xs text-white focus:border-blue-500 outline-none placeholder-slate-500 transition">
+                <input type="text" id="filterId" oninput="aplicarFiltros()" placeholder="ID (ex: 39023)" class="bg-slate-800 border border-slate-700 rounded px-2 py-2 text-xs text-orange-400 font-bold placeholder-slate-600 focus:border-orange-500 outline-none transition">
+            </div>
+            <div class="flex justify-end mt-2">
+                <button onclick="limparFiltros()" class="text-[10px] text-slate-500 hover:text-white underline transition">Limpar Filtros</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- LOADING STATE -->
+    <div id="loading" class="flex flex-col items-center justify-center py-20">
+        <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+        <p class="text-slate-500 text-xs uppercase tracking-widest font-bold">Carregando Base...</p>
+    </div>
+
+    <!-- MENSAGEM DE ERRO/VAZIO -->
+    <div id="msgEmpty" class="hidden flex flex-col items-center justify-center py-20 text-slate-600">
+        <i class="fas fa-search fa-2x mb-2 opacity-50"></i>
+        <p class="text-sm">Nada encontrado.</p>
+    </div>
+
+    <!-- LISTA DE RESULTADOS (GRID) -->
+    <main id="resultsContainer" class="p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 hidden max-w-7xl mx-auto">
+        <!-- O JS vai injetar os cards aqui -->
+    </main>
+
+    <script>
+        // *** CONFIGURAÇÃO ***
+        // COLOQUE SUA URL DO GOOGLE SCRIPT AQUI
+        const API_URL = "https://script.google.com/macros/s/AKfycbxwNfHsj_aqI20FepJH1_-AAKZZJel9k-IsESjxm8gFDVVyfOU2oYA21Y1Xtq9nYvDp2w/exec";
+        
+        let rawData = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchData();
+        });
+
+        async function fetchData() {
+            try {
+                // Remove o mock se tiver a URL real
+                // if(API_URL.includes("CHANGE_ME")) { mockData(); return; }
+
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                if (data.error) {
+                    alert("Erro: " + data.error);
+                    return;
+                }
+
+                rawData = data.reverse(); 
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('resultsContainer').classList.remove('hidden');
+                aplicarFiltros();
+
+            } catch (error) {
+                console.error(error);
+                mockData(); // Fallback para visualização
+            }
+        }
+
+        // Dados de teste para visualização sem backend
+        function mockData() {
+            console.warn("Modo Demonstração Ativo");
+            rawData = [
+                { data: "09/01/2026", hora: "14:30", operador: "Atendimento 1", tecnico: "Filipe", cto: "CTO-CENTRO-01", os: "12345", onu: "ONU 1", anotacao: "21-[ID: 39023]" },
+                { data: "09/01/2026", hora: "14:30", operador: "Atendimento 1", tecnico: "Filipe", cto: "CTO-CENTRO-01", os: "12345", onu: "ONU 2", anotacao: "Sinal baixo" },
+                { data: "08/01/2026", hora: "09:00", operador: "Suporte N2", tecnico: "João", cto: "CTO-SUL-05", os: "99887", onu: "ONU 8", anotacao: "Porta travada" },
+                { data: "09/01/2026", hora: "10:00", operador: "Atendimento 2", tecnico: "Carlos", cto: "CTO-NORTE-02", os: "55555", onu: "ONU 5", anotacao: "15-[ID: 99999]" }
+            ];
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('resultsContainer').classList.remove('hidden');
+            aplicarFiltros();
+        }
+
+        function aplicarFiltros() {
+            const fData = document.getElementById('filterData').value.toLowerCase();
+            const fTec = document.getElementById('filterTecnico').value.toLowerCase();
+            const fOp = document.getElementById('filterOperador').value.toLowerCase();
+            const fCto = document.getElementById('filterCto').value.toLowerCase();
+            const fOs = document.getElementById('filterOs').value.toLowerCase();
+            const fId = document.getElementById('filterId').value.trim();
+
+            const filtrados = rawData.filter(item => {
+                const matchData = !fData || item.data.toLowerCase().includes(fData);
+                const matchTec = !fTec || item.tecnico.toLowerCase().includes(fTec);
+                const matchOp = !fOp || (item.operador && item.operador.toLowerCase().includes(fOp));
+                const matchCto = !fCto || item.cto.toLowerCase().includes(fCto);
+                const matchOs = !fOs || item.os.toLowerCase().includes(fOs);
+                
+                let matchId = true;
+                if (fId) {
+                    const regex = /\[ID:\s*(\d+)\]/i;
+                    const match = item.anotacao.match(regex);
+                    if (match && match[1]) {
+                        matchId = match[1].includes(fId);
+                    } else {
+                        matchId = false; 
+                    }
+                }
+
+                return matchData && matchTec && matchCto && matchOs && matchId && matchOp;
+            });
+
+            document.getElementById('contadorResultados').innerText = filtrados.length;
+            renderizarResultados(filtrados);
+        }
+
+        function renderizarResultados(lista) {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = '';
+
+            if (lista.length === 0) {
+                document.getElementById('msgEmpty').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('msgEmpty').classList.add('hidden');
+            }
+
+            const gruposCTO = {};
+            lista.forEach(item => {
+                if (!gruposCTO[item.cto]) gruposCTO[item.cto] = [];
+                gruposCTO[item.cto].push(item);
+            });
+
+            let cardIndex = 0;
+
+            for (const [nomeCto, itemsDaCto] of Object.entries(gruposCTO)) {
+                cardIndex++;
+                const cardId = `cto-${cardIndex}`;
+                
+                // Agrupar por Sessão
+                const sessoes = {};
+                itemsDaCto.forEach(item => {
+                    // Chave única para agrupar batidas do mesmo momento
+                    const chaveSessao = `${item.data}-${item.hora}-${item.tecnico}`;
+                    if (!sessoes[chaveSessao]) sessoes[chaveSessao] = {
+                        meta: { data: item.data, hora: item.hora, tecnico: item.tecnico, operador: item.operador, os: item.os },
+                        itens: []
+                    };
+                    sessoes[chaveSessao].itens.push(item);
+                });
+
+                // HTML das Sessões (Oculto por padrão)
+                let htmlSessoes = '';
+                let sessaoIndex = 0;
+
+                for (const [chave, dadosSessao] of Object.entries(sessoes)) {
+                    sessaoIndex++;
+                    const sessaoId = `${cardId}-sessao-${sessaoIndex}`;
+                    const meta = dadosSessao.meta;
+                    
+                    let htmlItens = dadosSessao.itens.map(item => {
+                        let anotacaoFormatada = item.anotacao.replace(/\[ID:\s*(\d+)\]/g, '<span class="text-orange-300 font-bold bg-orange-900/40 px-1 rounded">ID:$1</span>');
+                        
+                        let estiloLinha = "border-l-2 border-slate-700"; // Padrão
+                        let corTexto = "text-slate-400";
+
+                        if(anotacaoFormatada.includes("SEM_POT")) {
+                            estiloLinha = "border-l-2 border-red-500 bg-red-900/10";
+                            corTexto = "text-red-300 font-semibold";
+                            anotacaoFormatada = anotacaoFormatada.replace("SEM_POTENCIA", "SEM POTÊNCIA");
+                        } else if (anotacaoFormatada.includes("SEM_ID")) {
+                            estiloLinha = "border-l-2 border-yellow-600 bg-yellow-900/10";
+                            corTexto = "text-yellow-500 font-semibold";
+                             anotacaoFormatada = anotacaoFormatada.replace("SEM_ID", "SEM ETIQUETA");
+                        }
+
+                        return `
+                            <div class="flex items-start gap-2 mb-1 pl-2 py-1 ${estiloLinha} text-[11px]">
+                                <span class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded border border-slate-700 font-mono whitespace-nowrap">${item.onu}</span>
+                                <span class="${corTexto} leading-tight break-all">${anotacaoFormatada}</span>
+                            </div>
+                        `;
+                    }).join('');
+
+                    htmlSessoes += `
+                        <div class="mb-2 bg-slate-900/50 rounded border border-slate-700/50 overflow-hidden">
+                            <!-- Cabeçalho da Sessão (Clicável) -->
+                            <div onclick="toggleElement('${sessaoId}')" class="p-2 flex flex-wrap items-center justify-between cursor-pointer hover:bg-slate-800 transition select-none group">
+                                <div class="flex items-center gap-2 text-xs">
+                                    <span class="text-blue-300 font-mono">${meta.data}</span>
+                                    <span class="text-slate-500 border-l border-slate-700 pl-2">${meta.hora}</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-[10px] uppercase font-bold tracking-wide">
+                                    <span class="text-emerald-400 group-hover:text-emerald-300"><i class="fas fa-hard-hat mr-1"></i>${meta.tecnico}</span>
+                                    <i class="fas fa-chevron-down text-slate-600 group-hover:text-slate-400 chevron" id="icon-${sessaoId}"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Detalhes da Sessão (Expandível) -->
+                            <div id="${sessaoId}" class="hidden p-2 bg-slate-950 border-t border-slate-800">
+                                <div class="flex flex-wrap gap-2 mb-2 pb-2 border-b border-slate-800 text-[10px] text-slate-400">
+                                    <span class="bg-slate-900 px-2 py-0.5 rounded"><i class="fas fa-headset text-purple-400 mr-1"></i>Op: ${meta.operador || 'N/A'}</span>
+                                    <span class="bg-slate-900 px-2 py-0.5 rounded"><i class="fas fa-clipboard-list text-blue-400 mr-1"></i>OS: ${meta.os}</span>
+                                </div>
+                                ${htmlItens}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Card Principal da CTO
+                const card = document.createElement('div');
+                card.className = "bg-slate-800 rounded-lg shadow-lg border border-slate-700 hover:border-slate-600 transition flex flex-col animate-fade-in h-fit";
+                
+                card.innerHTML = `
+                    <!-- Cabeçalho CTO -->
+                    <div onclick="toggleElement('${cardId}')" class="p-3 flex items-center justify-between cursor-pointer bg-slate-800 rounded-t-lg select-none group">
+                        <div class="flex items-center gap-3">
+                            <div class="h-8 w-1 bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-100 group-hover:text-blue-300 transition">${nomeCto}</h3>
+                                <p class="text-[10px] text-slate-500">Última: ${itemsDaCto[0].data}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-[10px] bg-slate-700 text-blue-200 px-2 py-1 rounded-full border border-slate-600 font-bold">${Object.keys(sessoes).length} visitas</span>
+                            <i class="fas fa-chevron-down text-slate-500 group-hover:text-white transition chevron" id="icon-${cardId}"></i>
+                        </div>
+                    </div>
+
+                    <!-- Conteúdo CTO (Expandível) -->
+                    <div id="${cardId}" class="hidden p-2 bg-slate-900/30 border-t border-slate-700 rounded-b-lg">
+                        ${htmlSessoes}
+                    </div>
+                `;
+
+                container.appendChild(card);
+            }
+        }
+
+        function toggleElement(id) {
+            const el = document.getElementById(id);
+            const icon = document.getElementById(`icon-${id}`);
+            
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                if(icon) icon.classList.add('rotate-180');
+            } else {
+                el.classList.add('hidden');
+                if(icon) icon.classList.remove('rotate-180');
+            }
+        }
+
+        function limparFiltros() {
+            ['filterData', 'filterTecnico', 'filterOperador', 'filterCto', 'filterOs', 'filterId'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            aplicarFiltros();
+        }
+    </script>
+</body>
+</html>
