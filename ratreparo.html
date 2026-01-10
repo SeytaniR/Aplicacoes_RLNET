@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RAT S.A.L.V.A. - RL NET v1.0</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: #334155; -webkit-tap-highlight-color: transparent; padding-bottom: 180px; }
+
+        /* --- CORES DO MÉTODO S.A.L.V.A. --- */
+        :root { 
+            --color-s: #3b82f6; /* Sondar - Azul */
+            --color-a: #eab308; /* Analisar - Amarelo */
+            --color-l: #f97316; /* Localizar - Laranja */
+            --color-v: #22c55e; /* Validar - Verde */
+            --color-ap: #8b5cf6; /* Apresentar - Roxo */
+        }
+
+        /* --- UI ELEMENTS --- */
+        .step-nav { display: flex; overflow-x: auto; gap: 5px; padding: 10px; background: white; border-bottom: 1px solid #e2e8f0; position: sticky; top: 60px; z-index: 40; scrollbar-width: none; }
+        .step-btn { 
+            flex: 0 0 auto; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; 
+            border: 1px solid #cbd5e1; color: #64748b; transition: all 0.2s; display: flex; align-items: center; gap: 5px;
+        }
+        .step-btn.active { background: #1e293b; color: white; border-color: #1e293b; transform: scale(1.05); }
+        
+        /* Cores passos */
+        .step-btn[data-step="s"].active { background: var(--color-s); border-color: var(--color-s); }
+        .step-btn[data-step="a"].active { background: var(--color-a); border-color: var(--color-a); color: #422006; }
+        .step-btn[data-step="l"].active { background: var(--color-l); border-color: var(--color-l); }
+        .step-btn[data-step="v"].active { background: var(--color-v); border-color: var(--color-v); }
+        .step-btn[data-step="ap"].active { background: var(--color-ap); border-color: var(--color-ap); }
+
+        .section-card { position: relative; background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 10px; padding: 15px; border: 1px solid #e2e8f0; display: none; animation: fadeIn 0.3s; overflow: hidden; }
+        .section-card.active { display: block; }
+        
+        .section-title { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; padding-bottom: 8px; border-bottom: 2px solid #f1f5f9; position: relative; z-index: 10; }
+        .section-desc { font-size: 0.7rem; color: #64748b; font-style: italic; margin-bottom: 15px; display: block; position: relative; z-index: 10; }
+
+        /* INPUTS */
+        .input-group { margin-bottom: 10px; position: relative; z-index: 10; }
+        .input-label { font-size: 0.65rem; font-weight: 700; color: #64748b; margin-bottom: 3px; display: block; text-transform: uppercase; }
+        .input-field { 
+            width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; 
+            background-color: #fff; transition: all 0.2s; 
+        }
+        .input-field:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1); }
+        .input-field.error { border-color: #ef4444; background-color: #fef2f2; animation: shake 0.3s; }
+        .input-field:disabled { background-color: #f8fafc; color: #94a3b8; }
+        .uppercase-input { text-transform: uppercase; }
+
+        /* CHECKBOXES & RADIOS */
+        .check-card { display: flex; align-items: center; background: #f8fafc; padding: 8px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 4px; cursor: pointer; transition: 0.2s; font-size: 0.75rem; position: relative; z-index: 10; }
+        .check-card input { width: 16px; height: 16px; margin-right: 8px; accent-color: #3b82f6; flex-shrink: 0; }
+        .check-card.checked { background: #eff6ff; border-color: #bfdbfe; }
+        
+        /* CRITICAL CHECKBOX (TRAVA) */
+        .critical-check { background: #fef2f2; border-color: #fecaca; }
+        .critical-check.checked { background: #ecfdf5; border-color: #86efac; }
+        .critical-check input { accent-color: #16a34a; }
+
+        /* FOOTER */
+        .footer-fixed {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: white; border-top: 1px solid #e2e8f0; padding: 10px; z-index: 50;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+        }
+        .btn-action { width: 100%; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+        .btn-primary { background: #1e293b; color: white; }
+        .btn-success { background: #16a34a; color: white; }
+        .btn-primary:disabled, .btn-success:disabled { background: #cbd5e1; cursor: not-allowed; opacity: 0.7; }
+        .btn-api { background: #3b82f6; color: white; height: 38px; font-size: 0.8rem; padding: 0 15px; border-radius: 6px; font-weight: 700; }
+
+        /* ASSINATURA */
+        .sig-box { width: 100%; height: 160px; background: #fff; border: 2px dashed #cbd5e1; border-radius: 6px; position: relative; touch-action: none; overflow: hidden; z-index: 10; }
+        canvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
+
+        /* ALERTAS */
+        .alert-box { padding: 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; margin-bottom: 10px; position: relative; z-index: 10; }
+        .alert-error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        .alert-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+        
+        /* PRINT STYLES (PDF NATIVO) */
+        @media print {
+            .no-print, .step-nav, .footer-fixed, .alert-box, button, #summary_modal, #save_indicator { display: none !important; }
+            body { background: white; padding: 0; color: black; font-size: 10pt; }
+            #main_content { max-width: 100%; padding: 0; margin: 0; }
+            /* Header Logo */
+            #print_header { display: flex !important; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+            /* Forçar exibição de todos os blocos com QUEBRA PROIBIDA DENTRO DO BLOCO */
+            .section-card { 
+                display: block !important; 
+                opacity: 1 !important;
+                visibility: visible !important;
+                border: none; 
+                box-shadow: none; 
+                margin-bottom: 15px; 
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+                padding: 0;
+                position: relative; /* Mantém contexto para marca d'água */
+                overflow: hidden; /* Garante que nada vaze */
+            }
+            .section-title { border-bottom: 1px solid #000; color: #000; margin-bottom: 5px; font-size: 11pt; }
+            .section-desc { display: none; }
+            /* Estilo dos campos */
+            .input-field { border: none; border-bottom: 1px dotted #999; padding: 0; background: transparent !important; font-weight: 600; font-size: 10pt; }
+            .input-field::placeholder { color: transparent; }
+            select.input-field { appearance: none; -webkit-appearance: none; background-image: none; padding-right: 0; }
+            
+            /* Checkboxes Visual */
+            .check-card { background: transparent; border: none; padding: 0; margin-bottom: 1px; }
+            .check-card input { display: none; } 
+            .check-card.checked::before { content: "[x] "; font-weight: bold; }
+            .check-card:not(.checked)::before { content: "[ ] "; color: #999; }
+            
+            /* Labels internos para bobinas */
+            .print-label { display: block !important; font-size: 7pt; color: #666; font-weight: bold; text-transform: uppercase; line-height: 1; }
+            
+            /* Assinatura */
+            .sig-box { border: 1px solid #000; height: 80px; }
+            canvas { border: none; }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+    </style>
+</head>
+<body>
+
+    <!-- SUMMARY MODAL -->
+    <div id="summary_modal" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-lg p-4 w-full max-w-md shadow-xl flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center mb-3 border-b pb-2">
+                <h3 class="font-bold text-gray-800 text-lg"><i class="fas fa-file-alt text-blue-600"></i> Resumo S.A.L.V.A.</h3>
+                <button onclick="closeSummary()" class="text-gray-500 hover:text-red-500"><i class="fas fa-times fa-lg"></i></button>
+            </div>
+            <div class="flex-grow overflow-y-auto mb-3">
+                <textarea id="summary_text" class="w-full h-64 p-3 bg-gray-50 border rounded text-xs font-mono" readonly></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="copySummary()" class="btn-success py-2 rounded font-bold text-xs shadow">
+                    <i class="fas fa-copy mr-1"></i> COPIAR
+                </button>
+                <button onclick="printNative()" class="bg-blue-600 text-white py-2 rounded font-bold text-xs shadow">
+                    <i class="fas fa-print mr-1"></i> GERAR PDF
+                </button>
+            </div>
+            <p id="copy_status" class="text-center text-[10px] text-green-600 font-bold mt-2 h-4"></p>
+        </div>
+    </div>
+
+    <!-- HEADER (SCREEN) -->
+    <div id="screen_header" class="bg-white p-3 border-b border-gray-200 flex justify-between items-center sticky top-0 z-50 no-print" style="height: 60px;">
+        <div class="flex items-center gap-2">
+            <img src="logorlnet.png" alt="RL NET" class="h-8 object-contain" onerror="this.style.display='none'">
+            <div>
+                <h1 class="text-lg font-black text-slate-800 leading-none">RAT <span class="text-blue-600">S.A.L.V.A.</span></h1>
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">RL NET v1.0 @ Filipe Cruz</p>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <a href="index.html" class="bg-gray-100 text-slate-700 px-3 py-1 rounded font-bold text-[10px] flex items-center gap-1 hover:bg-gray-200 border border-gray-300" title="Menu de Apps">
+                <i class="fas fa-home"></i> LAUNCHER
+            </a>
+            <button onclick="novaRat()" class="bg-red-50 text-red-600 px-2 py-1 rounded border border-red-100 text-[10px] font-bold">
+                <i class="fas fa-trash-alt mr-1"></i> LIMPAR
+            </button>
+        </div>
+    </div>
+
+    <!-- HEADER (PRINT) -->
+    <div id="print_header" class="hidden">
+        <img src="logorlnet.png" alt="RL NET" class="h-10 object-contain" onerror="this.style.display='none'">
+        <div class="text-right">
+            <h1 class="text-xl font-black">RAT DIGITAL S.A.L.V.A.</h1>
+            <p class="text-xs">Registro de Atendimento Técnico</p>
+        </div>
+    </div>
+
+    <!-- NAVEGAÇÃO S.A.L.V.A. -->
+    <div class="step-nav no-print">
+        <button class="step-btn active" data-step="init" onclick="goToStep('init')"><i class="fas fa-user"></i> ID</button>
+        <button class="step-btn" data-step="s" onclick="goToStep('s')">S - SONDAR</button>
+        <button class="step-btn" data-step="a" onclick="goToStep('a')">A - ANALISAR</button>
+        <button class="step-btn" data-step="l" onclick="goToStep('l')">L - LIMPAR</button>
+        <button class="step-btn" data-step="v" onclick="goToStep('v')">V - VALIDAR</button>
+        <button class="step-btn" data-step="ap" onclick="goToStep('ap')">A - APRESENTAR</button>
+    </div>
+
+    <!-- AUTO SAVE INDICATOR -->
+    <div id="save_indicator" class="fixed top-2 right-2 text-[8px] bg-green-100 text-green-700 px-2 py-1 rounded border border-green-200 hidden z-[60] no-print">
+        <i class="fas fa-save"></i> Salvo Localmente
+    </div>
+
+    <div id="main_content" class="p-3 max-w-2xl mx-auto">
+        
+        <!-- STEP: IDENTIFICAÇÃO (INIT) -->
+        <div id="step_init" class="section-card active">
+            
+            <div class="section-title text-slate-700"><i class="fas fa-id-card"></i> IDENTIFICAÇÃO</div>
+            <span class="section-desc">Identifique a O.S., o cliente e o técnico responsável.</span>
+            
+            <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 mb-4 no-print">
+                <label class="input-label text-blue-800">BUSCAR O.S. (IXC)</label>
+                <div class="flex gap-2">
+                    <input type="number" id="search_os_id" class="input-field" placeholder="Nº da OS">
+                    <button onclick="buscarOS()" id="btn_buscar" class="btn-api">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <p id="api_status" class="text-[10px] mt-1 text-gray-500 italic"></p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div class="input-group">
+                    <label class="input-label">Nº O.S. *</label>
+                    <input type="number" id="os_id" class="input-field font-bold bg-gray-50 text-center required">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">ID Contrato</label>
+                    <input type="number" id="contrato_id" class="input-field bg-gray-50 text-center">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Cliente *</label>
+                <input type="text" id="cliente_nome" class="input-field uppercase-input required">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Endereço</label>
+                <input type="text" id="cliente_endereco" class="input-field uppercase-input text-xs">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div class="input-group">
+                    <label class="input-label">Técnico *</label>
+                    <input type="text" id="tec_nome" class="input-field uppercase-input required" placeholder="SEU NOME">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Data *</label>
+                    <input type="date" id="data_exec" class="input-field required">
+                </div>
+            </div>
+
+            <!-- NOVOS CAMPOS: HORA E TAXA -->
+             <div class="grid grid-cols-2 gap-3 border-t pt-2 mt-2">
+                <div class="input-group">
+                    <label class="input-label">Entrada *</label>
+                    <input type="time" id="hora_entrada" class="input-field required text-center">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Saída *</label>
+                    <input type="time" id="hora_saida" class="input-field required text-center">
+                </div>
+            </div>
+
+            <div class="input-group border-t pt-2">
+                <label class="input-label">Taxa *</label>
+                <div class="flex gap-2">
+                    <select id="taxa_tipo" class="input-field required w-1/2" onchange="toggleTaxaValor()">
+                        <option value="Isenta">Isenta</option>
+                        <option value="Cobrada">Cobrada</option>
+                    </select>
+                    <input type="text" id="taxa_valor" class="input-field w-1/2 hidden" placeholder="R$ 0,00" oninput="maskMoney(this)">
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP: S - SONDAR -->
+        <div id="step_s" class="section-card">
+            
+            <div class="section-title text-blue-600 border-blue-100">
+                <span class="bg-blue-600 text-white w-6 h-6 rounded flex items-center justify-center text-xs">S</span> SONDAR (DIAGNÓSTICO HUMANO)
+            </div>
+            <span class="section-desc">Entenda a dor do cliente, escute o problema e verifique o cenário inicial.</span>
+            
+            <div class="mb-4">
+                <label class="input-label mb-2">1. ESCUTA ATIVA (RECLAMAÇÃO DO CLIENTE)</label>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <label class="check-card"><input type="checkbox" name="reclamacao" value="Lentidão"> Lentidão</label>
+                    <label class="check-card"><input type="checkbox" name="reclamacao" value="Quedas"> Quedas</label>
+                    <label class="check-card"><input type="checkbox" name="reclamacao" value="Wi-Fi Fraco"> Wi-Fi Fraco</label>
+                    <label class="check-card"><input type="checkbox" name="reclamacao" value="Sem Acesso"> Sem Acesso</label>
+                    <label class="check-card"><input type="checkbox" name="reclamacao" value="Estética"> Estética</label>
+                    <label class="check-card"><input type="checkbox" name="reclamacao" value="Adequações"> Adequações</label>
+                    <label class="check-card"><input type="checkbox" name="reclamacao" value="Inclusões"> Inclusões</label>
+                    <label class="check-card"><input type="checkbox" name="reclamacao" value="Trocas"> Trocas</label>
+                    <label class="check-card"><input type="checkbox" name="reclamacao" value="Cabeamentos"> Cabeamentos</label>
+                    <label class="check-card"><input type="checkbox" name="reclamacao" value="Configurações"> Configurações</label>
+                    <label class="check-card"><input type="checkbox" name="reclamacao" value="Dúvidas"> Dúvidas</label>
+                    <label class="check-card"><input type="checkbox" name="reclamacao" value="Tratativa de Insatisfação"> Tratativa de Insatisfação</label>
+                </div>
+                <input type="text" id="reclamacao_outros" class="input-field mt-2 text-xs" placeholder="Outros (descreva)...">
+            </div>
+
+            <div class="mb-2">
+                <label class="input-label mb-2">2. INSPEÇÃO VISUAL (LEDS ONU)</label>
+                <div class="flex gap-2 mb-2">
+                    <select id="led_pon" class="input-field text-xs">
+                        <option value="">Status PON...</option>
+                        <option value="Estável">🟢 PON Estável</option>
+                        <option value="Piscando">🟡 PON Piscando</option>
+                        <option value="Apagado">🔴 PON Apagado</option>
+                    </select>
+                    <select id="led_los" class="input-field text-xs">
+                        <option value="">Status LOS...</option>
+                        <option value="Apagado">🟢 LOS Apagado</option>
+                        <option value="Piscando">🔴 LOS Piscando</option>
+                    </select>
+                </div>
+            </div>
+            <textarea id="obs_sondagem" class="input-field h-16 text-xs" placeholder="Detalhes do relato do cliente..."></textarea>
+        </div>
+
+        <!-- STEP: A - ANALISAR -->
+        <div id="step_a" class="section-card">
+            
+            <div class="section-title text-yellow-600 border-yellow-100">
+                <span class="bg-yellow-500 text-white w-6 h-6 rounded flex items-center justify-center text-xs">A</span> ANALISAR (TÉCNICO)
+            </div>
+            <span class="section-desc">Meça os níveis de sinal (max 2dB de perda da CTO) e inspecione a integridade física da rede.</span>
+
+            <div class="alert-box bg-blue-50 text-blue-800 border-blue-200 mb-3">
+                <i class="fas fa-info-circle"></i> Padrão RL NET: max 2dB da CTO até o IXC
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div class="input-group col-span-2">
+                    <label class="input-label">Potência IXC (Referência)</label>
+                    <input type="tel" id="pot_ixc" class="input-field text-center font-mono" placeholder="-xx,xxdBm" oninput="maskDBM(this)">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Medido CTO</label>
+                    <input type="tel" id="pot_cto" class="input-field text-center font-mono required" placeholder="-xx,xxdBm" oninput="maskDBM(this)">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Medido Cliente</label>
+                    <input type="tel" id="pot_cli" class="input-field text-center font-mono font-bold required" placeholder="-xx,xxdBm" oninput="maskDBM(this); validatePower(this)">
+                </div>
+            </div>
+
+            <div id="power_alert" class="alert-box alert-error hidden">
+                <i class="fas fa-exclamation-triangle"></i> SINAL FORA DO PADRÃO!
+            </div>
+
+            <div class="border-t pt-3 mt-2">
+                <label class="input-label mb-2">INSPEÇÃO INFRAESTRUTURA (Selecionar 1)</label>
+                <div class="grid grid-cols-1 gap-2 text-xs">
+                    <label class="check-card"><input type="radio" name="infra_status" value="Drop não verificado" checked> Drop não verificado</label>
+                    <label class="check-card"><input type="radio" name="infra_status" value="Drop Íntegro"> Drop Íntegro</label>
+                    <label class="check-card"><input type="radio" name="infra_status" value="Drop com Emenda"> Drop com Emenda</label>
+                    <label class="check-card"><input type="radio" name="infra_status" value="Drop Danificado"> Drop Danificado</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP: L - LOCALIZAR/LIMPAR -->
+        <div id="step_l" class="section-card">
+            
+            <div class="section-title text-orange-600 border-orange-100">
+                <span class="bg-orange-500 text-white w-6 h-6 rounded flex items-center justify-center text-xs">L</span> LOCALIZAR & LIMPAR (EXECUÇÃO)
+            </div>
+            <span class="section-desc">Execute o reparo ou instalação com higiene (lenço/caneta) e precisão.</span>
+
+            <!-- Trava de Higiene -->
+            <div class="mb-4">
+                <label class="check-card critical-check font-bold text-xs" id="hygiene_container">
+                    <input type="checkbox" id="check_higiene" onchange="toggleHygiene(this)">
+                    CONFERIDA VOLTAGEM E AMPERAGEM DAS FONTES? *
+                </label>
+            </div>
+
+            <div class="mb-3">
+                <label class="input-label">SERVIÇOS REALIZADOS (Múltipla Escolha)</label>
+                <div class="grid grid-cols-2 gap-1 text-[10px]">
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Conector Externo"> Conector Externo</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Conector Interno"> Conector Interno</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Conector na Emenda"> Conector na Emenda</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Conectores RJ45"> Conectores RJ45</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Acoplador Externo"> Acoplador Externo</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Acoplador ONU"> Acoplador ONU</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Adição de Emenda"> Adição de Emenda</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Remoção de Emenda"> Remoção de Emenda</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Emenda Mantida"> Emenda Mantida</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Problema de Infra"> Problema de Infra</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Troca Drop Completo"> Troca Drop Completo</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Troca Drop Parcial"> Troca Drop Parcial</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Adequação de Drop"> Adequação de Drop</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Cabo UTP Trocado"> Cabo UTP Trocado</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Cabo UTP Lançado"> Cabo UTP Lançado</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Troca de ONU"> Troca de ONU</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Troca de ONT"> Troca de ONT</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Troca de Roteador"> Troca de Roteador</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Troca de Fonte"> Troca de Fonte</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Troca de Câmera"> Troca de Câmera</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Troca de TV Box"> Troca de TV Box</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Outros Equipamentos"> Outros Equipamentos</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Configs e Testes"> Configs e Testes</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Instalação de Apps"> Instalação de Apps</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Orientação ao Cliente"> Orientação ao Cliente</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Improdutiva"> Improdutiva</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="CTO Batida"> CTO Batida</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Uso de 1x2"> Uso de 1x2</label>
+                    <label class="check-card"><input type="checkbox" name="servico_tipo" value="Outros"> Outros</label>
+                </div>
+            </div>
+
+            <!-- CALCULADORA DROP -->
+            <div class="bg-gray-50 p-2 rounded mb-3 border border-gray-200">
+                <label class="input-label text-center mb-1 text-blue-700">BOBINA DROP</label>
+                <div class="grid grid-cols-4 gap-1 mb-1">
+                    <div>
+                        <span class="print-label hidden">ID</span>
+                        <input type="number" id="drop_id" class="input-field text-[10px] text-center px-1" placeholder="ID">
+                    </div>
+                    <div>
+                        <span class="print-label hidden">INI</span>
+                        <input type="number" id="drop_ini" class="input-field text-[10px] text-center px-1" placeholder="Início" oninput="calcCabo('drop')">
+                    </div>
+                    <div>
+                        <span class="print-label hidden">FIM</span>
+                        <input type="number" id="drop_fim" class="input-field text-[10px] text-center px-1" placeholder="Fim" oninput="calcCabo('drop')">
+                    </div>
+                    <div>
+                        <span class="print-label hidden">TOTAL</span>
+                        <input type="text" id="drop_total" class="input-field text-[10px] text-center font-bold bg-gray-100" placeholder="Total" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALCULADORA UTP -->
+            <div class="bg-gray-50 p-2 rounded mb-3 border border-gray-200">
+                <label class="input-label text-center mb-1 text-slate-700">BOBINA UTP</label>
+                <div class="grid grid-cols-4 gap-1 mb-1">
+                    <div>
+                        <span class="print-label hidden">ID</span>
+                        <input type="number" id="utp_id" class="input-field text-[10px] text-center px-1" placeholder="ID">
+                    </div>
+                    <div>
+                        <span class="print-label hidden">INI</span>
+                        <input type="number" id="utp_ini" class="input-field text-[10px] text-center px-1" placeholder="Início" oninput="calcCabo('utp')">
+                    </div>
+                    <div>
+                        <span class="print-label hidden">FIM</span>
+                        <input type="number" id="utp_fim" class="input-field text-[10px] text-center px-1" placeholder="Fim" oninput="calcCabo('utp')">
+                    </div>
+                    <div>
+                        <span class="print-label hidden">TOTAL</span>
+                        <input type="text" id="utp_total" class="input-field text-[10px] text-center font-bold bg-gray-100" placeholder="Total" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <label class="input-label">TROCA DE EQUIPAMENTO?</label>
+                <div class="grid grid-cols-2 gap-2 text-xs mb-2">
+                    <input type="text" id="eq_retirado" class="input-field" placeholder="Retirado (Modelo)">
+                    <input type="text" id="eq_colocado" class="input-field" placeholder="Colocado (Modelo)">
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <label class="input-label">CONECTORES</label>
+                <input type="number" id="mat_conector" class="input-field text-xs w-24" placeholder="Qtd.">
+            </div>
+
+            <textarea id="obs_execucao" class="input-field h-16 text-xs" placeholder="Descreva o que foi feito na rede..."></textarea>
+        </div>
+
+        <!-- STEP: V - VALIDAR -->
+        <div id="step_v" class="section-card">
+            
+            <div class="section-title text-green-600 border-green-100">
+                <span class="bg-green-600 text-white w-6 h-6 rounded flex items-center justify-center text-xs">V</span> VALIDAR (PROVA REAL)
+            </div>
+            <span class="section-desc">Garanta que o serviço entregue está funcionando perfeitamente (Velocidade e Alcance).</span>
+
+            <div class="alert-box bg-green-50 text-green-800 border-green-200 mb-3 text-xs">
+                <i class="fas fa-network-wired"></i> Teste via CABO obrigatório.
+            </div>
+
+            <div class="mb-4 bg-gray-50 p-2 rounded border">
+                <label class="input-label mb-1">TESTE CABO</label>
+                <div class="grid grid-cols-3 gap-2">
+                    <input type="number" id="test_cabo_down" class="input-field font-bold text-center required text-xs" placeholder="Down (Mb)">
+                    <input type="number" id="test_cabo_up" class="input-field font-bold text-center required text-xs" placeholder="Up (Mb)">
+                    <div class="relative">
+                        <input type="text" id="test_cabo_ping" class="input-field text-center required text-xs" placeholder="Ping 8.8.8.8 (xxxms)" oninput="maskPing(this, 'google')">
+                        <span id="ping_google_status" class="absolute right-1 top-1.5 text-[10px]"></span>
+                    </div>
+                </div>
+                <div class="relative mt-2">
+                    <input type="text" id="test_cabo_ping_dns" class="input-field text-center text-xs" placeholder="Ping DNS 45.165.84.10 (xxxms)" oninput="maskPing(this, 'dns')">
+                    <span id="ping_dns_status" class="absolute right-1 top-1.5 text-[10px]"></span>
+                </div>
+                <div class="mt-2 flex items-center gap-2">
+                    <input type="text" id="ipv6_nota" class="input-field text-xs w-24 text-center" placeholder="xx/10" oninput="maskIPv6(this)">
+                    <label class="text-xs font-bold flex items-center cursor-pointer">
+                        <input type="checkbox" id="ipv6_off" class="mr-1" onchange="toggleIPv6(this)"> IPv6 OFF
+                    </label>
+                </div>
+            </div>
+
+            <div class="mb-4 bg-gray-50 p-2 rounded border">
+                <label class="input-label mb-1">MAPEAMENTO ALCANCE WI-FI</label>
+                <div id="wifi_map_container">
+                    <!-- Gerado via JS ou Estático -->
+                    <div class="grid grid-cols-12 gap-1 mb-1 items-center wifi-row">
+                        <div class="col-span-5">
+                            <select class="input-field text-xs p-1 h-8 wifi-room">
+                                <option value="" disabled selected>Cômodo...</option>
+                                <option value="Sala">Sala</option>
+                                <option value="Quarto Princ.">Quarto Princ.</option>
+                                <option value="Quarto 2">Quarto 2</option>
+                                <option value="Cozinha">Cozinha</option>
+                                <option value="Banheiro">Banheiro</option>
+                                <option value="Frente">Frente</option>
+                                <option value="Fundos">Fundos</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                        <div class="col-span-5">
+                            <input type="text" class="input-field text-xs p-1 h-8 text-center wifi-dbm" placeholder="-xxdBm" oninput="maskWifiDBM(this)">
+                        </div>
+                        <div class="col-span-2 text-center">
+                            <i class="fas fa-wifi text-gray-300 wifi-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="addWifiRow()" class="w-full text-[10px] text-blue-600 font-bold border border-blue-200 rounded py-1 mt-1 bg-white hover:bg-blue-50 no-print">
+                    <i class="fas fa-plus"></i> Adicionar Cômodo
+                </button>
+            </div>
+        </div>
+
+        <!-- STEP: A - APRESENTAR -->
+        <div id="step_ap" class="section-card">
+            
+            <div class="section-title text-purple-600 border-purple-100">
+                <span class="bg-purple-600 text-white w-6 h-6 rounded flex items-center justify-center text-xs">A</span> APRESENTAR (ENCANTAMENTO)
+            </div>
+            <span class="section-desc">Finalize com organização, limpeza e instrução ao cliente.</span>
+
+            <div class="mb-4 space-y-2">
+                <label class="check-card critical-check font-bold text-xs">
+                    <input type="checkbox" id="check_organizado" onchange="validateFinal()">
+                    <i class="fas fa-magic mr-2 text-purple-600"></i> Cabos organizados (Velcro/Abraçadeira)?
+                </label>
+                <label class="check-card critical-check font-bold text-xs">
+                    <input type="checkbox" id="check_lixo" onchange="validateFinal()">
+                    <i class="fas fa-trash mr-2 text-purple-600"></i> Lixo recolhido (Lixo Zero)?
+                </label>
+                <label class="check-card critical-check font-bold text-xs">
+                    <input type="checkbox" id="check_mostrou" onchange="validateFinal()">
+                    <i class="fas fa-mobile-alt mr-2 text-purple-600"></i> Resultado mostrado ao cliente?
+                </label>
+                <label class="check-card critical-check font-bold text-xs">
+                    <input type="checkbox" id="check_fotos" onchange="validateFinal()">
+                    <i class="fas fa-camera mr-2 text-purple-600"></i> Fotos evidenciadas?
+                </label>
+                <label class="check-card critical-check font-bold text-xs">
+                    <input type="checkbox" id="check_orientou" onchange="validateFinal()">
+                    <i class="fas fa-comment mr-2 text-purple-600"></i> Cliente orientado?
+                </label>
+                <!-- NEW OPTIONAL CHECKBOX -->
+                <label class="check-card font-bold text-xs">
+                    <input type="checkbox" id="check_apps_ok">
+                    <i class="fas fa-play-circle mr-2 text-blue-600"></i> Apps instalados / orientados?
+                </label>
+            </div>
+
+            <div class="mb-3 border-t pt-3">
+                <label class="input-label mb-2">QUEM ACOMPANHOU?</label>
+                <div class="flex gap-4 mb-2 text-xs">
+                    <label class="flex items-center"><input type="radio" name="resp_tipo" value="Titular" checked onclick="toggleResponsavel(false)" class="mr-1"> Titular</label>
+                    <label class="flex items-center"><input type="radio" name="resp_tipo" value="Responsável" onclick="toggleResponsavel(true)" class="mr-1"> Responsável</label>
+                </div>
+                
+                <div id="area_responsavel" class="hidden bg-purple-50 p-2 rounded border border-purple-100 mb-2">
+                    <input type="text" id="resp_nome" class="input-field mb-2 text-xs" placeholder="Nome Responsável">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="tel" id="resp_cpf" class="input-field text-xs" placeholder="CPF" oninput="maskCPF(this)">
+                        <input type="tel" id="resp_contato" class="input-field text-xs" placeholder="Contato" oninput="maskPhone(this)">
+                    </div>
+                </div>
+
+                <label class="input-label mt-2">ASSINATURA</label>
+                <div class="sig-box mb-1" id="sig_wrapper">
+                    <canvas id="sig_cli"></canvas>
+                </div>
+                <button onclick="clearSig('sig_cli')" class="text-[10px] text-red-500 underline font-bold">Limpar Assinatura</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-fixed no-print">
+        <div id="lock_msg" class="text-[10px] text-red-500 text-center font-bold mb-2 hidden">
+            <i class="fas fa-lock"></i> PENDÊNCIAS: Higiene, Testes, Identificação ou Apresentação.
+        </div>
+        <div class="flex gap-2">
+            <button id="btn_prev" onclick="nav(-1)" class="flex-1 bg-gray-100 text-gray-600 py-3 rounded font-bold text-xs hidden">VOLTAR</button>
+            <button id="btn_next" onclick="nav(1)" class="flex-[2] bg-slate-800 text-white py-3 rounded font-bold text-xs">PRÓXIMO</button>
+            <button id="btn_finish" onclick="finishRAT()" class="flex-[2] bg-green-600 text-white py-3 rounded font-bold text-xs hidden shadow-lg shadow-green-200">
+                FINALIZAR <i class="fas fa-check ml-1"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // CONFIG & STATE
+        let currentStepIndex = 0;
+        const steps = ['init', 's', 'a', 'l', 'v', 'ap'];
+        const apiUrl = 'https://unfurrowed-nonesthetically-zachery.ngrok-free.dev';
+        const sheetsUrl = 'https://script.google.com/macros/s/AKfycbywqLg5llMP8F6DzdoLeiRMazIBRhnFFGeL3KayW35Pq7Og9k2EeGrPcQykWXZ1CMzn/exec';
+        const LOCAL_STORAGE_KEY = 'rat_salva_rlnet_v1_auto';
+
+        // INIT
+        window.onload = () => {
+            restoreLocal(); // RESTORE DATA
+            const today = new Date().toISOString().split('T')[0];
+            if(!document.getElementById('data_exec').value) {
+                document.getElementById('data_exec').value = today;
+            }
+            updateNavUI();
+            
+            // Auto-save listeners
+            document.querySelectorAll('input, select, textarea').forEach(el => {
+                el.addEventListener('input', saveLocal);
+                el.addEventListener('change', saveLocal);
+                // Ensure checked class is updated
+                if(el.type === 'checkbox' || el.type === 'radio') {
+                    el.addEventListener('change', () => {
+                        saveLocal();
+                        updateCheckVisuals();
+                    });
+                }
+            });
+            updateCheckVisuals();
+        };
+
+        // VISUAL HELPER FOR CHECKBOXES IN PDF
+        function updateCheckVisuals() {
+            document.querySelectorAll('.check-card input').forEach(inp => {
+                if(inp.checked) inp.parentElement.classList.add('checked');
+                else inp.parentElement.classList.remove('checked');
+            });
+        }
+
+        // --- LOCAL STORAGE ---
+        function saveLocal() {
+            const data = {};
+            // Text inputs, selects
+            document.querySelectorAll('input:not([type=checkbox]):not([type=radio]), select, textarea').forEach(el => {
+                if(el.id) data[el.id] = el.value;
+            });
+            // Checkboxes
+            document.querySelectorAll('input[type=checkbox]').forEach(el => {
+                if(el.id) data[el.id] = el.checked;
+                else if(el.name) {
+                    if(!data[el.name]) data[el.name] = [];
+                    if(el.checked) data[el.name].push(el.value);
+                }
+            });
+            // Radios
+            document.querySelectorAll('input[type=radio]:checked').forEach(el => {
+                if(el.name) data[el.name] = el.value;
+            });
+            
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+            
+            // Show saved indicator
+            const ind = document.getElementById('save_indicator');
+            if(ind) {
+                ind.classList.remove('hidden');
+                setTimeout(() => ind.classList.add('hidden'), 1000);
+            }
+        }
+
+        function restoreLocal() {
+            const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if(!stored) return;
+            try {
+                const data = JSON.parse(stored);
+                // Restore fields by ID
+                Object.keys(data).forEach(k => {
+                    const el = document.getElementById(k);
+                    if(el) {
+                        if(el.type === 'checkbox') el.checked = data[k];
+                        else el.value = data[k];
+                    }
+                });
+                
+                // Restore Checkbox Groups (Arrays)
+                ['reclamacao', 'servico_tipo', 'infra_status'].forEach(name => {
+                    if(data[name] && Array.isArray(data[name])) {
+                        data[name].forEach(val => {
+                            const cb = document.querySelector(`input[name="${name}"][value="${val}"]`);
+                            if(cb) cb.checked = true;
+                        });
+                    }
+                });
+
+                // Restore Radios
+                if(data['infra_status'] && typeof data['infra_status'] === 'string') {
+                     const rb = document.querySelector(`input[name="infra_status"][value="${data['infra_status']}"]`);
+                     if(rb) rb.checked = true;
+                }
+                
+                if(data['resp_tipo']) {
+                    const rb = document.querySelector(`input[name="resp_tipo"][value="${data['resp_tipo']}"]`);
+                    if(rb) {
+                        rb.checked = true;
+                        toggleResponsavel(data['resp_tipo'] === 'Responsável');
+                    }
+                }
+
+                if(document.querySelectorAll('.wifi-row').length === 0) addWifiRow();
+
+            } catch(e) { console.error("Restore error", e); }
+        }
+
+        // NAVIGATION
+        function goToStep(stepId) {
+            const idx = steps.indexOf(stepId);
+            if(idx !== -1) {
+                currentStepIndex = idx;
+                updateNavUI();
+            }
+        }
+
+        function nav(dir) {
+            const nextIdx = currentStepIndex + dir;
+            if(nextIdx >= 0 && nextIdx < steps.length) {
+                currentStepIndex = nextIdx;
+                updateNavUI();
+            }
+        }
+
+        function updateNavUI() {
+            // Hide all sections
+            document.querySelectorAll('.section-card').forEach(el => el.classList.remove('active'));
+            // Show current
+            const currentId = steps[currentStepIndex];
+            document.getElementById(`step_${currentId}`).classList.add('active');
+            
+            // Se for a aba de apresentação, inicializa/redimensiona o canvas
+            if(currentId === 'ap') {
+                setTimeout(() => initCanvas('sig_cli'), 100);
+            }
+
+            // Update top buttons
+            document.querySelectorAll('.step-btn').forEach(el => {
+                el.classList.remove('active');
+                if(el.dataset.step === currentId) el.classList.add('active');
+            });
+
+            // Update footer buttons
+            const btnPrev = document.getElementById('btn_prev');
+            const btnNext = document.getElementById('btn_next');
+            const btnFinish = document.getElementById('btn_finish');
+
+            if(currentStepIndex === 0) btnPrev.classList.add('hidden'); else btnPrev.classList.remove('hidden');
+            
+            if(currentStepIndex === steps.length - 1) {
+                btnNext.classList.add('hidden');
+                btnFinish.classList.remove('hidden');
+                validateFinal(); // Check locks
+            } else {
+                btnNext.classList.remove('hidden');
+                btnFinish.classList.add('hidden');
+                document.getElementById('lock_msg').classList.add('hidden');
+            }
+            
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function novaRat() {
+            if(confirm('Limpar todos os dados?')) {
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        // LOGIC: API IXC
+        async function buscarOS() {
+            const id = document.getElementById('search_os_id').value;
+            const btn = document.getElementById('btn_buscar');
+            const status = document.getElementById('api_status');
+
+            if(!id) return alert('Digite o ID da OS');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            status.innerHTML = "Buscando...";
+
+            try {
+                const res = await fetch(`${apiUrl}/api/validar_os`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({os_id: id})
+                });
+
+                if (!res.ok) throw new Error(`Status: ${res.status}`);
+
+                const data = await res.json();
+                
+                if(data.erro) throw new Error(data.erro);
+
+                // Preencher campos
+                document.getElementById('os_id').value = data.os_id || id;
+                document.getElementById('contrato_id').value = data.id_contrato || '';
+                document.getElementById('cliente_nome').value = data.razao_social || data.cliente || '';
+                document.getElementById('cliente_endereco').value = data.endereco || '';
+                document.getElementById('tec_nome').value = data.tecnico || '';
+                status.innerHTML = "Dados carregados com sucesso!";
+                status.className = "text-[10px] mt-1 text-green-600 font-bold";
+                saveLocal(); // Save after fetch
+
+            } catch (error) {
+                console.error("Erro API:", error);
+                status.innerHTML = "Erro ao conectar (Offline/CORS). Preencha manualmente.";
+                status.className = "text-[10px] mt-1 text-red-500 font-bold";
+                document.getElementById('os_id').value = id; // Fallback
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-search"></i>';
+            }
+        }
+
+        // LOGIC: VALIDATION & LOCKS
+        function maskDBM(el) {
+            let v = el.value.replace(/[^\d]/g, '');
+            if (v.length > 4) v = v.slice(0, 4);
+            if (v.length >= 3) {
+                const intPart = v.slice(0, 2);
+                const decPart = v.slice(2);
+                el.value = `-${intPart},${decPart}dBm`;
+            } else if (v.length > 0) {
+                el.value = `-${v}`;
+            } else {
+                el.value = "";
+            }
+        }
+        
+        function maskMoney(el) {
+            let v = el.value.replace(/\D/g,"");
+            v = (v/100).toFixed(2) + "";
+            v = v.replace(".", ",");
+            v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+            el.value = "R$ " + v;
+        }
+
+        function validatePower(el) {
+            const raw = el.value.replace('dBm', '').replace(',', '.');
+            const val = parseFloat(raw);
+            const alertBox = document.getElementById('power_alert');
+            
+            if(!isNaN(val) && (val > -18 || val < -25)) {
+                alertBox.classList.remove('hidden');
+                el.classList.add('error');
+            } else {
+                alertBox.classList.add('hidden');
+                el.classList.remove('error');
+            }
+        }
+
+        function calcCabo(tipo) {
+            const ini = parseFloat(document.getElementById(tipo+'_ini').value) || 0;
+            const fim = parseFloat(document.getElementById(tipo+'_fim').value) || 0;
+            const total = Math.abs(fim - ini);
+            document.getElementById(tipo+'_total').value = total > 0 ? total : 0;
+        }
+
+        function toggleHygiene(chk) {
+            const container = document.getElementById('hygiene_container');
+            if(chk.checked) {
+                container.classList.add('checked');
+                container.classList.remove('critical-check');
+            } else {
+                container.classList.remove('checked');
+                container.classList.add('critical-check');
+            }
+            validateFinal();
+        }
+        
+        function toggleResponsavel(isResp) {
+            const area = document.getElementById('area_responsavel');
+            if(isResp) area.classList.remove('hidden');
+            else area.classList.add('hidden');
+        }
+        
+        function toggleTaxaValor() {
+            const tipo = document.getElementById('taxa_tipo').value;
+            const campo = document.getElementById('taxa_valor');
+            if(tipo === 'Cobrada') {
+                campo.classList.remove('hidden');
+                campo.classList.add('required');
+            } else {
+                campo.classList.add('hidden');
+                campo.classList.remove('required');
+                campo.value = '';
+            }
+        }
+
+        function toggleIPv6(chk) {
+            const inp = document.getElementById('ipv6_nota');
+            if(chk.checked) {
+                inp.disabled = true;
+                inp.value = '';
+            } else {
+                inp.disabled = false;
+            }
+        }
+
+        // MASK FUNCTIONS
+        function maskWifiDBM(el) {
+            let v = el.value.replace(/[^\d]/g, '');
+            if (v.length > 2) v = v.slice(0, 2); // Only 2 digits
+            if (v.length > 0) {
+                el.value = `-${v}dBm`;
+            } else {
+                el.value = "";
+            }
+            updateWifiIcon(el);
+        }
+
+        function maskPing(el, type) {
+            let v = el.value.replace(/\D/g, "");
+            if (v.length > 3) v = v.slice(0, 3);
+            if (v.length > 0) el.value = v + "ms";
+            else el.value = "";
+            
+            const val = parseInt(v);
+            let status = "";
+            let color = "";
+
+            if (!isNaN(val)) {
+                if (type === 'google') {
+                    if (val <= 20) { status = "Excelente"; color = "text-green-600"; }
+                    else if (val <= 30) { status = "Atenção"; color = "text-yellow-600"; }
+                    else { status = "Ruim"; color = "text-red-600"; }
+                } else if (type === 'dns') {
+                    if (val <= 2) { status = "Excelente"; color = "text-green-600"; }
+                    else if (val <= 7) { status = "Atenção"; color = "text-yellow-600"; }
+                    else { status = "Ruim"; color = "text-red-600"; }
+                }
+            }
+            
+            const statusEl = document.getElementById(`ping_${type}_status`);
+            if(statusEl) {
+                statusEl.innerText = status;
+                statusEl.className = `absolute right-1 top-1.5 text-[10px] font-bold ${color}`;
+            }
+        }
+
+        function maskIPv6(el) {
+            let v = el.value.replace(/\D/g, "");
+            if (v.length > 2) v = v.slice(0, 2);
+            if (v.length > 0) {
+                if(parseInt(v) > 10) v = "10";
+                el.value = v + "/10";
+            } else {
+                el.value = "";
+            }
+        }
+
+        function maskCPF(el) {
+            let v = el.value.replace(/\D/g, "");
+            if (v.length > 11) v = v.slice(0, 11);
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+            el.value = v;
+        }
+
+        function maskPhone(el) {
+            let v = el.value.replace(/\D/g, "");
+            if (v.length > 11) v = v.slice(0, 11);
+            if (v.length > 10) {
+                v = v.replace(/^(\d{2})(\d)(\d{4})(\d{4}).*/, "($1) $2 $3-$4");
+            } else if (v.length > 5) {
+                v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, "($1) $2-$3");
+            } else if (v.length > 2) {
+                v = v.replace(/^(\d{2})/, "($1) ");
+            }
+            el.value = v;
+        }
+
+        // --- WIFI MAP LOGIC ---
+        function addWifiRow() {
+            const container = document.getElementById('wifi_map_container');
+            const div = document.createElement('div');
+            div.className = 'grid grid-cols-12 gap-1 mb-1 items-center wifi-row';
+            div.innerHTML = `
+                <div class="col-span-5">
+                    <select class="input-field text-xs p-1 h-8 wifi-room">
+                        <option value="" disabled selected>Cômodo...</option>
+                        <option value="Sala">Sala</option>
+                        <option value="Quarto Princ.">Quarto Princ.</option>
+                        <option value="Quarto 2">Quarto 2</option>
+                        <option value="Cozinha">Cozinha</option>
+                        <option value="Banheiro">Banheiro</option>
+                        <option value="Frente">Frente</option>
+                        <option value="Fundos">Fundos</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="col-span-5">
+                    <input type="text" class="input-field text-xs p-1 h-8 text-center wifi-dbm" placeholder="-xxdBm" oninput="maskWifiDBM(this)">
+                </div>
+                <div class="col-span-2 text-center">
+                    <i class="fas fa-wifi text-gray-300 wifi-icon"></i>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function updateWifiIcon(input) {
+            // parse from string like "-50dBm"
+            const raw = input.value.replace(/[^\d]/g, '');
+            if(!raw) {
+                const row = input.closest('.wifi-row');
+                row.querySelector('.wifi-icon').className = "fas fa-wifi text-gray-300 wifi-icon";
+                return;
+            }
+            const val = -1 * parseInt(raw);
+            const row = input.closest('.wifi-row');
+            const icon = row.querySelector('.wifi-icon');
+            
+            if(isNaN(val)) {
+                icon.className = "fas fa-wifi text-gray-300 wifi-icon";
+                return;
+            }
+
+            // Green > -65, Yellow -65 to -75, Red < -75
+            if(val > -65) {
+                icon.className = "fas fa-wifi text-green-500 wifi-icon";
+            } else if (val >= -75 && val <= -65) {
+                icon.className = "fas fa-wifi text-yellow-500 wifi-icon";
+            } else {
+                icon.className = "fas fa-wifi text-red-500 wifi-icon";
+            }
+        }
+
+        function validateFinal() {
+            const os = document.getElementById('os_id').value;
+            const cli = document.getElementById('cliente_nome').value;
+            const tec = document.getElementById('tec_nome').value;
+            const data = document.getElementById('data_exec').value;
+            const hEnt = document.getElementById('hora_entrada').value;
+            const hSai = document.getElementById('hora_saida').value;
+            const taxaOk = document.getElementById('taxa_tipo').value === 'Isenta' || document.getElementById('taxa_valor').value;
+            const initValid = os && cli && tec && data && hEnt && hSai && taxaOk;
+
+            const higiene = document.getElementById('check_higiene').checked;
+            const org = document.getElementById('check_organizado').checked;
+            const lixo = document.getElementById('check_lixo').checked;
+            const mostrou = document.getElementById('check_mostrou').checked;
+            const fotos = document.getElementById('check_fotos').checked;
+            const orientou = document.getElementById('check_orientou').checked;
+            
+            const cableTest = document.getElementById('test_cabo_down').value && 
+                              document.getElementById('test_cabo_up').value && 
+                              document.getElementById('test_cabo_ping').value;
+
+            const btn = document.getElementById('btn_finish');
+            const msg = document.getElementById('lock_msg');
+
+            const isValid = initValid && higiene && org && lixo && mostrou && fotos && orientou && cableTest;
+
+            if(isValid) {
+                btn.disabled = false;
+                msg.classList.add('hidden');
+            } else {
+                btn.disabled = true;
+                msg.classList.remove('hidden');
+                if(!initValid) msg.innerHTML = '<i class="fas fa-lock"></i> PENDÊNCIAS: Identificação Incompleta (Campos com *)';
+                else msg.innerHTML = '<i class="fas fa-lock"></i> PENDÊNCIAS: Higiene, Testes ou Apresentação.';
+            }
+        }
+
+        // CANVAS ASSINATURA
+        function initCanvas(id) {
+            const oldCanvas = document.getElementById(id);
+            if(!oldCanvas) return;
+
+            const newCanvas = oldCanvas.cloneNode(true);
+            oldCanvas.parentNode.replaceChild(newCanvas, oldCanvas);
+
+            const parent = newCanvas.parentElement;
+            if(parent.offsetWidth > 0) {
+                newCanvas.width = parent.offsetWidth;
+                newCanvas.height = parent.offsetHeight;
+            }
+
+            const ctx = newCanvas.getContext('2d');
+            ctx.strokeStyle = '#000000'; // Black ink
+            ctx.lineWidth = 2; 
+            ctx.lineCap = 'round';
+            
+            let isDrawing = false;
+
+            function getPos(e) {
+                const rect = newCanvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                    x: clientX - rect.left,
+                    y: clientY - rect.top
+                };
+            }
+
+            function start(e) { 
+                if(e.target === newCanvas) e.preventDefault();
+                isDrawing = true; 
+                ctx.beginPath(); 
+                const pos = getPos(e);
+                ctx.moveTo(pos.x, pos.y);
+            }
+            
+            function end(e) { 
+                if(e.target === newCanvas) e.preventDefault();
+                isDrawing = false; 
+                ctx.stroke(); 
+            }
+            
+            function draw(e) {
+                if (!isDrawing) return;
+                if(e.target === newCanvas) e.preventDefault();
+                const pos = getPos(e);
+                ctx.lineTo(pos.x, pos.y); 
+                ctx.stroke();
+            }
+
+            newCanvas.addEventListener('mousedown', start);
+            newCanvas.addEventListener('mouseup', end);
+            newCanvas.addEventListener('mousemove', draw);
+            newCanvas.addEventListener('mouseout', end); 
+
+            newCanvas.addEventListener('touchstart', start, {passive: false});
+            newCanvas.addEventListener('touchend', end, {passive: false});
+            newCanvas.addEventListener('touchmove', draw, {passive: false});
+        }
+
+        function clearSig(id) {
+            const c = document.getElementById(id);
+            if(c) c.getContext('2d').clearRect(0,0,c.width,c.height);
+        }
+
+        // GENERATE TEXT SUMMARY
+        function generateSummaryText() {
+            const getVal = (id) => document.getElementById(id)?.value || '-';
+            const getCheck = (name) => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(e => e.value).join(', ');
+            const getInfra = () => {
+                const checked = document.querySelector('input[name="infra_status"]:checked');
+                return checked ? checked.value : '-';
+            };
+
+            // Wifi Mapping
+            let wifiMapStr = '';
+            document.querySelectorAll('.wifi-row').forEach(row => {
+                const roomSel = row.querySelector('.wifi-room');
+                const room = roomSel.tagName === 'INPUT' ? roomSel.value : (roomSel.options[roomSel.selectedIndex]?.text || '');
+                const dbm = row.querySelector('.wifi-dbm').value;
+                if(room && dbm) wifiMapStr += `[${room}: ${dbm}] `;
+            });
+
+            // IPv6
+            const ipv6Off = document.getElementById('ipv6_off').checked;
+            const ipv6Val = ipv6Off ? "DESATIVADO" : getVal('ipv6_nota');
+            
+            // Apps
+            const appsOk = document.getElementById('check_apps_ok').checked ? "Sim" : "Não";
+
+            // Responsável logic
+            const respTipo = document.querySelector('input[name="resp_tipo"]:checked')?.value || "Titular";
+            let respInfo = respTipo;
+            if(respTipo === 'Responsável') {
+                const nome = getVal('resp_nome');
+                const cpf = getVal('resp_cpf');
+                const tel = getVal('resp_contato');
+                respInfo = `Responsável (${nome} | CPF: ${cpf} | Tel: ${tel})`;
+            }
+
+            const txt = `RESUMO TÉCNICO - RAT S.A.L.V.A.
+--------------------------------
+OS: ${getVal('os_id')} | DATA: ${getVal('data_exec')}
+CLIENTE: ${getVal('cliente_nome')}
+TÉCNICO: ${getVal('tec_nome')}
+HORÁRIO: ${getVal('hora_entrada')} - ${getVal('hora_saida')}
+--------------------------------
+[S] SONDAGEM:
+Queixa: ${getCheck('reclamacao')} ${getVal('reclamacao_outros')}
+LEDs: PON ${getVal('led_pon')} | LOS ${getVal('led_los')}
+Obs: ${getVal('obs_sondagem')}
+--------------------------------
+[A] ANÁLISE:
+Potências: IXC ${getVal('pot_ixc')} | CTO ${getVal('pot_cto')} | CLI ${getVal('pot_cli')}
+Infra: ${getInfra()}
+--------------------------------
+[L] EXECUÇÃO:
+Serviços: ${getCheck('servico_tipo')}
+Drop: ID ${getVal('drop_id')} (${getVal('drop_ini')}m - ${getVal('drop_fim')}m = ${getVal('drop_total')}m)
+UTP: ID ${getVal('utp_id')} (${getVal('utp_ini')}m - ${getVal('utp_fim')}m = ${getVal('utp_total')}m)
+Eq. Retirado: ${getVal('eq_retirado')}
+Eq. Colocado: ${getVal('eq_colocado')}
+Conectores: ${getVal('mat_conector')}
+Obs: ${getVal('obs_execucao')}
+--------------------------------
+[V] VALIDAÇÃO:
+Cabo: Down ${getVal('test_cabo_down')}M | Up ${getVal('test_cabo_up')}M | Ping ${getVal('test_cabo_ping')}
+Ping 8.8.8.8: ${getVal('test_cabo_ping')} | DNS RL: ${getVal('test_cabo_ping_dns')}
+IPv6: ${ipv6Val}
+Wi-Fi: ${wifiMapStr}
+--------------------------------
+[A] APRESENTAÇÃO:
+(x) Higiene (x) Organizado (x) Lixo Zero (x) Orientado
+Apps Instalados/Orientados? ${appsOk}
+Acompanhado por: ${respInfo}
+`;
+            return txt;
+        }
+
+        // GOOGLE SHEETS SEND
+        async function sendToSheets(summaryText) {
+            const formData = new FormData();
+            
+            // Build JSON structure
+            const dataObj = {
+                data: new Date().toLocaleString(),
+                resumo: summaryText,
+                os: document.getElementById('os_id').value,
+                tecnico: document.getElementById('tec_nome').value
+            };
+
+            // Send as single JSON field
+            formData.append('json_data', JSON.stringify(dataObj));
+            
+            try {
+                await fetch(sheetsUrl, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors' 
+                });
+                console.log("Enviado para planilha.");
+            } catch (e) {
+                console.error("Erro planilha", e);
+            }
+        }
+
+        // FINISH & SUMMARY
+        function finishRAT() {
+            // Temporary enable printing all sections by adding a class to body
+            document.body.classList.add('printing');
+
+            // 1. Gerar Texto
+            const summary = generateSummaryText();
+            document.getElementById('summary_text').value = summary;
+            
+            // 2. Enviar Planilha (Background)
+            sendToSheets(summary);
+
+            // 3. Abrir Modal
+            document.getElementById('summary_modal').classList.remove('hidden');
+            
+            // Remove printing class after short delay
+            setTimeout(() => document.body.classList.remove('printing'), 100);
+        }
+
+        function closeSummary() {
+            document.getElementById('summary_modal').classList.add('hidden');
+        }
+
+        function copySummary() {
+            const el = document.getElementById('summary_text');
+            el.select();
+            document.execCommand('copy');
+            document.getElementById('copy_status').innerText = "Copiado com sucesso!";
+            setTimeout(() => document.getElementById('copy_status').innerText = "", 2000);
+        }
+
+        // NATIVE PRINT
+        function printNative() {
+            // Force print styles before print dialog
+            // Note: @media print handles visibility mostly, but ensure modal is hidden
+            document.getElementById('summary_modal').classList.add('hidden');
+            window.print();
+            // Show modal again after print
+            document.getElementById('summary_modal').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
